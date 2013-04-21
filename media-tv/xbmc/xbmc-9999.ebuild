@@ -1,15 +1,13 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-tv/xbmc/xbmc-9999.ebuild,v 1.134 2013/01/29 17:11:12 scarabeus Exp $
+# $Header: $
 
-EAPI="4"
+EAPI=5
 
-# Does not work with py3 here
-# It might work with py:2.5 but I didn't test that
-PYTHON_DEPEND="2:2.6"
-PYTHON_USE_WITH=sqlite
+PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_REQ_USE="sqlite"
 
-inherit eutils python multiprocessing autotools git-2
+inherit eutils python-single-r1 multiprocessing autotools git-2
 
 EGIT_REPO_URI="git://github.com/xbmc/xbmc.git"
 
@@ -18,8 +16,7 @@ HOMEPAGE="http://xbmc.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa altivec avahi bluetooth bluray cec css debug goom java joystick midi mysql nfs profile +projectm pulseaudio pvr +rsxs rtmp +samba sse sse2 sftp udev upnp vaapi vdpau webserver +xrandr external-ffmpeg"
-REQUIRED_USE="pvr? ( mysql )"
+IUSE="airplay alsa altivec avahi bluetooth bluray cec css debug goom java joystick midi mysql nfs profile +projectm pulseaudio +rsxs rtmp +samba sse sse2 sftp udev upnp vaapi vdpau webserver +xrandr external-ffmpeg +X"
 
 COMMON_DEPEND="virtual/glu
 	virtual/opengl
@@ -37,7 +34,7 @@ COMMON_DEPEND="virtual/glu
 	>=dev-libs/lzo-2.04
 	dev-libs/tinyxml[stl]
 	dev-libs/yajl
-	dev-python/simplejson
+	dev-python/simplejson[${PYTHON_USEDEP}]
 	media-fonts/corefonts
 	media-fonts/roboto
 	media-libs/alsa-lib
@@ -105,11 +102,6 @@ DEPEND="${COMMON_DEPEND}
 
 S=${WORKDIR}/${MY_P}
 
-pkg_setup() {
-	python_set_active_version 2
-	python_pkg_setup
-}
-
 src_prepare() {
 	./bootstrap || die "bootstrap failed"
 }
@@ -145,7 +137,6 @@ src_configure() {
 		$(use_enable profile profiling) \
 		$(use_enable projectm) \
 		$(use_enable pulseaudio pulse) \
-		$(use_enable pvr mythtv) \
 		$(use_enable rsxs) \
 		$(use_enable rtmp) \
 		$(use_enable samba) \
@@ -155,6 +146,7 @@ src_configure() {
 		$(use_enable vdpau) \
 		$(use_enable webserver) \
 		$(use_enable xrandr) \
+		$(use_enable X x11) \
 		$(use_enable external-ffmpeg)
 }
 
@@ -184,11 +176,11 @@ src_install() {
 	dosym /usr/share/fonts/roboto/Roboto-Bold.ttf \
 		/usr/share/xbmc/addons/skin.confluence/fonts/Roboto-Bold.ttf
 
-	insinto "$(python_get_sitedir)" #309885
-	doins tools/EventClients/lib/python/xbmcclient.py || die
-	newbin "tools/EventClients/Clients/XBMC Send/xbmc-send.py" xbmc-send || die
+	python_domodule tools/EventClients/lib/python/xbmcclient.py
+	python_newscript "tools/EventClients/Clients/XBMC Send/xbmc-send.py" xbmc-send
 }
 
 pkg_postinst() {
 	elog "Visit http://wiki.xbmc.org/?title=XBMC_Online_Manual"
 }
+
