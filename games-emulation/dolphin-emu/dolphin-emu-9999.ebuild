@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://code.google.com/p/dolphin-emu/"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~x86 amd64 ~ppc ~ppc64"
-IUSE="alsa ao bluetooth doc encode +lzo openal opengl portaudio pulseaudio +wxwidgets +xrandr"
+IUSE="sse4_2 alsa ao bluetooth doc encode +lzo openal opengl portaudio pulseaudio +wxwidgets +xrandr"
 RESTRICT=""
 
 RDEPEND=">=media-libs/glew-1.5
@@ -46,6 +46,8 @@ src_configure() {
 	# filter problematic compiler flags
 	filter-flags -flto -fwhole-program
 	append-flags -fno-pie
+
+    use sse4_2 && sed -i 's/add_definitions(-msse2)/add_definitions(-march=native -O3 -fno-stack-protector -pipe -msse4.2 -msse2 -D_M_SSE=0x402)/g' CMakeLists.txt
 
 	mycmakeargs="
 		-DDOLPHIN_WC_REVISION=${MY_PV}
