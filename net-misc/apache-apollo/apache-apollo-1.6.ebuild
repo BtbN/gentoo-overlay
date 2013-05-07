@@ -6,14 +6,14 @@ EAPI=5
 
 inherit eutils
 
-DESCRIPTION="ActiveMQ Apollo is a faster, more reliable, easier to maintain messaging broker built from the foundations of the original ActiveMQ"
+DESCRIPTION="ActiveMQ Apollo is a faster, more reliable, easier to maintain messaging broker"
 HOMEPAGE="http://activemq.apache.org/apollo/"
 SRC_URI="mirror://apache/activemq/activemq-apollo/${PV}/${P}-unix-distro.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="docs examples"
+IUSE="doc examples"
 
 RDEPEND=">=virtual/jdk-1.6"
 DEPEND="${DEPEND}"
@@ -30,13 +30,10 @@ src_install() {
 
 	dosym /opt/apache-apollo/bin/apollo /usr/bin/apollo
 
-	dodoc LICENSE
-	dodoc NOTICE
 	dodoc readme.html
 
-	use docs && dodoc -r "${S}/docs"
+	use doc && dodoc -r "${S}/docs"
 	use examples && cp -r "${S}/examples" "${D}/opt/apache-apollo"
-
 
 	mkdir -p "${D}/var/lib/apollo"
 	cd "${D}/var/lib/apollo"
@@ -47,4 +44,3 @@ src_install() {
 	doinitd "${FILESDIR}/apollo"
 	doenvd "${FILESDIR}/98apollo"
 }
-
