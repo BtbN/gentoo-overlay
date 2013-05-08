@@ -21,6 +21,8 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
 
+QA_PREBUILT="usr/bin/btsync"
+
 src_install() {
 	dodoc LICENSE.TXT
 	dobin btsync
