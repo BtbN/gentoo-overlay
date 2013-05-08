@@ -22,6 +22,12 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}"
 
 src_install() {
-	dodoc "${S}/LICENSE.TXT"
-	dobin "${S}/btsync"
+	dodoc LICENSE.TXT
+	dobin btsync
+
+	newinitd "${FILESDIR}/btsync_initd" btsync
+	newconfd "${FILESDIR}/btsync_confd" btsync
+
+	insinto /etc
+	doins "${FILESDIR}/btsync.conf"
 }
