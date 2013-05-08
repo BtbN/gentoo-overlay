@@ -36,11 +36,20 @@ src_install() {
 	use examples && cp -r "${S}/examples" "${D}/opt/apache-apollo"
 
 	mkdir -p "${D}/var/lib/apollo"
-	cd "${D}/var/lib/apollo"
 	chown apollo:apollo "${D}/var/lib/apollo"
-
-	su apollo -c "'${D}/opt/apache-apollo/bin/apollo' create default" >/dev/null
 
 	doinitd "${FILESDIR}/apollo"
 	doenvd "${FILESDIR}/98apollo"
+}
+
+pkg_config() {
+	if [ -d "${ROOT}/var/lib/apollo/default" ]; then
+		ewarn "Default broker already exists!"
+		ewarn "Will not overwrite it..."
+	else
+		cd "${ROOT}/var/lib/apollo"
+		ebegin "Creating default apollo broker"
+		su apollo -c "'${ROOT}/opt/apache-apollo/bin/apollo' create default" >/dev/null
+		eend $?
+	fi
 }
