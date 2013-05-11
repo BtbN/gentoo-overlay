@@ -73,7 +73,6 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	pulseaudio? ( media-sound/pulseaudio )
 	media-sound/wavpack
 	|| ( media-libs/libpostproc media-video/ffmpeg )
-	>=virtual/ffmpeg-9[encode]
 	rtmp? ( media-video/rtmpdump )
 	avahi? ( net-dns/avahi )
 	nfs? ( net-fs/libnfs )
