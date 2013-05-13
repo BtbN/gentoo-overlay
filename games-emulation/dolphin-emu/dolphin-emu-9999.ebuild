@@ -47,7 +47,8 @@ src_configure() {
 	filter-flags -flto -fwhole-program
 	append-flags -fno-pie
 
-    use sse4_2 && sed -i 's/add_definitions(-msse2)/add_definitions(-march=native -O3 -fno-stack-protector -pipe -msse4.2 -msse2 -D_M_SSE=0x402)/g' CMakeLists.txt
+    use sse4_2 && sed -i 's/add_definitions(-msse2)/add_definitions(-march=native -O3 -fno-stack-protector -pipe -msse4.2 -msse2 -D_M_SSE=0x402)/g' CMakeLists.txt || die "sed failed"
+	sed -i 's/EXECUTE_PROCESS(/EXECUTE_PROCESS(WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} /g' CMakeLists.txt || die "sed failed"
 
 	mycmakeargs="
 		-DDOLPHIN_WC_REVISION=${MY_PV}
