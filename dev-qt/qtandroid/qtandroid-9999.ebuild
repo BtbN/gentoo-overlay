@@ -25,6 +25,10 @@ src_prepare() {
 	perl init-repository || die "init repo failed"
 }
 
+src_compile() {
+	make -j1 || die "make failed"
+}
+
 src_configure() {
 	./configure -developer-build -xplatform android-g++ -nomake tests \
 		-nomake examples -android-ndk /opt/android-ndk \
