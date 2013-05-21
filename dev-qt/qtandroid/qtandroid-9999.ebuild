@@ -21,6 +21,7 @@ DEPEND="dev-util/android-sdk-update-manager
 RDEPEND="${DEPEND}"
 
 src_prepare() {
+	git config remote.origin.url "git://gitorious.org/qt/qt5.git" || die "git config failed"
 	perl init-repository || die "init repo failed"
 }
 
