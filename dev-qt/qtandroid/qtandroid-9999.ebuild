@@ -26,16 +26,12 @@ src_prepare() {
 }
 
 src_configure() {
-	my_arch="linux-x86_64"
-	if use x86; then
-		my_arch="linux-x86"
-	fi
-
 	./configure -developer-build -xplatform android-g++ -nomake tests \
 		-nomake examples -android-ndk /opt/android-ndk \
 		-android-sdk /opt/android-sdk-update-manager \
-		-android-ndk-host "$my_arch" -skip qttranslations -skip qtwebkit \
+		-skip qttranslations -skip qtwebkit \
 		-skip qtserialport -skip qtwebkit-examples \
+		-opensource -confirm-license \
 		-prefix /opt/qt5-android || die "configure failed"
 }
 
