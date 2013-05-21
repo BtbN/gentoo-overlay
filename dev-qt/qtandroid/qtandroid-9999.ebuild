@@ -19,6 +19,10 @@ DEPEND="dev-util/android-sdk-update-manager
         dev-util/android-ndk"
 RDEPEND="${DEPEND}"
 
+src_prepare() {
+	perl init-repository || die "init repo failed"
+}
+
 src_configure() {
 	my_arch="linux-x86_64"
 	if use x86; then
@@ -30,6 +34,6 @@ src_configure() {
 		-android-sdk /opt/android-sdk-update-manager \
 		-android-ndk-host "$my_arch" -skip qttranslations -skip qtwebkit \
 		-skip qtserialport -skip qtwebkit-examples \
-		-prefix /opt/qt5-android
+		-prefix /opt/qt5-android || die "configure failed"
 }
 
