@@ -9,6 +9,7 @@ inherit git-2
 DESCRIPTION="Qt 5.1 git build for android"
 HOMEPAGE="http://qt-project.org"
 EGIT_REPO_URI="git://gitorious.org/qt/qt5.git"
+EGIT_BRANCH="stable"
 
 LICENSE="LGPL-3"
 SLOT="0"
