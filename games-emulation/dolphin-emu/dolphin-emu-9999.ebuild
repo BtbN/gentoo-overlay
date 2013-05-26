@@ -1,4 +1,4 @@
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://code.google.com/p/dolphin-emu/"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 amd64 ~ppc ~ppc64"
+KEYWORDS="~x86 ~amd64"
 IUSE="sse4_2 alsa ao bluetooth doc encode +lzo openal opengl portaudio pulseaudio +wxwidgets +xrandr"
 RESTRICT=""
 
@@ -35,7 +35,7 @@ RDEPEND=">=media-libs/glew-1.5
 	xrandr? ( x11-libs/libXrandr )"
 DEPEND="${RDEPEND}
 	dev-util/cmake
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	media-gfx/nvidia-cg-toolkit"
 
 src_prepare() {
@@ -47,14 +47,13 @@ src_configure() {
 	filter-flags -flto -fwhole-program
 	append-flags -fno-pie
 
-    use sse4_2 && sed -i 's/add_definitions(-msse2)/add_definitions(-march=native -O3 -fno-stack-protector -pipe -msse4.2 -msse2 -D_M_SSE=0x402)/g' CMakeLists.txt || die "sed failed"
-	sed -i 's/EXECUTE_PROCESS(/EXECUTE_PROCESS(WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} /g' CMakeLists.txt || die "sed failed"
+	use sse4_2 && sed -i 's/add_definitions(-msse2)/add_definitions(-march=native -O3 -fno-stack-protector -pipe -msse4.2 -msse2 -D_M_SSE=0x402)/g' CMakeLists.txt || die "sed failed"
 
 	mycmakeargs="
 		-DDOLPHIN_WC_REVISION=${MY_PV}
 		-DCMAKE_INSTALL_PREFIX=${GAMES_PREFIX}
 		-Dprefix=${GAMES_PREFIX}
-		-Ddatadir=${GAMES_DATADIR}/${PN}
+		-Ddatadir='${GAMES_DATADIR}/${PN}'
 		-Dplugindir=$(games_get_libdir)/${PN}
 		$(cmake-utils_use !wxwidgets DISABLE_WX)
 		$(cmake-utils_use encode ENCODE_FRAMEDUMPS)"
