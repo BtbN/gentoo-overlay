@@ -24,6 +24,8 @@ if use x86; then
 	S="${WORKDIR}/${P}-Linux-i686-release"
 fi
 
+QA_PREBUILT="usr/lib/libspotify.so.${PV}"
+
 src_unpack() {
 	unpack ${A}
 	cd "${S}"
@@ -40,13 +42,13 @@ src_install() {
 		dohtml share/doc/libspotify/html/*
 	fi
 
-	dodir usr/lib64
-	dodir usr/lib64/pkgconfig
+	dodir usr/lib
+	dodir usr/lib/pkgconfig
 	dodir usr/include/libspotify
 
 	dolib.so lib/libspotify.so*
 
-	insinto /usr/lib64/pkgconfig
+	insinto /usr/lib/pkgconfig
 	doins lib/pkgconfig/libspotify.pc
 	
 	insinto /usr/include/libspotify
