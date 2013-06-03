@@ -18,13 +18,13 @@ x86? ( https://developer.spotify.com/download/libspotify/${P}-Linux-i686-release
 
 if use amd64; then
 	S="${WORKDIR}/${P}-Linux-x86_64-release"
+	QA_PREBUILT="usr/lib64/libspotify.so.${PV}"
 fi
 
 if use x86; then
 	S="${WORKDIR}/${P}-Linux-i686-release"
+	QA_PREBUILT="usr/lib/libspotify.so.${PV}"
 fi
-
-QA_PREBUILT="usr/lib/libspotify.so.${PV}"
 
 src_unpack() {
 	unpack ${A}
