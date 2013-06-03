@@ -15,7 +15,7 @@ SRC_URI="http://clementine-player.googlecode.com/files/${P}.tar.gz"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="amd64 x86"
-IUSE="ayatana cdda +dbus debug googledrive ios ipod lastfm mms moodbar mtp projectm test +udev wiimote spotify"
+IUSE="ayatana cdda +dbus debug googledrive ios ipod lastfm mms moodbar mtp projectm test +udev wiimote +spotify"
 IUSE+="${LANGS// / linguas_}"
 
 REQUIRED_USE="
