@@ -10,7 +10,7 @@ LICENSE="libspotify"
 SLOT="0"
 IUSE="doc"
 
-#KEYWORDS="~x86 ~amd64"
+KEYWORDS="x86 amd64"
 
 SRC_URI="
 amd64? ( https://developer.spotify.com/download/libspotify/${P}-Linux-x86_64-release.tar.gz ) 
