@@ -18,3 +18,11 @@ IUSE=""
 
 DEPEND="dev-python/mysql-connector-python"
 RDEPEND="${DEPEND}"
+
+src_install()
+{
+	distutils-r1_src_install
+
+	cd "${D}"
+	rm usr/lib*/python*/site-packages/mysql/__init__.py
+}
