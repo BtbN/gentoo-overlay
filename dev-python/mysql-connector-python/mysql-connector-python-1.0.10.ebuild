@@ -4,17 +4,17 @@
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python{2_6,2_7} python{3_1,3_2,3_3} )
 inherit distutils-r1
 
-DESCRIPTION="Various usefull mysql utilities"
+DESCRIPTION="Mysql connector python library"
 HOMEPAGE="http://dev.mysql.com/downloads/tools/utilities"
-SRC_URI="http://cdn.mysql.com/Downloads/MySQLGUITools/${P}.tar.gz"
+SRC_URI="http://cdn.mysql.com/Downloads/Connector-Python/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="dev-python/mysql-connector-python"
+DEPEND=""
 RDEPEND="${DEPEND}"
