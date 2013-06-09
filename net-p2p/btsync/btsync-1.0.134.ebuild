@@ -4,7 +4,7 @@
 
 EAPI=5
 
-DESCRIPTION="Sync stuff via BitTorent"
+DESCRIPTION="Sync stuff via BitTorrent"
 HOMEPAGE="http://labs.bittorrent.com/experiments/sync.html"
 SRC_URI="amd64? ( http://syncapp.bittorrent.com/${PV}/${PN}_x64-${PV}.tar.gz )
 	x86? ( http://syncapp.bittorrent.com/${PV}/${PN}_i386-${PV}.tar.gz )
