@@ -136,7 +136,6 @@ RDEPEND="
 		vaapi? ( x11-libs/libva )
 		vcdx? ( >=dev-libs/libcdio-0.78.2 >=media-video/vcdimager-0.7.22 )
 		vorbis? ( media-libs/libvorbis )
-		win32codecs? ( media-libs/win32codecs )
 		X? ( x11-libs/libX11 )
 		x264? ( >=media-libs/x264-0.0.20090923 )
 		xcb? ( >=x11-libs/libxcb-1.6 >=x11-libs/xcb-util-0.3.4 )
