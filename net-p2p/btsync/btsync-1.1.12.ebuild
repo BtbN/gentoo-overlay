@@ -4,6 +4,8 @@
 
 EAPI=5
 
+inherit pax-utils
+
 DESCRIPTION="Sync stuff via BitTorrent"
 HOMEPAGE="http://labs.bittorrent.com/experiments/sync.html"
 SRC_URI="amd64? ( http://syncapp.bittorrent.com/${PV}/${PN}_x64-${PV}.tar.gz )
@@ -25,11 +27,14 @@ QA_PREBUILT="usr/bin/btsync"
 
 src_install() {
 	dodoc LICENSE.TXT
-	dobin btsync
 
 	newinitd "${FILESDIR}/btsync_initd" btsync
 	newconfd "${FILESDIR}/btsync_confd" btsync
 
 	insinto /etc
 	doins "${FILESDIR}/btsync.conf"
+
+	mkdir -p "${D}/usr/bin"
+	cp btsync "${D}/usr/bin/btsync"
+	pax-mark m "${D}/usr/bin/btsync"
 }
