@@ -19,7 +19,7 @@ LICENSE="PHP-3"
 SLOT="0"
 IUSE="+ssl"
 SRC_URI=""
-EGIT_REPO_URI="git://github.com/ppetermann/pecl-tools-stomp.git"
+EGIT_REPO_URI="git://github.com/php/pecl-tools-stomp.git"
 
 DEPEND="${DEPEND}
 	ssl? ( dev-lang/php[ssl] )
