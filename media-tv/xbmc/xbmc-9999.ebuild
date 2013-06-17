@@ -18,7 +18,10 @@ HOMEPAGE="http://xbmc.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa altivec avahi bluetooth bluray caps cec css debug +fishbmc gles goom joystick midi mysql neon nfs +opengl profile +projectm pulseaudio +rsxs rtmp +samba +sdl sse sse2 sftp udev upnp +usb vaapi vdpau webserver +X +xrandr"
+IUSE="airplay alsa altivec avahi bluetooth bluray caps cec css debug +fishbmc
+gles goom joystick midi mysql neon nfs +opengl profile +projectm pulseaudio
++rsxs rtmp +samba +sdl sse sse2 sftp udev upnp +usb vaapi vdpau webserver +X
++xrandr external-libraries external-ffmpeg"
 REQUIRED_USE="
 	rsxs? ( X )
 	xrandr? ( X )
@@ -181,7 +184,8 @@ src_configure() {
 		--docdir=/usr/share/doc/${PF} \
 		--disable-ccache \
 		--disable-optimizations \
-		--enable-external-libraries \
+		$(use_enable external-libraries) \
+		$(use_enable external-ffmpeg) \
 		--enable-gl \
 		$(use_enable airplay) \
 		$(use_enable avahi) \
