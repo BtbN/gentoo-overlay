@@ -47,7 +47,7 @@ src_prepare() {
 	fi
 
     if use remoteroster; then
-		EPATCH_OPTS="-d ${WORKDIR}/${P}" epatch "${FILESDIR}/ejabberd-2.1.x-remote-roster.patch"
+		EPATCH_OPTS="-d ${WORKDIR}/${P}" epatch "${FILESDIR}/ejabberd-2.1.12-remote-roster.patch"
 	fi
 
 	# don't install release notes (we'll do this manually)
