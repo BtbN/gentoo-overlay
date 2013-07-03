@@ -29,7 +29,7 @@ diff -Naur ejabberd-2.1.12.orig/doc/guide.tex ejabberd-2.1.12/doc/guide.tex
   [
    ...
 -  {mod_roster, [{versioning, true}, {store_current_id, true}]},
-+  {mod_roster, [{versioning, true}, {store_current_id, true}, {["icq.example.org", "msn.example.org"]} ]},
++  {mod_roster, [{versioning, true}, {store_current_id, true}, {managers, ["icq.example.org", "msn.example.org"]} ]},
    ...
   ]}.
  \end{verbatim}
