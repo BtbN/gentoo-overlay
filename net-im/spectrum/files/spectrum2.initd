@@ -11,15 +11,23 @@ depend() {
 }
 
 start() {
-        ebegin "Starting ${PROTOCOL} Spectrum Transport"
+        [ -d /run/spectrum2 ] || mkdir /run/spectrum2
+        chown jabber:jabber /run/spectrum2
+
+        ebegin "Starting Spectrum Transport"
         start-stop-daemon --start --user jabber --group jabber \
-		--exec /usr/bin/spectrum2_manager start &> $LOGFILE
+                --exec /usr/bin/spectrum2_manager start &> $LOGFILE
         eend $?
 }
 
 stop() {
-        ebegin "Stopping ${PROTOCOL} Spectrum Transport"
+        ebegin "Stopping Spectrum Transport"
         start-stop-daemon --user jabber --group jabber \
-		--exec /usr/bin/spectrum2_manager stop 1>>$LOGFILE 2>&1
+                --exec /usr/bin/spectrum2_manager stop 1>>$LOGFILE 2>&1
         eend $?
 }
+
+status() {
+        /usr/bin/spectrum2_manager status
+}
+
