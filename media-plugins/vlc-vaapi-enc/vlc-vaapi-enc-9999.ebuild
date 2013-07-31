@@ -6,9 +6,9 @@ EAPI=4
 
 inherit git-2
 
-DESCRIPTION="VLC RawIO Plugin"
-HOMEPAGE="https://github.com/BtbN/vlc-raw-io"
-EGIT_REPO_URI="git://github.com/BtbN/vlc-raw-io.git"
+DESCRIPTION="VLC VAAPI Encoding Plugin"
+HOMEPAGE="https://github.com/BtbN/vlc-vaapi-enc"
+EGIT_REPO_URI="git://github.com/BtbN/vlc-vaapi-enc.git"
 
 LICENSE="GPL-3"
 SLOT="0"
