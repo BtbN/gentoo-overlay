@@ -23,6 +23,7 @@ IUSE="doc opengl static-libs +encoders"
 DEPEND="dev-libs/glib:2
 	>=media-libs/gstreamer-1.0
 	>=media-libs/gst-plugins-base-1.0
+	>=media-libs/gst-plugins-bad-1.0
 	>=x11-libs/libva-1.2
 	x11-libs/libX11
 	>=virtual/ffmpeg-0.6[vaapi]
