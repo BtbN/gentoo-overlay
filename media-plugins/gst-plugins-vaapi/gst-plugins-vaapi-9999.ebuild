@@ -40,8 +40,6 @@ S="${WORKDIR}/${MY_PN}"
 src_configure() {
 	local myeconfargs=(
 		$(use_enable opengl glx)
-		$(use_enable opengl vaapi-glx)
-		$(use_enable opengl vaapisink-glx)
 		$(use_enable encoders)
 	)
 	autotools-utils_src_configure
