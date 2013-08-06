@@ -4,11 +4,12 @@
 
 EAPI=4
 
-inherit git-2
+inherit cmake-utils git-2
 
 DESCRIPTION="VLC VAAPI Encoding Plugin"
 HOMEPAGE="https://github.com/BtbN/vlc-vaapi-enc"
 EGIT_REPO_URI="git://github.com/BtbN/vlc-vaapi-enc.git"
+EGIT_BRANCH="rewrite"
 
 LICENSE="GPL-3"
 SLOT="0"
