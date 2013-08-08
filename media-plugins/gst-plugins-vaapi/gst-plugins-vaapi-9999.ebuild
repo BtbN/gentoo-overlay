@@ -5,7 +5,7 @@
 EAPI=4
 
 EGIT_REPO_URI="git://gitorious.org/~windyuan/vaapi/windyuan-gstreamer-vaapi.git"
-EGIT_BRANCH="encoder-1.0"
+EGIT_MASTER="encoder-1.0"
 EGIT_HAS_SUBMODULES="1"
 EGIT_BOOTSTRAP="[ ! -f gtk-doc.make ] && echo 'EXTRA_DIST =' > gtk-doc.make; eautoreconf"
 
