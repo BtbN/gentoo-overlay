@@ -26,7 +26,7 @@ DEPEND="
 DOCS=( AUTHORS ChangeLog NEWS README )
 
 src_prepare() {
-	eautoreconf || die
+	./bootstrap || die
 	sed -e '/CFLAGS/s:-O2::' -e '/CFLAGS/s:-O6::' -e '/CFLAGS/s:-Werror::' -i configure || die
 }
 
