@@ -4,25 +4,20 @@
 
 EAPI=5
 
-inherit git-2
+inherit subversion
 
-DESCRIPTION="library for MPEG TS/DVB PSI tables decoding and generation"
-HOMEPAGE="http://www.videolan.org/libdvbpsi"
+DESCRIPTION="library for dvb csa descrambling"
+HOMEPAGE="http://www.videolan.org/libdvbcsa"
 SRC_URI=""
-EGIT_REPO_URI="git://git.videolan.org/libdvbpsi.git"
+ESVN_REPO_URI="svn://svn.videolan.org/libdvbcsa/trunk"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS=""
-IUSE="doc static-libs"
+IUSE="static-libs"
 
 RDEPEND=""
-DEPEND="
-    sys-devel/automake:1.12
-	doc? (
-		app-doc/doxygen
-		>=media-gfx/graphviz-2.26
-	)"
+DEPEND="sys-devel/automake:1.12"
 
 DOCS=( AUTHORS ChangeLog NEWS README )
 
@@ -37,14 +32,8 @@ src_configure() {
 		--enable-release
 }
 
-src_compile() {
-	emake
-	use doc && emake doc
-}
-
 src_install() {
 	default
-	use doc && dohtml doc/doxygen/html/*
 	rm -f "${ED}"usr/lib*/${PN}.la
 }
 
