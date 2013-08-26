@@ -40,6 +40,7 @@ src_prepare() {
 src_configure() {
 	econf	--disable-dependency-tracking \
 		--disable-gecko \
+		--disable-gtkhtml \
 		--enable-webkit \
 		--disable-monowebbrowser
 }
