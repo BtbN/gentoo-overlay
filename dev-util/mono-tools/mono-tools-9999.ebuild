@@ -29,6 +29,10 @@ PATCHES=( "${FILESDIR}/${PN}-2.10-autoconf.patch" )
 #Fails parallel make.
 MAKEOPTS="${MAKEOPTS} -j1"
 
+src_unpack() {
+	git-2_src_unpack
+}
+
 src_prepare() {
 	base_src_prepare
 
