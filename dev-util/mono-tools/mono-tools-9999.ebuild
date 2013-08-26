@@ -4,17 +4,19 @@
 
 EAPI="4"
 
-inherit mono-env autotools base
+inherit git-2 mono-env autotools base
 
 DESCRIPTION="Set of useful Mono related utilities"
 HOMEPAGE="http://www.mono-project.com/"
 
 LICENSE="GPL-2 MIT"
 SLOT="0"
-KEYWORDS="amd64 ppc x86"
+KEYWORDS=""
 IUSE=""
+SRC_URI=""
+EGIT_REPO_URI="git://github.com/mono/mono-tools.git"
 
-RDEPEND="=virtual/monodoc-${PV}*
+RDEPEND="virtual/monodoc
 	>=dev-dotnet/gtk-sharp-2.12.21
 	>=dev-dotnet/webkit-sharp-0.2-r1
 	"
@@ -22,8 +24,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig"
 
-PATCHES=( "${FILESDIR}/${PN}-2.8-html-renderer-fixes.patch"
-		"${FILESDIR}/${PN}-2.10-autoconf.patch" )
+PATCHES=( "${FILESDIR}/${PN}-2.10-autoconf.patch" )
 
 #Fails parallel make.
 MAKEOPTS="${MAKEOPTS} -j1"
