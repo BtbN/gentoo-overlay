@@ -44,6 +44,6 @@ src_compile() {
 src_install() {
 	default
 	mono_multilib_comply || die
-	sed -i "s/\\r//g" usr/bin/* || die
+	sed -i "s/\\r//g" "${D}"/usr/bin/* || die
 }
 
