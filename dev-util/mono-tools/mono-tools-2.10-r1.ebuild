@@ -4,7 +4,7 @@
 
 EAPI="4"
 
-inherit mono-env autotools
+inherit mono-env autotools base
 
 DESCRIPTION="Set of useful Mono related utilities"
 HOMEPAGE="http://www.mono-project.com/"
@@ -29,7 +29,7 @@ PATCHES=( "${FILESDIR}/${PN}-2.8-html-renderer-fixes.patch"
 MAKEOPTS="${MAKEOPTS} -j1"
 
 src_prepare() {
-	default
+	base_src_prepare
 
 	# Stop getting ACLOCAL_FLAGS command not found problem like bug #298813
 	sed -i -e '/ACLOCAL_FLAGS/d' Makefile.am || die
