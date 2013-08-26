@@ -8,20 +8,18 @@ inherit mono autotools base
 
 SLOT="2"
 KEYWORDS="~amd64 ~x86"
-SRC_URI="http://download.mono-project.com/sources/gtk-sharp212/${P}.tar.gz"
+SRC_URI="http://ftp.gnome.org/pub/gnome/sources/gnome-sharp/2.24/${PN}-${PV}.tar.bz2"
 IUSE="debug"
 
 RESTRICT="test"
 
 RDEPEND="
-	>=dev-lang/mono-3.0
-	>=dev-util/pkgconfig-0.9
-	x11-libs/pango
-	>=dev-libs/glib-2.31
-	dev-libs/atk
-	x11-libs/gtk+:2
-	gnome-base/libglade
-	dev-perl/XML-LibXML"
+	>=dev-dotnet/gtk-sharp-2.12.21
+	gnome-base/gconf
+	gnome-base/libgnomecanvas
+	gnome-base/libgnomeui
+	media-libs/libart_lgpl
+	"
 DEPEND="${RDEPEND}
 	sys-devel/automake:1.11"
 
