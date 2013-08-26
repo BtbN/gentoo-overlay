@@ -13,8 +13,16 @@ IUSE="debug"
 
 RESTRICT="test"
 
-DEPEND="sys-devel/automake:1.11"
-RDEPEND=""
+RDEPEND="
+	>=dev-lang/mono-3.0
+	>=dev-util/pkgconfig-0.9
+	x11-libs/pango
+	>=dev-libs/glib-2.31
+	dev-libs/atk
+	x11-libs/gtk+:2
+	gnome-base/libglade"
+DEPEND="${RDEPEND}
+	sys-devel/automake:1.11"
 
 src_prepare() {
 	base_src_prepare || die
