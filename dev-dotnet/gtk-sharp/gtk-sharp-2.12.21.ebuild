@@ -23,7 +23,7 @@ src_prepare() {
 }
 
 src_configure() {
-	./configure \
+	econf \
 		$(use_enable debug) \
 		|| die
 }
