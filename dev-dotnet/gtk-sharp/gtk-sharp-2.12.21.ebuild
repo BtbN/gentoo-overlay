@@ -33,7 +33,7 @@ src_compile() {
 }
 
 src_install() {
-	emake install DESTDIR="${D}" || die
+	default
 	mono_multilib_comply || die
 }
 
