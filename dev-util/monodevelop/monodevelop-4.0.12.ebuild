@@ -17,7 +17,7 @@ IUSE="+subversion +git"
 RDEPEND=">=dev-lang/mono-3.0
 	>=dev-dotnet/gnome-sharp-2.24.2-r1
 	>=dev-dotnet/gtk-sharp-2.12.21
-	>=dev-dotnet/mono-addins-0.6[gtk]
+	>=dev-dotnet/mono-addins-1.0[gtk]
 	>=dev-dotnet/xsp-2
 	dev-util/ctags
 	sys-apps/dbus[X]
