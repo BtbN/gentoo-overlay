@@ -22,7 +22,7 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	virtual/pkgconfig"
 
-PATCHES=( "${FILESDIR}/${PN}-2.10-autoconf.patch" )
+#PATCHES=( "${FILESDIR}/${PN}-2.10-autoconf.patch" )
 
 #Fails parallel make.
 MAKEOPTS="${MAKEOPTS} -j1"
