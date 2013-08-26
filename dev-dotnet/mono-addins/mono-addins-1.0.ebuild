@@ -20,6 +20,11 @@ RDEPEND=">=dev-lang/mono-3
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
 
+src_prepare() {
+	default
+	sed -i "s;Mono.Cairo;Mono.Cairo, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756;g" Mono.Addins.Gui/Mono.Addins.Gui.csproj || die "sed failed"
+}
+
 src_configure() {
 	econf $(use_enable gtk gui)
 }
