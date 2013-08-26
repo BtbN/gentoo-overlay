@@ -13,6 +13,9 @@ IUSE="debug"
 
 RESTRICT="test"
 
+DEPEND="sys-devel/automake:1.11"
+RDEPEND=""
+
 src_prepare() {
 	base_src_prepare || die
 	eautoreconf || die
