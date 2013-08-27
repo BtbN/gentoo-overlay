@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -12,37 +12,26 @@ inherit multilib toolchain-funcs linux-info qt4-r2 scons-utils ${VCS_ECLASS}
 
 DESCRIPTION="Your friendly chat client"
 HOMEPAGE="http://swift.im/"
-if [[ ${PV} == *9999* ]] ; then
-	EGIT_REPO_URI="git://swift.im/swift"
-else
-	SRC_URI="http://swift.im/downloads/releases/${P}/${P}.tar.gz"
-fi
+EGIT_REPO_URI="git://swift.im/swift"
 
 LICENSE="GPL-3"
 SLOT="0"
-if [[ ${PV} == *9999* ]] ; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS=""
 
-IUSE="avahi debug doc examples +expat qt4 ssl static-libs zeroconf"
+IUSE="avahi debug doc examples +expat qt4 ssl static-libs"
 
 RDEPEND="
 	dev-libs/boost
 	expat? ( dev-libs/expat )
 	!expat? ( dev-libs/libxml2 )
 	ssl? ( dev-libs/openssl )
-	zeroconf? (
-		avahi? ( net-dns/avahi )
-		!avahi? ( net-misc/mDNSResponder )
-	)
+	avahi? ( net-dns/avahi )
 	net-dns/libidn
 	sys-libs/zlib
 	qt4? (
 		x11-libs/libXScrnSaver
-		x11-libs/qt-gui
-		x11-libs/qt-webkit
+		dev-qt/qtgui:4
+		dev-qt/qtwebkit:4
 	)
 "
 DEPEND="${RDEPEND}
@@ -84,7 +73,6 @@ set_scons_vars() {
 		$(use_scons debug)
 		$(use !static-libs && use_scons !static-libs swiften_dll)
 		$(use_scons ssl openssl)
-		$(use zeroconf && use_scons !avahi bonjour)
 	)
 }
 

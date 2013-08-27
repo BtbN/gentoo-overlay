@@ -1,14 +1,12 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-LANGS=" ca de es fr hu nl pl ru se sk"
+LANGS="ca de es fr hu nl pl ru se sk"
 
-[[ ${PV} = *9999* ]] && VCS_ECLASS="git-2" || VCS_ECLASS=""
-
-inherit multilib toolchain-funcs linux-info qt4-r2 scons-utils ${VCS_ECLASS}
+inherit multilib toolchain-funcs linux-info qt4-r2 scons-utils
 
 inherit versionator
 MY_PN="swift"
@@ -18,37 +16,26 @@ S="${WORKDIR}/${MY_P}"
 
 DESCRIPTION="Your friendly chat client"
 HOMEPAGE="http://swift.im/"
-if [[ ${PV} == *9999* ]] ; then
-	EGIT_REPO_URI="git://swift.im/swift"
-else
-	SRC_URI="http://swift.im/downloads/releases/${MY_P}/${MY_P}.tar.gz"
-fi
+SRC_URI="http://swift.im/downloads/releases/${MY_P}/${MY_P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-if [[ ${PV} == *9999* ]] ; then
-	KEYWORDS=""
-else
-	KEYWORDS="~amd64 ~x86"
-fi
+KEYWORDS="~amd64 ~x86"
 
-IUSE="avahi debug doc examples +expat qt4 ssl static-libs zeroconf"
+IUSE="avahi debug doc examples +expat qt4 ssl static-libs"
 
 RDEPEND="
 	dev-libs/boost
 	expat? ( dev-libs/expat )
 	!expat? ( dev-libs/libxml2 )
 	ssl? ( dev-libs/openssl )
-	zeroconf? (
-		avahi? ( net-dns/avahi )
-		!avahi? ( net-misc/mDNSResponder )
-	)
+	avahi? ( net-dns/avahi )
 	net-dns/libidn
 	sys-libs/zlib
 	qt4? (
 		x11-libs/libXScrnSaver
-		x11-libs/qt-gui
-		x11-libs/qt-webkit
+		dev-qt/qtgui:4
+		dev-qt/qtwebkit:4
 	)
 "
 DEPEND="${RDEPEND}
@@ -90,7 +77,6 @@ set_scons_vars() {
 		$(use_scons debug)
 		$(use !static-libs && use_scons !static-libs swiften_dll)
 		$(use_scons ssl openssl)
-		$(use zeroconf && use_scons !avahi bonjour)
 	)
 }
 
