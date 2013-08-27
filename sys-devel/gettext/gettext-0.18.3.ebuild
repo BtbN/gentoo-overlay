@@ -105,11 +105,11 @@ pkg_preinst() {
 	# older gettext's sometimes installed libintl ...
 	# need to keep the linked version or the system
 	# could die (things like sed link against it :/)
-	preserve_old_lib /{,usr/}$(get_libdir)/libintl$(get_libname 7)
+	preserve_old_lib /{,usr/}$(get_libdir)/libintl$(get_libname 7) #nowarn
 
 	java-pkg-opt-2_pkg_preinst
 }
 
 pkg_postinst() {
-	preserve_old_lib_notify /{,usr/}$(get_libdir)/libintl$(get_libname 7)
+	preserve_old_lib_notify /{,usr/}$(get_libdir)/libintl$(get_libname 7) #nowarn
 }

@@ -35,4 +35,3 @@ src_install() {
 	default
 	rm -f "${ED}"usr/lib*/${PN}.la
 }
-

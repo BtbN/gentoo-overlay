@@ -18,4 +18,3 @@ IUSE=""
 
 DEPEND="media-video/vlc"
 RDEPEND="${DEPEND}"
-

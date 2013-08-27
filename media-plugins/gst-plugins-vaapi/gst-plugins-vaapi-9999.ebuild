@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -21,17 +21,16 @@ KEYWORDS=""
 
 IUSE="doc opengl static-libs +encoders"
 
-DEPEND="dev-libs/glib:2
+RDEPEND="dev-libs/glib:2
 	>=media-libs/gstreamer-1.0
 	>=media-libs/gst-plugins-base-1.0
 	>=media-libs/gst-plugins-bad-1.0
 	>=x11-libs/libva-1.2
 	x11-libs/libX11
 	>=virtual/ffmpeg-0.6[vaapi]
-	doc? ( dev-util/gtk-doc )
 	opengl? ( virtual/opengl )"
-
-RDEPEND="${DEPEND}"
+DEPEND="${RDEPEND}
+	doc? ( dev-util/gtk-doc )"
 
 DOCS=(AUTHORS README NEWS)
 
@@ -45,4 +44,3 @@ src_configure() {
 	)
 	autotools-utils_src_configure
 }
-

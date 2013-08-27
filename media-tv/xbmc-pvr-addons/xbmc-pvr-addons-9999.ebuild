@@ -32,4 +32,3 @@ src_configure() {
 		--datadir=/usr/share/xbmc/addons \
 		$(use_enable with-deps addons-with-dependencies) || die "econf failed"
 }
-

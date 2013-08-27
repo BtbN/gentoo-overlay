@@ -18,7 +18,7 @@ IUSE="doc static-libs"
 
 RDEPEND=""
 DEPEND="
-    sys-devel/automake:1.12
+	sys-devel/automake:1.12
 	doc? (
 		app-doc/doxygen
 		>=media-gfx/graphviz-2.26
@@ -47,4 +47,3 @@ src_install() {
 	use doc && dohtml doc/doxygen/html/*
 	rm -f "${ED}"usr/lib*/${PN}.la
 }
-

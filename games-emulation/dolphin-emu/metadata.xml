@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+</longdescription>
+<use>
+	<flag name="sse4_2">Build with sse4.2 optimizations</flag>
+	<flag name="xrandr">Build with xrandr support</flag>
+</use>
+</pkgmetadata>
