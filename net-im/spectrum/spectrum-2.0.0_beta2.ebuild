@@ -1,5 +1,4 @@
-
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -11,26 +10,19 @@ inherit cmake-utils versionator ${VCS_ECLASS}
 
 DESCRIPTION="Spectrum is a XMPP transport/gateway"
 HOMEPAGE="http://spectrum.im"
-if [[ ${PV} == *9999* ]]; then
-	EGIT_REPO_URI="git://github.com/hanzz/libtransport.git"
-else
-	MY_PN="spectrum"
-	MY_PV=$(replace_version_separator '_' '-')
-	MY_P="${MY_PN}-${MY_PV}"
-	SRC_URI="https://github.com/downloads/hanzz/libtransport/${MY_P}.tar.gz"
-	S="${WORKDIR}/${MY_P}"
-fi
+MY_PN="spectrum"
+MY_PV=$(replace_version_separator '_' '-')
+MY_P="${MY_PN}-${MY_PV}"
+SRC_URI="mirror://github/hanzz/libtransport/${MY_P}.tar.gz"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~amd64 ~x86"
-IUSE_PLUGINS="frotz irc jabber purple skype sms twitter yahoo"
+IUSE_PLUGINS="frotz jabber purple sms twitter yahoo" # irc
 IUSE="debug doc libev mysql postgres sqlite test ${IUSE_PLUGINS}"
 
-# Richard H. <chain@rpgfiction.net> (2012-10-17): 2.0_beta2 does only build with swift-2.0_beta1
-[[ ${PV} = *9999* ]] && RDEPEND="net-im/swift[ssl]" || RDEPEND="=net-im/swift-2.0_beta1[ssl]"
-
-RDEPEND="${RDEPEND}
+RDEPEND="net-im/swift
 	dev-libs/libev
 	dev-libs/log4cxx
 	dev-libs/openssl
@@ -39,11 +31,10 @@ RDEPEND="${RDEPEND}
 	mysql? ( virtual/mysql )
 	postgres? ( dev-libs/libpqxx )
 	sqlite? ( dev-db/sqlite:3 )
-	irc? ( net-im/communi )
 	purple? ( >=net-im/pidgin-2.6.0 )
-	skype? ( dev-libs/dbus-glib x11-base/xorg-server[xvfb] net-im/skype )
 	libev? ( dev-libs/libev )
 	"
+# irc? ( net-im/communi )
 
 DEPEND="${RDEPEND}
 	dev-util/cmake
@@ -94,13 +85,12 @@ src_install() {
 	keepdir "${EPREFIX}"/var/run/spectrum2
 }
 
-
 pkg_postinst() {
-        # Create jabber-user
-        enewgroup jabber
-        enewuser jabber -1 -1 -1 jabber
+	# Create jabber-user
+	enewgroup jabber
+	enewuser jabber -1 -1 -1 jabber
 
-        # Set correct rights
+	# Set correct rights
 	chown jabber:jabber -R "/etc/spectrum2" || die
 	chown jabber:jabber -R "${EPREFIX}/var/log/spectrum2" || die
 	chown jabber:jabber -R "${EPREFIX}/var/run/spectrum2" || die

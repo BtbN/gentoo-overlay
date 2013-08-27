@@ -1,5 +1,4 @@
-
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -24,7 +23,7 @@ fi
 LICENSE="GPL-2"
 SLOT="2"
 KEYWORDS="~amd64 ~x86"
-IUSE_PLUGINS="frotz irc jabber purple skype sms twitter yahoo"
+IUSE_PLUGINS="frotz jabber purple sms twitter yahoo" # irc
 IUSE="debug doc libev mysql postgres sqlite test ${IUSE_PLUGINS}"
 
 # Richard H. <chain@rpgfiction.net> (2012-10-17): 2.0_beta2 does only build with swift-2.0_beta1
@@ -39,11 +38,10 @@ RDEPEND="${RDEPEND}
 	mysql? ( virtual/mysql )
 	postgres? ( dev-libs/libpqxx )
 	sqlite? ( dev-db/sqlite:3 )
-	irc? ( net-im/communi )
 	purple? ( >=net-im/pidgin-2.6.0 )
-	skype? ( dev-libs/dbus-glib x11-base/xorg-server[xvfb] net-im/skype )
 	libev? ( dev-libs/libev )
 	"
+# irc? ( net-im/communi )
 
 DEPEND="${RDEPEND}
 	dev-util/cmake
@@ -76,7 +74,6 @@ src_configure() {
 		$(cmake-utils_use_enable irc IRC)
 		$(cmake-utils_use_enable jabber SWIFTEN)
 		$(cmake-utils_use_enable purple PURPLE)
-		$(cmake-utils_use_enable skype SKYPE)
 		$(cmake-utils_use_enable sms SMSTOOLS3)
 		$(cmake-utils_use_enable twitter TWITTER)
 		$(cmake-utils_use_enable yahoo YAHOO2)
@@ -94,13 +91,12 @@ src_install() {
 	keepdir "${EPREFIX}"/var/run/spectrum2
 }
 
-
 pkg_postinst() {
-        # Create jabber-user
-        enewgroup jabber
-        enewuser jabber -1 -1 -1 jabber
+	# Create jabber-user
+	enewgroup jabber
+	enewuser jabber -1 -1 -1 jabber
 
-        # Set correct rights
+	# Set correct rights
 	chown jabber:jabber -R "/etc/spectrum2" || die
 	chown jabber:jabber -R "${EPREFIX}/var/log/spectrum2" || die
 	chown jabber:jabber -R "${EPREFIX}/var/run/spectrum2" || die

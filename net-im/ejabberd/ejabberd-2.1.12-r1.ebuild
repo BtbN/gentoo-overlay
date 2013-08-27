@@ -46,7 +46,7 @@ src_prepare() {
 		EPATCH_OPTS="-p2" epatch "${WORKDIR}"/${PN}-mod_statsdx-1118.patch
 	fi
 
-    if use remoteroster; then
+	if use remoteroster; then
 		EPATCH_OPTS="-d ${WORKDIR}/${P}" epatch "${FILESDIR}/ejabberd-2.1.12-remote-roster.patch"
 	fi
 

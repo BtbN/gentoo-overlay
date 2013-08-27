@@ -49,7 +49,7 @@ src_prepare() {
 
 	if use remoteroster; then
 		EPATCH_OPTS="-d ${WORKDIR}/${P}" epatch "${FILESDIR}/ejabberd-2.1.12-remote-roster.patch"
-    fi
+	fi
 
 	# don't install release notes (we'll do this manually)
 	sed '/install .* [.][.]\/doc\/[*][.]txt $(DOCDIR)/d' -i Makefile.in || die
