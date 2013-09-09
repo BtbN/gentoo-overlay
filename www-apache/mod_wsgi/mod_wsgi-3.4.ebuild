@@ -27,6 +27,11 @@ DOCFILES="README"
 
 need_apache2
 
+pkg_setup() {
+	python-single-r1_pkg_setup
+	apache-module_pkg_setup
+}
+
 src_configure() {
 	econf --with-apxs=${APXS}
 }
