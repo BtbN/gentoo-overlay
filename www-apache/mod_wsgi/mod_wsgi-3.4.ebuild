@@ -29,7 +29,6 @@ need_apache2
 
 pkg_setup() {
 	python-single-r1_pkg_setup
-	default
 }
 
 src_configure() {
