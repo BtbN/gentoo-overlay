@@ -34,3 +34,7 @@ pkg_setup() {
 src_configure() {
 	econf --with-apxs=${APXS}
 }
+
+src_compile() {
+	default
+}
