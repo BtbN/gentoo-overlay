@@ -26,6 +26,6 @@ APACHE2_MOD_FILE="${S}/apache2/.libs/${PN}.so"
 APACHE2_MOD_CONF="20_mod_scgi"
 APACHE2_MOD_DEFINE="SCGI"
 
-DOCFILES="PKG-INFO LICENSE.txt CHANGES.txt apache2/README.txt"
+DOCFILES="LICENSE.txt apache2/README.txt"
 
 need_apache2
