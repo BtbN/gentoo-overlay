@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-inherit cmake-utils git-2
+# inherit cmake-utils git-2
+inherit git-2
 
 DESCRIPTION="VLC VAAPI Encoding Plugin"
 HOMEPAGE="https://github.com/BtbN/vlc-vaapi-enc"
