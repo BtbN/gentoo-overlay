@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+Project Tox, also known as Tox, is a FOSS (Free and Open Source Software) instant messaging application aimed to replace Skype.
+
+With the rise of governmental monitoring programs, Tox aims to be an easy to use, all-in-one communication platform (including audio, and videochats in the future) that ensures their users full privacy and secure message delivery.
+</longdescription>
+<use>
+<flag name="ntox">Build ntox cli client</flag>
+<flag name="dht-bootstrap-daemon">Build dht bootstrap daemon</flag>
+</use>
+</pkgmetadata>
