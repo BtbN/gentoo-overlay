@@ -19,7 +19,8 @@ IUSE="ntox dht-bootstrap-daemon"
 
 DEPEND="
 	>=dev-libs/libsodium-0.4.2
-	ntox? ( sys-libs/ncurses )"
+	ntox? ( sys-libs/ncurses )
+	dht-bootstrap-daemon? ( dev-libs/libconfig )"
 RDEPEND="${DEPEND}"
 
 DOCS=( AUTHORS README ChangeLog NEWS  )
