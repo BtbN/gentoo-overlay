@@ -23,7 +23,7 @@ DEPEND="
 	dht-bootstrap-daemon? ( dev-libs/libconfig )"
 RDEPEND="${DEPEND}"
 
-DOCS=( AUTHORS README ChangeLog NEWS  )
+DOCS=( AUTHORS README README.md ChangeLog NEWS  )
 
 src_configure() {
 	local myeconfargs=(
