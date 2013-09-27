@@ -2,14 +2,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-EGIT_REPO_URI="git://gitorious.org/~windyuan/vaapi/windyuan-gstreamer-vaapi.git"
-EGIT_BRANCH="encoder-1.0"
-EGIT_HAS_SUBMODULES="1"
-EGIT_BOOTSTRAP="[ ! -f gtk-doc.make ] && echo 'EXTRA_DIST =' > gtk-doc.make; eautoreconf"
+EGIT_REPO_URI="git://gitorious.org/gst-plugins-vaapi/gst-plugins-vaapi.git"
+AUTOTOOLS_AUTORECONF="yes"
 
-inherit autotools-utils git-2
+inherit git-r3 autotools-utils
 
 DESCRIPTION="GStreamer VA-API plugins"
 HOMEPAGE="http://gitorious.org/vaapi/gstreamer-vaapi"
@@ -34,8 +32,13 @@ DEPEND="${RDEPEND}
 
 DOCS=(AUTHORS README NEWS)
 
-MY_PN="gstreamer-vaapi"
-S="${WORKDIR}/${MY_PN}"
+S="${WORKDIR}/${P}"
+
+src_prepare() {
+	[ -f gtk-doc.make ] || echo 'EXTRA_DIST =' > gtk-doc.make
+
+	autotools-utils_src_prepare
+}
 
 src_configure() {
 	local myeconfargs=(
