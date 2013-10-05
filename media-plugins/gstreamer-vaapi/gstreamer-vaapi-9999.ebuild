@@ -20,9 +20,9 @@ KEYWORDS=""
 IUSE="doc opengl static-libs +encoders"
 
 RDEPEND="dev-libs/glib:2
-	>=media-libs/gstreamer-1.0
-	>=media-libs/gst-plugins-base-1.0
-	>=media-libs/gst-plugins-bad-1.0
+	>=media-libs/gstreamer-1.2
+	>=media-libs/gst-plugins-base-1.2
+	>=media-libs/gst-plugins-bad-1.2
 	>=x11-libs/libva-1.2
 	x11-libs/libX11
 	>=virtual/ffmpeg-0.6[vaapi]
@@ -44,6 +44,7 @@ src_configure() {
 	local myeconfargs=(
 		$(use_enable opengl glx)
 		$(use_enable encoders)
+		--with-gstreamer-api=1.2
 	)
 	autotools-utils_src_configure
 }
