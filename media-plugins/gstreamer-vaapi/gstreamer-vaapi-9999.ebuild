@@ -4,7 +4,7 @@
 
 EAPI=5
 
-EGIT_REPO_URI="git://gitorious.org/gstreamer-vaapi/gstreamer-vaapi.git"
+EGIT_REPO_URI="git://gitorious.org/vaapi/gstreamer-vaapi.git"
 AUTOTOOLS_AUTORECONF="yes"
 
 inherit git-r3 autotools-utils
