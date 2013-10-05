@@ -17,7 +17,7 @@ LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS=""
 
-IUSE="doc opengl static-libs +encoders"
+IUSE="doc opengl static-libs"
 
 RDEPEND="dev-libs/glib:2
 	>=media-libs/gstreamer-1.2
@@ -43,7 +43,6 @@ src_prepare() {
 src_configure() {
 	local myeconfargs=(
 		$(use_enable opengl glx)
-		$(use_enable encoders)
 		--with-gstreamer-api=1.2
 	)
 	autotools-utils_src_configure
