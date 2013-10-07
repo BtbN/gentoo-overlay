@@ -30,6 +30,7 @@ src_configure() {
 		$(use_enable dht-bootstrap-daemon)
 		$(use_enable ntox)
 		--disable-tests
+		--disable-testing
 	)
 	autotools-utils_src_configure
 }
