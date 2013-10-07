@@ -34,3 +34,9 @@ src_configure() {
 	)
 	autotools-utils_src_configure
 }
+
+src_install() {
+	autotools-utils_src_install
+
+	use dht-bootstrap-daemon && newinitd "${FILESDIR}"/initd tox-dht-bootstrap
+}
