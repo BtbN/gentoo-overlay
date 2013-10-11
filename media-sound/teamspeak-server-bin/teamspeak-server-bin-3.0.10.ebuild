@@ -21,7 +21,7 @@ SRC_URI="amd64? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak
 
 RDEPEND=""
 DEPEND="${RDEPEND}
-	app-arch/gzip"
+	app-arch/bzip2"
 
 S="${WORKDIR}/teamspeak3-server_linux-${ARCH}"
 
@@ -39,6 +39,15 @@ pkg_setup() {
 	enewuser teamspeak3
 }
 
+src_unpack() {
+	default
+
+	# Needed to overcome fetch restriction
+	cd "${S}"
+	wget "http://btbn.de/bins/libmysqlclient.so.15.bz2" || die "wget failed"
+	bunzip2 libmysqlclient.so.15.bz2 || die "bunzip2 failed"
+}
+
 src_install() {
 	# Install TeamSpeak 3 server into /opt/teamspeak3-server.
 	local opt_dir="/opt/teamspeak3-server"
@@ -54,8 +63,7 @@ src_install() {
 	exeinto ${opt_dir}
 	doexe *.sh
 	doins *.so
-
-	zcat "${FILESDIR}"/libmysqlclient.so.15.gz > "${ED}${opt_dir}/libmysqlclient.so.15" || die "gunzip failed"
+	doins libmysqlclient.so.15
 
 	doins -r sql
 
