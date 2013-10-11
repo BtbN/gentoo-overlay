@@ -19,6 +19,10 @@ RESTRICT="installsources mirror fetch strip"
 SRC_URI="amd64? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak3-server_linux-amd64-${PV}.tar.gz )
 	x86? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak3-server_linux-x86-${PV}.tar.gz )"
 
+RDEPEND=""
+DEPEND="${RDEPEND}
+	app-arch/gzip"
+
 S="${WORKDIR}/teamspeak3-server_linux-${ARCH}"
 
 pkg_nofetch() {
