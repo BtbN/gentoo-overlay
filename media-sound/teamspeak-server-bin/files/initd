@@ -9,25 +9,49 @@ depend() {
 }
 
 start() {
-	ebegin "Starting TeamSpeak 3 Server"
+	ebegin "Starting teamspeak3 server"
 
 	[ -d /run/teamspeak3-server ] || mkdir /run/teamspeak3-server
 	chown teamspeak3:teamspeak3 /run/teamspeak3-server
 
 	start-stop-daemon --start --background \
 		--pidfile "/run/teamspeak3-server/server.pid" --make-pidfile \
-		--user "teamspeak3" --chdir "/opt/teamspeak3-server" \
+		--user "teamspeak3" \
 		--exec "/usr/bin/ts3server" -- \
 		inifile="/etc/teamspeak3-server/server.conf"
+
+	eend $?
+
+
+	[ -f /usr/bin/tsdnsserver ] || return
+
+
+	ebegin "Starting tsdns server"
+
+	start-stop-daemon --start --background \
+		--pidfile "/run/teamspeak3-server/tsdns.pid" --make-pidfile \
+		--user "teamspeak3" \
+		--exec "/usr/bin/tsdnsserver"
 
 	eend $?
 }
 
 stop() {
-	ebegin "Stopping TeamSpeak Server"
+	ebegin "Stopping teamspeak3 server"
 
 	start-stop-daemon --stop \
 		--pidfile "/run/teamspeak3-server/server.pid"
+
+	eend $?
+
+
+        [ -f /usr/bin/tsdnsserver ] || return
+
+
+	ebegin "Stopping tsdns server"
+
+	start-stop-daemon --stop \
+		--pidfile "/run/teamspeak3-server/tsdns.pid"
 
 	eend $?
 }
