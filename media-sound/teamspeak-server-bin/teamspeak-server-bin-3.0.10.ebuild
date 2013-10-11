@@ -76,15 +76,15 @@ src_install() {
 	insinto /etc/teamspeak3-server
 	doins "${FILESDIR}"/server.conf
 	doins "${FILESDIR}"/ts3db_mysql.ini
-	keepdir /{etc,var/{lib,log,run}}/teamspeak3-server
+	keepdir /{etc,var/{lib,log}}/teamspeak3-server
 
 	# Install the init script and systemd unit.
 	newinitd "${FILESDIR}"/initd teamspeak3-server
 
 	# Fix up permissions.
-	fowners teamspeak3 /{etc,var/{lib,log,run}}/teamspeak3-server
+	fowners teamspeak3 /{etc,var/{lib,log}}/teamspeak3-server
 	fowners teamspeak3 ${opt_dir}
 
-	fperms 700 /{etc,var/{lib,log,run}}/teamspeak3-server
+	fperms 700 /{etc,var/{lib,log}}/teamspeak3-server
 	fperms 755 ${opt_dir}
 }
