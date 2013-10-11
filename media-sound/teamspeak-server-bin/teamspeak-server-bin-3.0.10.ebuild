@@ -81,6 +81,7 @@ src_install() {
 	doins "${FILESDIR}"/server.conf
 	doins "${FILESDIR}"/ts3db_mysql.ini
 	keepdir /{etc,var/{lib,log}}/teamspeak3-server
+	use tsdns && touch "${ED}/etc/teamspeak3-server/tsdns_settings.ini"
 
 	# Install the init script and systemd unit.
 	newinitd "${FILESDIR}"/initd teamspeak3-server
