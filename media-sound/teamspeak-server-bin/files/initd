@@ -32,6 +32,7 @@ start() {
 
 	start-stop-daemon --start --background \
 		--pidfile "/run/teamspeak3-server/tsdns.pid" --make-pidfile \
+		--stdout "/var/log/teamspeak3-server/tsdns.log" --stderr "/var/log/teamspeak3-server/tsdns.err" \
 		--user "teamspeak3" \
 		--exec "/usr/bin/tsdnsserver"
 
