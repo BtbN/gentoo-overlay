@@ -92,4 +92,7 @@ src_install() {
 
 	fperms 700 /{etc,var/{lib,log}}/teamspeak3-server
 	fperms 755 ${opt_dir}
+
+	chown -R teamspeak3 "${ED}/etc/teamspeak3-server"
+	chmod -R 700 "${ED}/etc/teamspeak3-server"
 }
