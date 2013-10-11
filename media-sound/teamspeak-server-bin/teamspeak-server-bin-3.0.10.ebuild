@@ -70,6 +70,10 @@ src_install() {
 		newdoc tsdns/README README.tsdns
 		newdoc tsdns/USAGE USAGE.tsdns
 		dodoc tsdns/tsdns_settings.ini.sample
+
+		exeinto /usr/bin
+		doexe "${FILESDIR}"/tsdnsserver
+		exeinto ${opt_dir}
 	fi
 
 	# Install the runtime FS layout.
