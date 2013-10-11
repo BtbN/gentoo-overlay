@@ -28,6 +28,8 @@ start() {
 
 	ebegin "Starting tsdns server"
 
+	[ -f /dev/shm/tsdns_update ] && rm /dev/shm/tsdns_update
+
 	start-stop-daemon --start --background \
 		--pidfile "/run/teamspeak3-server/tsdns.pid" --make-pidfile \
 		--user "teamspeak3" \
