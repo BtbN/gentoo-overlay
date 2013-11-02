@@ -18,7 +18,7 @@ RDEPEND=">=virtual/jdk-1.6"
 DEPEND="${RDEPEND}"
 MY_PV="$(get_version_component_range 4-5)"
 
-RESTRICT="strip"
+RESTRICT="strip mirror"
 QA_TEXTRELS="opt/${P}/bin/libbreakgen.so"
 
 S="${WORKDIR}/${PN}-IU-${MY_PV}"
