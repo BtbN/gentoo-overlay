@@ -17,8 +17,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=">=dev-python/gdata-1.2.4"
+DEPEND=">=dev-python/gdata-1.2.4
+	dev-python/pycurl"
 RDEPEND="${DEPEND}"
 
 DOCS="README CHANGELOG"
-
