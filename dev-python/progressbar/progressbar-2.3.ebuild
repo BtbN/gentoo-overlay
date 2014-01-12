@@ -10,16 +10,14 @@ inherit distutils-r1
 
 DESCRIPTION="Upload videos to Youtube from the command-line"
 HOMEPAGE="http://code.google.com/p/youtube-upload/"
-SRC_URI="http://${PN}.googlecode.com/files/${P}.tgz"
+SRC_URI="http://python-progressbar.googlecode.com/files/${P}-dev.tar.gz"
 
 LICENSE=""
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=">=dev-python/gdata-1.2.4
-	dev-python/pycurl
-	>=dev-python/progressbar-2.3"
+DEPEND=""
 RDEPEND="${DEPEND}"
 
-DOCS="README CHANGELOG"
+DOCS="README"
