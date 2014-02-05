@@ -1,6 +1,6 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-python/g-pypi/g-pypi-0.3.ebuild,v 1.6 2013/07/19 07:50:29 mgorny Exp $
+# $Header: $
 
 EAPI="4"
 PYTHON_DEPEND="2:2.6"
@@ -8,7 +8,9 @@ SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="2.5 3.*"
 DISTUTILS_SRC_TEST="nosetests"
 
-inherit distutils
+PYTHON_COMPAT=( python2_7 )
+
+inherit distutils-r1
 
 DESCRIPTION="Manages ebuilds using information from Python Package Index"
 HOMEPAGE="https://github.com/iElectric/g-pypi"
@@ -48,16 +50,16 @@ RDEPEND="
 PYTHON_MODNAME="gpypi"
 
 src_prepare() {
-	distutils_src_prepare
+	distutils-r1_src_prepare
 	sed -e "s:'argparse',::" -i setup.py || die
 }
 
 src_compile() {
-	distutils_src_compile
+	distutils-r1_src_compile
 	use doc && emake -C docs html
 }
 
 src_install() {
-	distutils_src_install
+	distutils-r1_src_install
 	use doc && dohtml -r docs/build/html/*
 }
