@@ -12,7 +12,7 @@ LICENSE="MIT"
 SRC_URI="http://pkg.jenkins-ci.org/redhat/RPMS/noarch/jenkins-${PV}-1.1.noarch.rpm"
 RESTRICT="mirror"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="media-fonts/dejavu"
