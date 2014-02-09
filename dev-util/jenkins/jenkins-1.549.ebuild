@@ -12,12 +12,14 @@ LICENSE="MIT"
 SRC_URI="http://pkg.jenkins-ci.org/redhat/RPMS/noarch/jenkins-${PV}-1.1.noarch.rpm"
 RESTRICT="mirror"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~x86 ~amd64"
 IUSE=""
 
 DEPEND="media-fonts/dejavu"
 RDEPEND="${DEPEND}
 	>=virtual/jdk-1.6"
+
+S="${WORKDIR}"
 
 src_unpack() {
 	rpm_src_unpack ${A}

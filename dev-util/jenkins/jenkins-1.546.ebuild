@@ -19,6 +19,8 @@ DEPEND="media-fonts/dejavu"
 RDEPEND="${DEPEND}
 	>=virtual/jdk-1.6"
 
+S="${WORKDIR}"
+
 src_unpack() {
 	rpm_src_unpack ${A}
 }
