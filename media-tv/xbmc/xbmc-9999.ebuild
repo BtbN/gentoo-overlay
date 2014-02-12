@@ -198,7 +198,7 @@ src_configure() {
 	econf \
 		--docdir=/usr/share/doc/${PF} \
 		--disable-ccache \
-		--disable-external-libraries \
+		--with-ffmpeg=force \
 		$(has_version 'media-video/libav' && echo "--enable-libav-compat") \
 		--enable-gl \
 		$(use_enable airplay) \
