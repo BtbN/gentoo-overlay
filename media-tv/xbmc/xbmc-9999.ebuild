@@ -1,29 +1,46 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-tv/xbmc/xbmc-9999.ebuild,v 1.142 2013/04/20 17:22:26 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-tv/xbmc/xbmc-9999.ebuild,v 1.152 2013/12/31 00:30:11 vapier Exp $
 
-EAPI=5
+EAPI="5"
 
 # Does not work with py3 here
 # It might work with py:2.5 but I didn't test that
 PYTHON_COMPAT=( python{2_6,2_7} )
 PYTHON_REQ_USE="sqlite"
 
-inherit eutils python-single-r1 multiprocessing autotools git-2
+inherit eutils python-single-r1 multiprocessing autotools
 
-EGIT_REPO_URI="git://github.com/xbmc/xbmc.git"
+case ${PV} in
+9999)
+	EGIT_REPO_URI="git://github.com/xbmc/xbmc.git"
+	inherit git-2
+	#SRC_URI="!java? ( mirror://gentoo/${P}-20130413-generated-addons.tar.xz )"
+	;;
+*_alpha*|*_beta*|*_rc*)
+	MY_PV="Frodo_${PV#*_}"
+	MY_P="${PN}-${MY_PV}"
+	SRC_URI="https://github.com/xbmc/xbmc/archive/${MY_PV}.tar.gz -> ${P}.tar.gz
+		!java? ( mirror://gentoo/${P}-generated-addons.tar.xz )"
+	KEYWORDS="~amd64 ~x86"
+	;;
+*)
+	MY_P=${P/_/-*_}
+	SRC_URI="http://mirrors.xbmc.org/releases/source/${MY_P}.tar.gz"
+	KEYWORDS="~amd64 ~x86"
+	;;
+esac
 
 DESCRIPTION="XBMC is a free and open source media-player and entertainment hub"
 HOMEPAGE="http://xbmc.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa altivec avahi bluetooth bluray caps cec css debug +fishbmc
-gles goom joystick midi mysql nfs +opengl profile +projectm pulseaudio
-+rsxs rtmp +samba +sdl sse sse2 sftp udev upnp +usb vaapi vdpau webserver +X
-+xrandr"
+IUSE="airplay alsa altivec avahi bluetooth bluray caps cec css debug +fishbmc gles goom java joystick midi mysql neon nfs +opengl profile +projectm pulseaudio pvr +rsxs rtmp +samba +sdl sse sse2 sftp udev upnp +usb vaapi vdpau webserver +X +xrandr"
 REQUIRED_USE="
+	pvr? ( mysql )
 	rsxs? ( X )
+	X? ( sdl )
 	xrandr? ( X )
 "
 
@@ -33,7 +50,6 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	app-arch/zip
 	app-i18n/enca
 	airplay? ( app-pda/libplist )
-	>=dev-lang/python-2.4
 	dev-libs/boost
 	dev-libs/fribidi
 	dev-libs/libcdio[-minimal]
@@ -75,12 +91,12 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	media-libs/tiff
 	pulseaudio? ( media-sound/pulseaudio )
 	media-sound/wavpack
-	|| ( media-libs/libpostproc media-video/ffmpeg )
+	|| ( >=media-video/ffmpeg-1.2.1:0=[encode] ( media-libs/libpostproc >=media-video/libav-10_alpha:=[encode] ) )
 	rtmp? ( media-video/rtmpdump )
 	avahi? ( net-dns/avahi )
 	nfs? ( net-fs/libnfs )
 	webserver? ( net-libs/libmicrohttpd[messages] )
-	sftp? ( net-libs/libssh )
+	sftp? ( net-libs/libssh[sftp] )
 	net-misc/curl
 	samba? ( >=net-fs/samba-3.4.6[smbclient] )
 	bluetooth? ( net-wireless/bluez )
@@ -98,7 +114,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	vaapi? ( x11-libs/libva[opengl] )
 	vdpau? (
 		|| ( x11-libs/libvdpau >=x11-drivers/nvidia-drivers-180.51 )
-		virtual/ffmpeg[vdpau]
+		|| ( >=media-video/ffmpeg-1.2.1:0=[vdpau] >=media-video/libav-10_alpha:=[vdpau] )
 	)
 	X? (
 		x11-apps/xdpyinfo
@@ -116,12 +132,22 @@ DEPEND="${COMMON_DEPEND}
 	X? ( x11-proto/xineramaproto )
 	dev-util/cmake
 	x86? ( dev-lang/nasm )
-	virtual/jre"
+	java? ( virtual/jre )"
+# Force java for latest git version to avoid having to hand maintain the
+# generated addons package.  #488118
+[[ ${PV} == "9999" ]] && DEPEND+=" virtual/jre"
 
 S=${WORKDIR}/${MY_P}
 
 pkg_setup() {
 	python-single-r1_pkg_setup
+
+	if has_version 'media-video/libav' ; then
+		ewarn "Building ${PN} against media-video/libav is not supported upstream."
+		ewarn "It requires building a (small) wrapper library with some code"
+		ewarn "from media-video/ffmpeg."
+		ewarn "If you experience issues, please try with media-video/ffmpeg."
+	fi
 }
 
 src_unpack() {
@@ -129,18 +155,12 @@ src_unpack() {
 }
 
 src_prepare() {
-	# some dirs ship generated autotools, some dont
-	multijob_init
-	local d
-	for d in $(printf 'f:\n\t@echo $(BOOTSTRAP_TARGETS)\ninclude bootstrap.mk\n' | emake -f - f) ; do
-		[[ -e ${d} ]] && continue
-		pushd ${d/%configure/.} >/dev/null || die
-		AT_NOELIBTOOLIZE="yes" AT_TOPLEVEL_EAUTORECONF="yes" \
-		multijob_child_init eautoreconf
-		popd >/dev/null
-	done
-	multijob_finish
-	elibtoolize
+	epatch "${FILESDIR}"/${PN}-9999-nomythtv.patch
+	epatch "${FILESDIR}"/${PN}-9999-no-arm-flags.patch #400617
+	# The mythtv patch touches configure.ac, so force a regen
+	rm -f configure
+
+	LC_ALL=C ./bootstrap
 
 	# Disable internal func checks as our USE/DEPEND
 	# stuff handles this just fine already #408395
@@ -167,7 +187,7 @@ src_prepare() {
 	epatch_user #293109
 
 	# Tweak autotool timestamps to avoid regeneration
-	find . -type f -print0 | xargs -0 touch -r configure
+	find . -type f -exec touch -r configure {} +
 }
 
 src_configure() {
@@ -178,12 +198,14 @@ src_configure() {
 	# No configure flage for this #403561
 	export ac_cv_lib_bluetooth_hci_devid=$(usex bluetooth)
 	# Requiring java is asine #434662
-	export ac_cv_path_JAVA_EXE=$(which java)
+	[[ ${PV} != "9999" ]] && export ac_cv_path_JAVA_EXE=$(which $(usex java java true))
 
 	econf \
 		--docdir=/usr/share/doc/${PF} \
 		--disable-ccache \
 		--disable-optimizations \
+		--enable-external-libraries \
+		$(has_version 'media-video/libav' && echo "--enable-libav-compat") \
 		--enable-gl \
 		$(use_enable airplay) \
 		$(use_enable avahi) \
@@ -199,11 +221,13 @@ src_configure() {
 		$(use_enable joystick) \
 		$(use_enable midi mid) \
 		$(use_enable mysql) \
+		$(use_enable neon) \
 		$(use_enable nfs) \
 		$(use_enable opengl gl) \
 		$(use_enable profile profiling) \
 		$(use_enable projectm) \
 		$(use_enable pulseaudio pulse) \
+		$(use_enable pvr mythtv) \
 		$(use_enable rsxs) \
 		$(use_enable rtmp) \
 		$(use_enable samba) \
