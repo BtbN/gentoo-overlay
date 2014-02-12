@@ -155,11 +155,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}"/${PN}-9999-nomythtv.patch
-	epatch "${FILESDIR}"/${PN}-9999-no-arm-flags.patch #400617
-	# The mythtv patch touches configure.ac, so force a regen
-	rm -f configure
-
 	LC_ALL=C ./bootstrap
 
 	# Disable internal func checks as our USE/DEPEND
@@ -203,8 +198,7 @@ src_configure() {
 	econf \
 		--docdir=/usr/share/doc/${PF} \
 		--disable-ccache \
-		--disable-optimizations \
-		--enable-external-libraries \
+		--disable-external-libraries \
 		$(has_version 'media-video/libav' && echo "--enable-libav-compat") \
 		--enable-gl \
 		$(use_enable airplay) \
