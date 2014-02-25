@@ -3,7 +3,4 @@
 <pkgmetadata>
 <longdescription lang="en">
 </longdescription>
-<use>
-	<flag name="with-deps">Build with plugins that require additional external dependencies</flag>
-</use>
 </pkgmetadata>
