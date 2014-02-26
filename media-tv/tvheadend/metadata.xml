@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <use>
-    <flag name='libav'>Use libav for muxing and transcoding</flag>
 	<flag name='timeshift'>Build with support for timeshifting</flag>
 	<flag name='trace'>Enable trace debug logger</flag>
 	<flag name='dvbscan'>Automaticaly fetch dvbscan data</flag>

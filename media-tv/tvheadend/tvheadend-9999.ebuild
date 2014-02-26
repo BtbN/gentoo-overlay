@@ -1,8 +1,8 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-tv/tvheadend/tvheadend-3.2.ebuild,v 1.1 2012/10/27 06:09:17 yngwin Exp $
 
-EAPI=4
+EAPI=5
 
 inherit eutils toolchain-funcs user git-2
 
@@ -13,13 +13,13 @@ EGIT_REPO_URI="git://github.com/tvheadend/tvheadend.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="libav avahi xmltv zlib timeshift trace +dvbscan"
+IUSE="ffmpeg avahi xmltv zlib timeshift trace +dvbscan"
 
 DEPEND="dev-libs/openssl
 	virtual/linuxtv-dvb-headers
 	avahi? ( net-dns/avahi )
 	zlib? ( sys-libs/zlib )
-	libav? ( >=media-video/libav-9[encode] )"
+	ffmpeg? ( >=virtual/ffmpeg-9[encode] )"
 RDEPEND="${DEPEND}
 	xmltv? ( media-tv/xmltv )"
 
@@ -44,7 +44,7 @@ src_configure() {
 		$(use_enable zlib) \
 		$(use_enable dvbscan) \
 		$(use_enable timeshift) \
-		$(use_enable libav) \
+		$(use_enable ffmpeg libav) \
 		$(use_enable trace)
 }
 
