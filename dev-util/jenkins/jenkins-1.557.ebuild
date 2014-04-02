@@ -4,12 +4,12 @@
 
 EAPI=5
 
-inherit user java-pkg-2 rpm
+inherit user java-pkg-2
 
 DESCRIPTION="Extensible continuous integration server"
 HOMEPAGE="http://jenkins-ci.org/"
 LICENSE="MIT"
-SRC_URI="http://pkg.jenkins-ci.org/redhat/RPMS/noarch/jenkins-${PV}-1.1.noarch.rpm"
+SRC_URI="http://mirrors.jenkins-ci.org/war/${PV}/jenkins.war -> jenkins-${PV}.war"
 RESTRICT="mirror"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
@@ -22,7 +22,11 @@ RDEPEND="${DEPEND}
 S="${WORKDIR}"
 
 src_unpack() {
-	rpm_src_unpack ${A}
+	return
+}
+
+src_compile() {
+	return
 }
 
 pkg_setup() {
@@ -34,8 +38,8 @@ src_install() {
 	keepdir /var/log/jenkins
 	keepdir /var/lib/jenkins/home /var/lib/jenkins/backup
 
-	insinto /usr/lib/jenkins
-	doins usr/lib/jenkins/jenkins.war
+	mkdir -p "${ED}/usr/lib/jenkins"
+	cp "${DISTDIR}/jenkins-${PV}.war" "${ED}/usr/lib/jenkins/jenkins.war"
 
 	newinitd "${FILESDIR}/init.sh" jenkins
 	newconfd "${FILESDIR}/conf" jenkins
