@@ -149,7 +149,6 @@ src_configure() {
 		--docdir=/usr/share/doc/${PF} \
 		--disable-ccache \
 		--disable-optimizations \
-		--enable-external-libraries \
 		--with-ffmpeg=force \
 		--enable-gl \
 		$(use_enable airplay) \
@@ -166,13 +165,11 @@ src_configure() {
 		$(use_enable joystick) \
 		$(use_enable midi mid) \
 		$(use_enable mysql) \
-		$(use_enable neon) \
 		$(use_enable nfs) \
 		$(use_enable opengl gl) \
 		$(use_enable profile profiling) \
 		$(use_enable projectm) \
 		$(use_enable pulseaudio pulse) \
-		$(use_enable pvr mythtv) \
 		$(use_enable rsxs) \
 		$(use_enable rtmp) \
 		$(use_enable samba) \
@@ -192,7 +189,7 @@ src_install() {
 	rm "${ED}"/usr/share/doc/*/{LICENSE.GPL,copying.txt}*
 
 	domenu tools/Linux/xbmc.desktop
-	newicon tools/Linux/xbmc-48x48.png xbmc.png
+	newicon media/icon48x48.png xbmc.png
 
 	# Remove optional addons (platform specific and disabled by USE flag).
 	local disabled_addons=(
