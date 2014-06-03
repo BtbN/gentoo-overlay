@@ -132,12 +132,10 @@ src_install() {
 		dobin "${WORKDIR}"/"${P}"_build/utils/list_smargo|| die
 	fi
 
-	insinto "/etc/oscam"
-	doins -r Distribution/doc/example/*
-	fperms 0755 /etc/oscam || die
 	newinitd "${FILESDIR}/oscam.initd" oscam
 	newconfd "${FILESDIR}/oscam.confd" oscam
 
 	dodir "/var/log/oscam"
+	dodir "/etc/oscam"
 }
 
