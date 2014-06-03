@@ -59,8 +59,7 @@ REQUIRED_USE="
 "
 
 DEPEND="dev-libs/openssl
-	usb? ( virtual/libusb:1
-	       dev-libs/libusb-compat )
+	usb? ( virtual/libusb:1 )
 	pcsc? ( sys-apps/pcsc-lite )"
 RDEPEND="${DEPEND}"
 
