@@ -17,21 +17,21 @@ KEYWORDS="~amd64 ~x86 ~arm"
 
 PROTOCOLS="camd33 camd35 camd35_tcp newcamd cccam cccshare gbox radegast serial constcw pandora ghttp"
 for share in ${PROTOCOLS}; do
-	IUSE_PROTOCOLS+=" +protocol_${share}"
+	IUSE_PROTOCOLS+=" protocol_${share}"
 done
 
 READERS="nagra irdeto conax cryptoworks seca viaccess videoguard dre tongfang bulcrypt griffin dgcrypt"
 for card in ${READERS}; do
-	IUSE_READERS+=" +reader_${card}"
+	IUSE_READERS+=" reader_${card}"
 done
 
 CARD_READERS="phoenix internal sc8in1 mp35 smargo smartreader db2com stapi"
 for cardreader in ${CARD_READERS}; do
-	IUSE_CARDREADERS+=" +cardreader_${cardreader}"
+	IUSE_CARDREADERS+=" cardreader_${cardreader}"
 done
 
 IUSE="${IUSE_PROTOCOLS} ${IUSE_READERS} ${IUSE_CARDREADERS}
-	pcsc +reader usb +www touch +dvbapi +irdeto_guessing +anticasc debug +monitor +ssl loadbalancing cacheex cw_cycle_check lcd led ipv6"
+	pcsc +reader usb +www touch +dvbapi irdeto_guessing anticasc debug +monitor +ssl loadbalancing cacheex cw_cycle_check lcd led ipv6"
 
 REQUIRED_USE="
 	protocol_camd35_tcp?    ( protocol_camd35 )
