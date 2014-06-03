@@ -120,7 +120,7 @@ src_configure() {
 		$(cmake-utils_use cardreader_db2com CARDREADER_DB2COM)
 		$(cmake-utils_use cardreader_stapi CARDREADER_STAPI)"
 
-	use usb && mycmakeargs="-DSTATIC_LIBUSB=0 -DHAVE_LIBUSB=0 ${mycmakeargs}"
+	use usb && mycmakeargs="-DSTATIC_LIBUSB=0 ${mycmakeargs}" || mycmakeargs="-DHAVE_LIBUSB=0 ${mycmakeargs}"
 	use pcsc || mycmakeargs="-DHAVE_PCSC=0 ${mycmakeargs}"
 
 	cmake-utils_src_configure
