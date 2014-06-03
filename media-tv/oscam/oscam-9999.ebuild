@@ -31,7 +31,7 @@ for cardreader in ${CARD_READERS}; do
 done
 
 IUSE="${IUSE_PROTOCOLS} ${IUSE_READERS} ${IUSE_CARDREADERS}
-	pcsc +reader usb +www touch +dvbapi irdeto_guessing +anticasc debug +monitor +ssl loadbalancing cacheex cw_cycle_check lcd led ipv6"
+	pcsc +reader usb +www touch +dvbapi +irdeto_guessing +anticasc debug +monitor +ssl loadbalancing cacheex cw_cycle_check lcd led ipv6"
 
 REQUIRED_USE="
 	protocol_camd35_tcp?    ( protocol_camd35 )
