@@ -28,7 +28,7 @@ S="${WORKDIR}"
 QA_PREBUILT="usr/bin/btsync"
 
 pkg_setup() {
-	enewuser btsync -1 -1 /dev/null
+	enewuser btsync -1 -1 /var/lib/btsync
 }
 
 src_install() {
