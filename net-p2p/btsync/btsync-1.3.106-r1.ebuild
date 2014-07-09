@@ -1,10 +1,10 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=5
 
-inherit pax-utils
+inherit pax-utils eutils systemd user
 
 DESCRIPTION="Sync stuff via BitTorrent"
 HOMEPAGE="http://labs.bittorrent.com/experiments/sync.html"
@@ -27,11 +27,18 @@ S="${WORKDIR}"
 
 QA_PREBUILT="usr/bin/btsync"
 
+pkg_setup() {
+	enewuser btsync -1 -1 /dev/null
+}
+
 src_install() {
 	dodoc LICENSE.TXT
 
 	newinitd "${FILESDIR}/btsync_initd" btsync
 	newconfd "${FILESDIR}/btsync_confd" btsync
+
+	systemd_newunit "${FILESDIR}/btsync.system_service" btsync.service
+	systemd_newuserunit "${FILESDIR}/btsync.user_service" btsync.service
 
 	insinto /etc
 	doins "${FILESDIR}/btsync.conf"
@@ -39,4 +46,8 @@ src_install() {
 	mkdir -p "${D}/usr/bin"
 	cp btsync "${D}/usr/bin/btsync"
 	pax-mark m "${D}/usr/bin/btsync"
+
+	dodir /var/lib/btsync
+	fperms 0700 /var/lib/btsync
+	fowners btsync:btsync /var/lib/btsync
 }
