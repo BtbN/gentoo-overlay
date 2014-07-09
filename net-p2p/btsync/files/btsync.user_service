@@ -3,7 +3,7 @@ Description=btsync
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/btsync --nodaemon
+ExecStart=/usr/bin/btsync --nodaemon --config %h/.config/btsync.conf
 Restart=always
 RestartSec=5
 
