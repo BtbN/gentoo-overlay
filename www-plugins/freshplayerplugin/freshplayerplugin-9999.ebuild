@@ -25,7 +25,9 @@ DEPEND="
 	dev-libs/libevent
 	media-libs/mesa
 	x11-libs/gtk+:2
-	dev-libs/uriparser"
+	dev-libs/uriparser
+	x11-libs/cairo
+	media-libs/freetype"
 RDEPEND="
 	${DEPEND}
 	www-plugins/chrome-binary-plugins[flash]"
