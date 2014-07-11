@@ -24,6 +24,9 @@ DEPEND="
 	x11-libs/libXinerama
 	dev-libs/libevent
 	media-libs/mesa
-	x11-libs/gtk+:2"
-RDEPEND="${DEPEND}"
+	x11-libs/gtk+:2
+	dev-libs/uriparser"
+RDEPEND="
+	${DEPEND}
+	www-plugins/chrome-binary-plugins[flash]"
 
