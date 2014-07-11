@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/games-simulation/openttd/openttd-1.3.3.ebuild,v 1.5 2014/05/15 17:01:14 ulm Exp $
+# $Header: $
 
 EAPI=5
 inherit eutils gnome2-utils games
@@ -11,7 +11,7 @@ SRC_URI="http://binaries.openttd.org/releases/${PV}/${P}-source.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 ~ppc ~ppc64 x86"
+KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 IUSE="aplaymidi debug dedicated iconv icu lzo +openmedia +png +timidity +truetype zlib"
 RESTRICT="test" # needs a graphics set in order to test
 
