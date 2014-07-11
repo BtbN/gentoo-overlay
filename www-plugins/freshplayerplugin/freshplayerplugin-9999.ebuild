@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit cmake-utils git-2
+inherit nsplugins cmake-multilib git-2
 
 DESCRIPTION="PPAPI-host NPAPI-plugin adapter for flashplayer in npapi based browsers"
 HOMEPAGE="https://github.com/i-rinat/freshplayerplugin"
@@ -32,3 +32,9 @@ RDEPEND="
 	${DEPEND}
 	www-plugins/chrome-binary-plugins[flash]"
 
+multilib_src_install() {
+	cd "${BUILD_DIR}" || die "failed entering build dir"
+
+	exeinto /usr/$(get_libdir)/${PLUGINS_DIR}
+	doexe libfreshwrapper-pepperflash.so
+}
