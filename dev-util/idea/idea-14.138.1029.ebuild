@@ -8,15 +8,15 @@ inherit eutils versionator
 
 DESCRIPTION="IntelliJ IDEA is an intelligent Java IDE"
 HOMEPAGE="http://jetbrains.com/idea/"
-SRC_URI="http://download.jetbrains.com/${PN}/${PN}IU-$(get_version_component_range 1-3).tar.gz"
+SRC_URI="http://download.jetbrains.com/${PN}/${PN}IU-$(get_version_component_range 2-3).tar.gz"
 LICENSE="IntelliJ-IDEA"
 IUSE=""
 KEYWORDS="~x86 ~amd64"
 
-SLOT="0"
+SLOT="eap"
 RDEPEND=">=virtual/jdk-1.6"
 DEPEND="${RDEPEND}"
-MY_PV="$(get_version_component_range 4-5)"
+MY_PV="$(get_version_component_range 2-3)"
 
 RESTRICT="strip mirror"
 QA_TEXTRELS="opt/${P}/bin/libbreakgen.so"
