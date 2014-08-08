@@ -8,7 +8,7 @@ inherit eutils versionator
 
 DESCRIPTION="IntelliJ IDEA is an intelligent Java IDE"
 HOMEPAGE="http://jetbrains.com/idea/"
-SRC_URI="http://download.jetbrains.com/${PN}/${PN}IU-$(get_version_component_range 2-3).tar.gz"
+SRC_URI="http://download.jetbrains.com/${PN}/${PN}IU-$(get_version_component_range 2-4).tar.gz"
 LICENSE="IntelliJ-IDEA"
 IUSE=""
 KEYWORDS="~x86 ~amd64"
@@ -33,5 +33,5 @@ src_install() {
 
 	newicon "bin/${PN}.png" "${exe}.png" || die
 	make_wrapper "${exe}" "/opt/${P}/bin/${PN}.sh" || die
-	make_desktop_entry ${exe} "IntelliJ IDEA $(get_version_component_range 1-3)" "${exe}" "Development;IDE" || die
+	make_desktop_entry ${exe} "IntelliJ IDEA $(get_version_component_range 1-4)" "${exe}" "Development;IDE" || die
 }
