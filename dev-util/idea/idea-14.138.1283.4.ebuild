@@ -16,7 +16,7 @@ KEYWORDS="~x86 ~amd64"
 SLOT="eap"
 RDEPEND=">=virtual/jdk-1.6"
 DEPEND="${RDEPEND}"
-MY_PV="$(get_version_component_range 2-3)"
+MY_PV="$(get_version_component_range 2-4)"
 
 RESTRICT="strip mirror"
 QA_TEXTRELS="opt/${P}/bin/libbreakgen.so"
