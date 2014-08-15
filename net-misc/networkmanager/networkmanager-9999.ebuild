@@ -134,6 +134,7 @@ src_configure() {
 		--with-udev-dir="$(get_udevdir)"
 		--with-iptables=/sbin/iptables
 		--enable-concheck
+		--enable-gtk-doc
 		--with-crypto=$(usex nss nss gnutls)
 		--with-session-tracking=$(usex systemd systemd $(usex consolekit consolekit no))
 		--with-suspend-resume=$(usex systemd systemd upower)
