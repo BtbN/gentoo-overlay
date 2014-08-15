@@ -165,7 +165,7 @@ src_install() {
 	newinitd "${FILESDIR}/init.d.NetworkManager" NetworkManager
 
 	# /var/run/NetworkManager is used by some distros, but not by Gentoo
-	rmdir -v "${ED}/var/run/NetworkManager" || die "rmdir failed"
+	rm -r "${ED}/var/run" || die "rm failed"
 
 	# Need to keep the /etc/NetworkManager/dispatched.d for dispatcher scripts
 	keepdir /etc/NetworkManager/dispatcher.d
