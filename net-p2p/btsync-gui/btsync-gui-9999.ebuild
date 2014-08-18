@@ -42,7 +42,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 src_prepare() {
 	sed -i '1s;^;#!/usr/bin/env python2\n;' *.py || die "sed failed"
 	sed -i 's;/usr/lib/btsync-common/btsync-core;/usr/bin/btsync;' btsyncagent.py || die "sed failed"
-	sed -i "s;/usr/share/doc/btsync-common/BitTorrentSyncUserGuide.pdf.gz;/usr/share/doc/${P}/BitTorrentSyncUserGuide.pdf" btsyncstatus.py || die "sed failed"
+	sed -i "s;/usr/share/doc/btsync-common/BitTorrentSyncUserGuide.pdf.gz;/usr/share/doc/${P}/BitTorrentSyncUserGuide.pdf;" btsyncstatus.py || die "sed failed"
 }
 
 src_install() {
