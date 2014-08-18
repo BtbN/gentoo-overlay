@@ -31,7 +31,7 @@ fi
 DEPEND="${PYTHON_DEPS}
 	net-p2p/btsync
 	sys-devel/gettext
-	dev-python/pygobject:2[${PYTHON_USEDEP}]
+	dev-python/pygobject:3[${PYTHON_USEDEP}]
 	dev-python/pygtk[${PYTHON_USEDEP}]
 	media-gfx/qrencode-python[${PYTHON_USEDEP}]
 	dev-python/requests[${PYTHON_USEDEP}]
