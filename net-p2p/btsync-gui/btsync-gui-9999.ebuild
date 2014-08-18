@@ -9,7 +9,7 @@ PYTHON_COMPAT=( python2_{5,6,7} )
 inherit python-single-r1 eutils versionator
 
 DESCRIPTION="Unofficial Bittorrent Sync GUI for Linux desktops"
-HOMEPAGE="https://github.com/tuxpoldo/btsync-deb"
+HOMEPAGE="http://www.yeasoft.com/site/projects:btsync-deb:btsync-gui"
 SRC_URI="http://syncapp.bittorrent.com/18TDE4IPRO/BitTorrentSyncUserGuide.pdf"
 [[ "${PV}" == "9999" ]] || SRC_URI="${SRC_URI} https://github.com/tuxpoldo/btsync-deb/archive/${PN}-$(get_version_component_range 1-3)-$(get_version_component_range 4).tar.gz"
 EGIT_REPO_URI="https://github.com/tuxpoldo/btsync-deb.git"
