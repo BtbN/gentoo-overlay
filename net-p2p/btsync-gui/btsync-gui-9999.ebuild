@@ -46,15 +46,13 @@ src_prepare() {
 }
 
 src_install() {
-	python_scriptinto /usr/bin
-	python_fix_shebang btsync-gui
-	python_doexe btsync-gui
+	python_fix_shebang btsync-gui *.py
 
-	python_scriptinto /usr/lib/btsync-gui
-	python_doscript *.py
+	exeinto /usr/bin
+	doexe btsync-gui
 
 	insinto /usr/lib/btsync-gui
-	doins "${FILESDIR}/btsync-gui.key" *.glade
+	doins "${FILESDIR}/btsync-gui.key" *.glade *.py
 
 	mkdir -p "${ED}/usr/share/icons/hicolor" || die "mkdir failed"
 	cp -R "${S}"/icons/* "${ED}/usr/share/icons/hicolor" || die "cp failed"
