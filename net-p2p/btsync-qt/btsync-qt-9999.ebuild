@@ -24,6 +24,7 @@ RDEPEND="${DEPEND}
 src_configure() {
 	local mycmakeargs=(
 		$(cmake-utils_use_with gui)
+		-DBTSYNC_BINARY_DEFAULT_PATH="${EPREFIX}/usr/bin/btsync"
 	)
 	cmake-utils_src_configure
 }
