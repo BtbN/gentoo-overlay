@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/BtbN/btsync-qt.git"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="gui"
+IUSE="+gui"
 
 DEPEND="dev-qt/qtcore:5
 	dev-qt/qtnetwork:5
