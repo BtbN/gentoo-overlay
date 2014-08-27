@@ -43,9 +43,9 @@ src_install() {
 	insinto /etc
 	doins "${FILESDIR}/btsync.conf"
 
-	mkdir -p "${D}/usr/bin"
-	cp btsync "${D}/usr/bin/btsync"
-	pax-mark m "${D}/usr/bin/btsync"
+	mkdir -p "${ED}/usr/bin"
+	cp btsync "${ED}/usr/bin/btsync"
+	pax-mark m "${ED}/usr/bin/btsync"
 
 	dodir /var/lib/btsync
 	fperms 0700 /var/lib/btsync
