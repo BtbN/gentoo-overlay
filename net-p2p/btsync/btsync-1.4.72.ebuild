@@ -8,10 +8,10 @@ inherit pax-utils eutils systemd user
 
 DESCRIPTION="Sync stuff via BitTorrent"
 HOMEPAGE="http://labs.bittorrent.com/experiments/sync.html"
-SRC_URI="amd64? ( http://syncapp.bittorrent.com/${PV}/${PN}_x64-${PV}.tar.gz )
-	x86? ( http://syncapp.bittorrent.com/${PV}/${PN}_i386-${PV}.tar.gz )
-	ppc? ( http://syncapp.bittorrent.com/${PV}/${PN}_powerpc-${PV}.tar.gz )
-	arm? ( http://syncapp.bittorrent.com/${PV}/${PN}_arm-${PV}.tar.gz )"
+SRC_URI="amd64? ( http://download-new.utorrent.com/endpoint/btsync/os/linux-x64/track/stable -> ${PN}_x64-${PV}.tar.gz )
+	x86? ( http://download-new.utorrent.com/endpoint/btsync/os/linux-i386/track/stable -> ${PN}_i386-${PV}.tar.gz )
+	ppc? ( http://download-new.utorrent.com/endpoint/btsync/os/linux-powerpc/track/stable -> ${PN}_ppc-${PV}.tar.gz )
+	arm? ( http://download-new.utorrent.com/endpoint/btsync/os/linux-arm/track/stable -> ${PN}_arm-${PV}.tar.gz )"
 
 RESTRICT="mirror"
 
