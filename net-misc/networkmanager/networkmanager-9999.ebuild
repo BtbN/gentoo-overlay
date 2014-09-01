@@ -52,6 +52,7 @@ COMMON_DEPEND="
 	resolvconf? ( net-dns/openresolv )
 	systemd? ( >=sys-apps/systemd-183:0= )
 	|| ( sys-power/upower sys-power/upower-pm-utils >=sys-apps/systemd-183 )
+	dev-perl/yaml
 "
 RDEPEND="${COMMON_DEPEND}
 	virtual/udev
