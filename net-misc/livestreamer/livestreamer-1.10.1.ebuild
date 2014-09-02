@@ -17,6 +17,7 @@ SLOT="0"
 
 RDEPEND="dev-python/pycrypto[${PYTHON_USEDEP}]
 	>=dev-python/requests-1.0[${PYTHON_USEDEP}]
+	virtual/python-futures[${PYTHON_USEDEP}]
 	python_targets_python2_7? ( dev-python/singledispatch[python_targets_python2_7] )
 	python_targets_python3_3? ( dev-python/singledispatch[python_targets_python3_3] )
 	>media-video/rtmpdump-2.4"
