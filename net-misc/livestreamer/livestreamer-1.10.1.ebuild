@@ -8,7 +8,7 @@ DESCRIPTION="CLI tool that pipes video streams from services like twitch.tv into
 HOMEPAGE="https://github.com/chrippa/livestreamer"
 SRC_URI="https://github.com/chrippa/livestreamer/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
-PYTHON_COMPAT=( python{2_7,3_4} ) # singledispatch, which is not in portage, is required for python 3.3
+PYTHON_COMPAT=( python{2_7,3_3,3_4} )
 inherit distutils-r1
 
 KEYWORDS="~amd64 ~mips ~x86"
@@ -17,5 +17,7 @@ SLOT="0"
 
 RDEPEND="dev-python/pycrypto[${PYTHON_USEDEP}]
 	>=dev-python/requests-1.0[${PYTHON_USEDEP}]
+	python_targets_python2_7? ( dev-python/singledispatch[python_targets_python2_7] )
+	python_targets_python3_3? ( dev-python/singledispatch[python_targets_python3_3] )
 	>media-video/rtmpdump-2.4"
 DEPEND="${RDEPEND}"
