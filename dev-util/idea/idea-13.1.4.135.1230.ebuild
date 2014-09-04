@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit eutils versionator
+inherit java-pkg-2 eutils versionator
 
 DESCRIPTION="IntelliJ IDEA is an intelligent Java IDE"
 HOMEPAGE="http://jetbrains.com/idea/"
