@@ -18,5 +18,6 @@
  <flag name='vaapi'>Enables VAAPI (Video Acceleration API) for hardware decoding</flag>
  <flag name='webserver'>Enable internal webserver</flag>
  <flag name='xrandr'>Support X randr extension</flag>
+ <flag name='pvr'>Legacy PVR support</flag>
 </use>
 </pkgmetadata>

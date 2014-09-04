@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <use>
+    <flag name='protocol_camd33'>Support said protocol</flag>
+    <flag name='protocol_camd35'>Support said protocol</flag>
+    <flag name='protocol_camd35_tcp'>Support said protocol</flag>
+    <flag name='protocol_newcamd'>Support said protocol</flag>
+    <flag name='protocol_cccam'>Support said protocol</flag>
+    <flag name='protocol_cccshare'>Support said protocol</flag>
+    <flag name='protocol_gbox'>Support said protocol</flag>
+    <flag name='protocol_radegast'>Support said protocol</flag>
+    <flag name='protocol_serial'>Support said protocol</flag>
+    <flag name='protocol_constcw'>Support said protocol</flag>
+    <flag name='protocol_pandora'>Support said protocol</flag>
+    <flag name='protocol_ghttp'>Support said protocol</flag>
+    <flag name='reader_nagra'>Support said reader</flag>
+    <flag name='reader_irdeto'>Support said reader</flag>
+    <flag name='reader_conax'>Support said reader</flag>
+    <flag name='reader_cryptoworks'>Support said reader</flag>
+    <flag name='reader_seca'>Support said reader</flag>
+    <flag name='reader_viaccess'>Support said reader</flag>
+    <flag name='reader_videoguard'>Support said reader</flag>
+    <flag name='reader_dre'>Support said reader</flag>
+    <flag name='reader_tongfang'>Support said reader</flag>
+    <flag name='reader_bulcrypt'>Support said reader</flag>
+    <flag name='reader_griffin'>Support said reader</flag>
+    <flag name='reader_dgcrypt'>Support said reader</flag>
+    <flag name='cardreader_phoenix'>Support said cardreader</flag>
+    <flag name='cardreader_internal'>Support said cardreader</flag>
+    <flag name='cardreader_sc8in1'>Support said cardreader</flag>
+    <flag name='cardreader_mp35'>Support said cardreader</flag>
+    <flag name='cardreader_smargo'>Support said cardreader</flag>
+    <flag name='cardreader_smartreader'>Support said cardreader</flag>
+    <flag name='cardreader_db2com'>Support said cardreader</flag>
+    <flag name='cardreader_stapi'>Support said cardreader</flag>
+    <flag name='pcsc'>Support pcsc reader</flag>
+    <flag name='reader'>Support cardreaders</flag>
+    <flag name='www'>Suppoer webif</flag>
+    <flag name='touch'>Bigger buttons</flag>
+    <flag name='dvbapi'>DVBApi support</flag>
+    <flag name='irdeto_guessing'>Irdeto Guessing</flag>
+    <flag name='anticasc'>Anti Cascading</flag>
+    <flag name='monitor'>Monitor support</flag>
+    <flag name='loadbalancing'>LB Support</flag>
+    <flag name='cacheex'>Cache Exchange support</flag>
+    <flag name='cw_cycle_check'>Cycle check support</flag>
+    <flag name='lcd'>LCD support</flag>
+    <flag name='led'>LED support</flag>
+  </use>
+</pkgmetadata>
