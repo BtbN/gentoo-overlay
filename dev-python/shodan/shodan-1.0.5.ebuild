@@ -10,14 +10,13 @@ inherit distutils-r1
 
 DESCRIPTION="Python library for Shodan"
 HOMEPAGE="https://developer.shodan.io"
-SRC_URI="https://pypi.python.org/packages/source/s/${PN}/${P}.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND="dev-python/requests
-	dev-python/simplejson"
+DEPEND="dev-python/requests[${PYTHON_USEDEP}]
+	dev-python/simplejson[${PYTHON_USEDEP}]"
 RDEPEND="${DEPEND}"
-

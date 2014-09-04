@@ -26,4 +26,3 @@ DEPEND="x11-libs/libX11
 	media-libs/freetype:2
 	media-libs/fontconfig"
 RDEPEND="${DEPEND}"
-

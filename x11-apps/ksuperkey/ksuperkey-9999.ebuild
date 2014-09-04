@@ -10,7 +10,7 @@ DESCRIPTION="Utility to bind the super and other keys to shortcuts"
 HOMEPAGE="https://github.com/hanschen/ksuperkey"
 EGIT_REPO_URI="https://github.com/hanschen/ksuperkey"
 
-LICENSE=""
+LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""

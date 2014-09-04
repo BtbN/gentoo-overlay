@@ -25,4 +25,3 @@ src_prepare() {
 	epatch "${FILESDIR}/libotr-4.0.0-fix.patch"
 	default_src_prepare
 }
-

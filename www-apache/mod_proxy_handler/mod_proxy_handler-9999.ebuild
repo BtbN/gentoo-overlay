@@ -8,7 +8,7 @@ EGIT_REPO_URI="https://gist.github.com/6ed4eeea60f6277c3e39.git"
 
 inherit apache-module git-2
 
-DESCRIPTION="Module for apache 2.4 that allows you to use e.g. mod_proxy_fcgi in AddHandler or SetHandler directives."
+DESCRIPTION="Apache 2.4 module that allows you to use e.g. mod_proxy_fcgi in AddHandler or SetHandler directives"
 HOMEPAGE="https://gist.github.com/progandy/6ed4eeea60f6277c3e39/"
 LICENSE="Apache-2.0"
 

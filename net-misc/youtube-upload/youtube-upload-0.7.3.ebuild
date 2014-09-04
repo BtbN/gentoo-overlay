@@ -12,14 +12,14 @@ DESCRIPTION="Upload videos to Youtube from the command-line"
 HOMEPAGE="http://code.google.com/p/youtube-upload/"
 SRC_URI="http://${PN}.googlecode.com/files/${P}.tgz"
 
-LICENSE=""
+LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=">=dev-python/gdata-1.2.4
-	dev-python/pycurl
-	>=dev-python/progressbar-2.3"
+DEPEND=">=dev-python/gdata-1.2.4[${PYTHON_USEDEP}]
+	dev-python/pycurl[${PYTHON_USEDEP}]
+	>=dev-python/progressbar-2.3[${PYTHON_USEDEP}]"
 RDEPEND="${DEPEND}"
 
 DOCS="README CHANGELOG"

@@ -14,14 +14,14 @@ SRC_URI=""
 
 ESVN_REPO_URI="http://youtube-upload.googlecode.com/svn/trunk/"
 
-LICENSE=""
+LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=">=dev-python/gdata-1.2.4
-	dev-python/pycurl
-	>=dev-python/progressbar-2.3"
+DEPEND=">=dev-python/gdata-1.2.4[${PYTHON_USEDEP}]
+	dev-python/pycurl[${PYTHON_USEDEP}]
+	>=dev-python/progressbar-2.3[${PYTHON_USEDEP}]"
 RDEPEND="${DEPEND}"
 
 DOCS="README CHANGELOG"

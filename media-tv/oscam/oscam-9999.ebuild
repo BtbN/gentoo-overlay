@@ -139,4 +139,3 @@ src_install() {
 	dodir "/var/log/oscam"
 	dodir "/etc/oscam"
 }
-
