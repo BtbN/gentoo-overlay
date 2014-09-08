@@ -18,10 +18,10 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE="+logging debug"
 
-if [[ "${PV}" != "9999" ]]; then
-	KEYWORDS="~amd64 ~x86"
-else
+if [[ "${PV}" == "9999" ]]; then
 	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~x86"
 fi
 
 DEPEND=""
