@@ -25,7 +25,7 @@ DEPEND="
 	x11-libs/pango
 	x11-libs/libXinerama
 	dev-libs/libevent
-	media-libs/mesa
+	media-libs/mesa[egl,gles2]
 	x11-libs/gtk+:2
 	dev-libs/uriparser
 	x11-libs/cairo
