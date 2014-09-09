@@ -56,7 +56,7 @@ index 006c4d3..cb72619 100644
  		AC_MSG_RESULT(
  [using mysql from ${mysql_lib} and ${mysql_include}])
 diff --git a/contrib/dlz/drivers/dlz_mysql_driver.c b/contrib/dlz/drivers/dlz_mysql_driver.c
-index 97deeab..2d618d0 100644
+index 97deeab..6e66944 100644
 --- a/contrib/dlz/drivers/dlz_mysql_driver.c
 +++ b/contrib/dlz/drivers/dlz_mysql_driver.c
 @@ -75,6 +75,85 @@
@@ -509,7 +509,7 @@ index 97deeab..2d618d0 100644
  	char *pass = NULL;
  	char *socket = NULL;
  	int port;
-+	int concount;
++	int concount = 0;
  	MYSQL *dbc;
  	char *endp;
 -	int j;
@@ -517,7 +517,7 @@ index 97deeab..2d618d0 100644
  	unsigned int flags = 0;
  #if MYSQL_VERSION_ID >= 50000
          my_bool auto_reconnect = 1;
-@@ -835,6 +1014,29 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
+@@ -835,6 +1014,28 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
  		goto full_cleanup;
  	}
  
@@ -531,7 +531,6 @@ index 97deeab..2d618d0 100644
 +#endif
 +	} else {
 +		concount = strtol(tmp, &endp, 10);
-+		isc_mem_free(ns_g_mctx, tmp);
 +		if (*endp != '\0' || concount < 1) {
 +			isc_log_write(dns_lctx, DNS_LOGCATEGORY_DATABASE,
 +				      DNS_LOGMODULE_DLZ, ISC_LOG_ERROR,
@@ -547,7 +546,7 @@ index 97deeab..2d618d0 100644
  	/* get db port.  Not required, but must be > 0 if specified */
  	tmp = getParameterValue(argv[1], "port=");
  	if (tmp == NULL) {
-@@ -853,58 +1055,6 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
+@@ -853,58 +1054,6 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
  		isc_mem_free(ns_g_mctx, tmp);
  	}
  
@@ -606,7 +605,7 @@ index 97deeab..2d618d0 100644
  	tmp = getParameterValue(argv[1], "compress=");
  	if (tmp != NULL) {
  		if (strcasecmp(tmp, "true") == 0)
-@@ -932,42 +1082,120 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
+@@ -932,42 +1081,120 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
  	pass = getParameterValue(argv[1], "pass=");
  	socket = getParameterValue(argv[1], "socket=");
  
@@ -751,7 +750,7 @@ index 97deeab..2d618d0 100644
  
   cleanup:
  
-@@ -996,18 +1224,25 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
+@@ -996,18 +1223,25 @@ mysql_create(const char *dlzname, unsigned int argc, char *argv[],
  static void
  mysql_destroy(void *driverarg, void *dbdata)
  {
@@ -784,7 +783,7 @@ index 97deeab..2d618d0 100644
  }
  
  /* pointers to all our runtime methods. */
-@@ -1044,6 +1279,14 @@ dlz_mysql_init(void) {
+@@ -1044,6 +1278,14 @@ dlz_mysql_init(void) {
  		      DNS_LOGMODULE_DLZ, ISC_LOG_DEBUG(2),
  		      "Registering DLZ mysql driver.");
  
@@ -799,7 +798,7 @@ index 97deeab..2d618d0 100644
  	/* Driver is always threadsafe.  Because of the way MySQL handles
           * threads the MySQL driver can only be used when bind is run single
           * threaded.  Using MySQL with Bind running multi-threaded is not
-@@ -1083,6 +1326,10 @@ dlz_mysql_clear(void) {
+@@ -1083,6 +1325,10 @@ dlz_mysql_clear(void) {
  	/* unregister the driver. */
  	if (dlz_mysql != NULL)
  		dns_sdlzunregister(&dlz_mysql);
