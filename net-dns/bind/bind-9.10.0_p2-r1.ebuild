@@ -47,7 +47,7 @@ threads urandom xml"
 
 REQUIRED_USE="postgres? ( dlz )
 	berkdb? ( dlz )
-	mysql? ( dlz !threads )
+	mysql? ( dlz )
 	odbc? ( dlz )
 	ldap? ( dlz )
 	sdb-ldap? ( dlz )
