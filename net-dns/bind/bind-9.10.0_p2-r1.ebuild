@@ -94,7 +94,7 @@ src_prepare() {
 	done
 
 	if use dlz; then
-		if use mysql && has_version ">=dev-db/mysql-5"; then
+		if use mysql && has_version ">=virtual/mysql-5"; then
 			epatch "${FILESDIR}"/bind-9.10-dlzmysql-threadsafe.patch
 		fi
 
