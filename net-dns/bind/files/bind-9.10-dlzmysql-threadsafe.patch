@@ -1,8 +1,40 @@
 diff --git a/configure b/configure
-index b4f2247..8b0bb26 100755
+index b4f2247..8e831f3 100755
 --- a/configure
 +++ b/configure
-@@ -20732,6 +20732,13 @@ $as_echo "not found" >&6; }
+@@ -833,6 +833,7 @@ ISC_PLATFORM_USESIT
+ ISC_THREAD_DIR
+ THREADOPTSRCS
+ THREADOPTOBJS
++ISC_PLATFORM_USEPTHREADS
+ ISC_PLATFORM_USETHREADS
+ ALWAYS_DEFINES
+ CHECK_DSA
+@@ -14734,6 +14735,7 @@ then
+ 	fi
+ 	ALWAYS_DEFINES="-D_REENTRANT"
+ 	ISC_PLATFORM_USETHREADS="#define ISC_PLATFORM_USETHREADS 1"
++	ISC_PLATFORM_USEPTHREADS="#define ISC_PLATFORM_USEPTHREADS 1"
+ 	THREADOPTOBJS='${THREADOPTOBJS}'
+ 	THREADOPTSRCS='${THREADOPTSRCS}'
+ 	thread_dir=pthreads
+@@ -15127,6 +15129,7 @@ fi
+ 
+ else
+ 	ISC_PLATFORM_USETHREADS="#undef ISC_PLATFORM_USETHREADS"
++	ISC_PLATFORM_USEPTHREADS="#undef ISC_PLATFORM_USEPTHREADS"
+ 	thread_dir=nothreads
+ 	THREADOPTOBJS=""
+ 	THREADOPTSRCS=""
+@@ -15137,6 +15140,7 @@ fi
+ 
+ 
+ 
++
+ ISC_THREAD_DIR=$thread_dir
+ 
+ 
+@@ -20732,6 +20736,13 @@ $as_echo "not found" >&6; }
  	as_fn_error $? "MySQL was not found in any of $mysqldirs; use --with-dlz-mysql=/path" "$LINENO" 5
  fi
  
@@ -16,7 +48,7 @@ index b4f2247..8b0bb26 100755
  case "$use_dlz_mysql" in
  	no)
  		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-@@ -20749,9 +20756,9 @@ $as_echo "no" >&6; }
+@@ -20749,9 +20760,9 @@ $as_echo "no" >&6; }
  	then
  		DLZ_DRIVER_INCLUDES="$DLZ_DRIVER_INCLUDES -I${mysql_include}"
  	fi
@@ -28,6 +60,34 @@ index b4f2247..8b0bb26 100755
  	fi
  
  
+diff --git a/configure.in b/configure.in
+index 75a040e..35150d6 100644
+--- a/configure.in
++++ b/configure.in
+@@ -1024,6 +1024,7 @@ then
+ 	fi
+ 	ALWAYS_DEFINES="-D_REENTRANT"
+ 	ISC_PLATFORM_USETHREADS="#define ISC_PLATFORM_USETHREADS 1"
++	ISC_PLATFORM_USEPTHREADS="#define ISC_PLATFORM_USEPTHREADS 1"
+ 	THREADOPTOBJS='${THREADOPTOBJS}'
+ 	THREADOPTSRCS='${THREADOPTSRCS}'
+ 	thread_dir=pthreads
+@@ -1140,6 +1141,7 @@ then
+ 
+ else
+ 	ISC_PLATFORM_USETHREADS="#undef ISC_PLATFORM_USETHREADS"
++	ISC_PLATFORM_USEPTHREADS="#undef ISC_PLATFORM_USEPTHREADS"
+ 	thread_dir=nothreads
+ 	THREADOPTOBJS=""
+ 	THREADOPTSRCS=""
+@@ -1148,6 +1150,7 @@ fi
+ 
+ AC_SUBST(ALWAYS_DEFINES)
+ AC_SUBST(ISC_PLATFORM_USETHREADS)
++AC_SUBST(ISC_PLATFORM_USEPTHREADS)
+ AC_SUBST(THREADOPTOBJS)
+ AC_SUBST(THREADOPTSRCS)
+ ISC_THREAD_DIR=$thread_dir
 diff --git a/contrib/dlz/config.dlz.in b/contrib/dlz/config.dlz.in
 index 006c4d3..cb72619 100644
 --- a/contrib/dlz/config.dlz.in
@@ -56,14 +116,14 @@ index 006c4d3..cb72619 100644
  		AC_MSG_RESULT(
  [using mysql from ${mysql_lib} and ${mysql_include}])
 diff --git a/contrib/dlz/drivers/dlz_mysql_driver.c b/contrib/dlz/drivers/dlz_mysql_driver.c
-index 97deeab..6e66944 100644
+index 97deeab..6c18a94 100644
 --- a/contrib/dlz/drivers/dlz_mysql_driver.c
 +++ b/contrib/dlz/drivers/dlz_mysql_driver.c
 @@ -75,6 +75,85 @@
  
  #include <mysql.h>
  
-+#ifdef ISC_PLATFORM_USETHREADS
++#ifdef ISC_PLATFORM_USEPTHREADS
 +#include <pthread.h>
 +#include <unistd.h>
 +
@@ -524,7 +584,7 @@ index 97deeab..6e66944 100644
 +	/* get connection count. Not required, must be >= 1 if specified */
 +	tmp = getParameterValue(argv[1], "concount=");
 +	if (tmp == NULL) {
-+#ifdef ISC_PLATFORM_USETHREADS
++#ifdef ISC_PLATFORM_USEPTHREADS
 +		concount = 9;
 +#else
 +		concount = 1;
@@ -809,3 +869,31 @@ index 97deeab..6e66944 100644
  }
  
  #endif
+diff --git a/lib/isc/include/isc/platform.h.in b/lib/isc/include/isc/platform.h.in
+index 6389717..6925936 100644
+--- a/lib/isc/include/isc/platform.h.in
++++ b/lib/isc/include/isc/platform.h.in
+@@ -214,6 +214,11 @@
+ @ISC_PLATFORM_USETHREADS@
+ 
+ /*
++ * Define if we are using pthreads.
++ */
++@ISC_PLATFORM_USEPTHREADS@
++
++/*
+  * Defined if unistd.h does not cause fd_set to be delared.
+  */
+ @ISC_PLATFORM_NEEDSYSSELECTH@
+diff --git a/lib/isc/win32/include/isc/platform.h.in b/lib/isc/win32/include/isc/platform.h.in
+index 9e56cc9..3f362f1 100644
+--- a/lib/isc/win32/include/isc/platform.h.in
++++ b/lib/isc/win32/include/isc/platform.h.in
+@@ -25,6 +25,7 @@
+  *****/
+ 
+ #define ISC_PLATFORM_USETHREADS 1
++#undef ISC_PLATFORM_USEPTHREADS
+ 
+ /***
+  *** Network.
