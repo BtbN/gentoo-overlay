@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://github.com/jp9000/obs-studio.git"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="pulseaudio imagemagick v4l fontconfig fdk"
+IUSE="pulseaudio imagemagick v4l +fontconfig +fdk"
 
 DEPEND="x11-libs/libX11
 	x11-libs/libXcomposite
