@@ -4,15 +4,21 @@
 
 EAPI=5
 
-inherit eutils git-r3
+inherit git-r3 eutils
 
 DESCRIPTION="p2p file syncthing"
 HOMEPAGE="http://syncthing.net/"
 EGIT_REPO_URI="https://github.com/syncthing/syncthing.git"
 
+if [[ "${PV}" != "9999" ]]; then
+	EGIT_COMMIT="v${PV}"
+	KEYWORDS="~amd64 ~x86"
+else
+	KEYWORDS=""
+fi
+
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
 IUSE="+tools"
 
 RDEPEND="dev-lang/go"
@@ -21,10 +27,10 @@ DEPEND="${RDEPEND}
 	dev-vcs/git
 	dev-util/godep"
 
-export GOPATH="${S}"
+export GOPATH="${WORKDIR}"
 GO_PN="github.com/syncthing/syncthing"
-EGIT_CHECKOUT_DIR="${S}/src/${GO_PN}"
-S="${EGIT_CHECKOUT_DIR}"
+S="${WORKDIR}/src/${GO_PN}"
+EGIT_CHECKOUT_DIR="${S}"
 
 src_compile() {
 	godep go run build.go || die "build.go failed"
