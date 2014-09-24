@@ -11,16 +11,18 @@ depend() {
 }
 
 start() {
-    if [ ! -d /run/syncthing ]; then
-        mkdir /run/syncthing
-        chown "${SYNCTHING_USER}:${SYNCTHING_GROUP}" /run/syncthing
-    fi
+    [ -d /run/syncthing ] || mkdir /run/syncthing
+    [ -d /var/log/syncthing ] || mkdir /var/log/syncthing
+
+    chown -R "${SYNCTHING_USER}:${SYNCTHING_GROUP}" /run/syncthing /var/log/syncthing
 
     ebegin "Starting syncthing"
     start-stop-daemon \
         --start \
         --pidfile "${PIDFILE}" \
         --make-pidfile \
+        --stdout "/var/log/syncthing/syncthing.log" \	
+        --stderr "/var/log/syncthing/syncthing.err" \
         --user "${SYNCTHING_USER}" \
         --group "${SYNCTHING_GROUP}" \
         --env "STNORESTART=yes" \
