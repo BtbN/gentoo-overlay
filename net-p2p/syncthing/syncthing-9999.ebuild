@@ -47,6 +47,6 @@ src_install() {
 	newinitd "${FILESDIR}/syncthing_initd" syncthing
 	newconfd "${FILESDIR}/syncthing_confd" syncthing
 
-	systemd_newunit "${FILESDIR}/syncthing@.system_service" syncthing@.service
-	systemd_newuserunit "${FILESDIR}/syncthing.user_service" syncthing.service
+	systemd_newunit "${FILESDIR}/syncthing.system_service" "syncthing@.service"
+	systemd_newuserunit "${FILESDIR}/syncthing.user_service" "syncthing.service"
 }
