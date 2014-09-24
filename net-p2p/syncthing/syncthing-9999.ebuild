@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit git-r3 eutils
+inherit git-r3 eutils systemd
 
 DESCRIPTION="p2p file syncthing"
 HOMEPAGE="http://syncthing.net/"
@@ -41,4 +41,12 @@ src_install() {
 	use tools && dobin bin/{stindex,stevents}
 
 	dodoc README.md CONTRIBUTORS CONTRIBUTING.md
+
+#files/syncthing_confd  files/syncthing_initd  files/syncthing@.system_service  files/syncthing.user_service
+
+	newinitd "${FILESDIR}/syncthing_initd" syncthing
+	newconfd "${FILESDIR}/syncthing_confd" syncthing
+
+	systemd_newunit "${FILESDIR}/syncthing@.system_service" syncthing@.service
+	systemd_newuserunit "${FILESDIR}/syncthing.user_service" syncthing.service
 }

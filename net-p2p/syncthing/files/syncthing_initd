@@ -1,0 +1,38 @@
+#!/sbin/runscript
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+PIDFILE="/run/syncthing/syncthing.pid"
+
+depend() {
+    need localmount net
+    after bootmisc
+}
+
+start() {
+    if [ ! -d /run/syncthing ]; then
+        mkdir /run/syncthing
+        chown "${SYNCTHING_USER}:${SYNCTHING_GROUP}" /run/syncthing
+    fi
+
+    ebegin "Starting syncthing"
+    start-stop-daemon \
+        --start \
+        --pidfile "${PIDFILE}" \
+        --make-pidfile \
+        --user "${SYNCTHING_USER}" \
+        --group "${SYNCTHING_GROUP}" \
+        --env "STNORESTART=yes" \
+        --background \
+        --exec /usr/bin/syncthing
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping syncthing"
+    start-stop-daemon \
+        --stop \
+        --pidfile "${PIDFILE}"
+    eend $?
+}

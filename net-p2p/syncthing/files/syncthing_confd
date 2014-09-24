@@ -1,0 +1,5 @@
+# conf.d file for syncthing
+
+# User and group daemon runs as
+SYNCTHING_USER="nobody"
+SYNCTHING_GROUP="nogroup"
