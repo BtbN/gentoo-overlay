@@ -3,7 +3,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-PIDFILE="/run/syncthing/syncthing.pid"
 
 depend() {
     need localmount net
@@ -11,21 +10,16 @@ depend() {
 }
 
 start() {
-    [ -d /run/syncthing ] || mkdir /run/syncthing
     [ -d /var/log/syncthing ] || mkdir /var/log/syncthing
-
-    chown -R "${SYNCTHING_USER}:${SYNCTHING_GROUP}" /run/syncthing /var/log/syncthing
+    chown -R "${SYNCTHING_USER}:${SYNCTHING_GROUP}" /var/log/syncthing
 
     ebegin "Starting syncthing"
     start-stop-daemon \
         --start \
-        --pidfile "${PIDFILE}" \
-        --make-pidfile \
         --stdout "/var/log/syncthing/syncthing.log" \	
         --stderr "/var/log/syncthing/syncthing.err" \
         --user "${SYNCTHING_USER}" \
         --group "${SYNCTHING_GROUP}" \
-        --env "STNORESTART=yes" \
         --background \
         --exec /usr/bin/syncthing
     eend $?
@@ -35,6 +29,8 @@ stop() {
     ebegin "Stopping syncthing"
     start-stop-daemon \
         --stop \
-        --pidfile "${PIDFILE}"
+        --user "${SYNCTHING_USER}" \
+        --group "${SYNCTHING_GROUP}" \
+        --exec /usr/bin/syncthing
     eend $?
 }
