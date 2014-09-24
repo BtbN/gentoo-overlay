@@ -16,7 +16,7 @@ start() {
     ebegin "Starting syncthing"
     start-stop-daemon \
         --start \
-        --stdout "/var/log/syncthing/syncthing.log" \	
+        --stdout "/var/log/syncthing/syncthing.log" \
         --stderr "/var/log/syncthing/syncthing.err" \
         --user "${SYNCTHING_USER}" \
         --group "${SYNCTHING_GROUP}" \
