@@ -29,7 +29,8 @@ DEPEND="
 	x11-libs/gtk+:2
 	dev-libs/uriparser
 	x11-libs/cairo
-	media-libs/freetype"
+	media-libs/freetype
+	dev-util/ragel"
 RDEPEND="
 	${DEPEND}
 	www-plugins/chrome-binary-plugins[flash]"
