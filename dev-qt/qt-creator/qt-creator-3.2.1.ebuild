@@ -48,6 +48,7 @@ CDEPEND="
 	>=dev-qt/qtscript-${QT_PV}
 	>=dev-qt/qtsql-${QT_PV}
 	>=dev-qt/qtsvg-${QT_PV}
+	>=dev-qt/linguist-tools-${QT_PV}
 	clang? ( >=sys-devel/clang-3.2:= )
 "
 DEPEND="${CDEPEND}
