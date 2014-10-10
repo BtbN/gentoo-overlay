@@ -54,7 +54,6 @@ src_install() {
 	exeinto ${opt_dir}
 	doexe *.sh
 	doins *.so
-	doins "${WORKDIR}"/libmysqlclient.so.15
 
 	doins -r sql
 
