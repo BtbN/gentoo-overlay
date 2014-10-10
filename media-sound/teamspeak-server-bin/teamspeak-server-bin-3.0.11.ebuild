@@ -17,10 +17,9 @@ KEYWORDS="~amd64 ~x86"
 RESTRICT="installsources mirror strip"
 
 SRC_URI="amd64? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak3-server_linux-amd64-${PV}.tar.gz )
-	x86? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak3-server_linux-x86-${PV}.tar.gz )
-	amd64? ( http://btbn.de/bins/libmysqlclient.so.15.bz2 )"
+	x86? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak3-server_linux-x86-${PV}.tar.gz )"
 
-RDEPEND=""
+RDEPEND="dev-db/mariadb_client:2"
 DEPEND="${RDEPEND}
 	app-arch/bzip2"
 
