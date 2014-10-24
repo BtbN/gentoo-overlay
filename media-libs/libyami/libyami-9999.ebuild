@@ -5,20 +5,13 @@
 EAPI=5
 
 AUTOTOOLS_AUTORECONF="yes"
-inherit autotools-utils
+inherit git-r3 autotools-utils
 
 DESCRIPTION="It is YUMMY to your video experience on Linux like platform"
 HOMEPAGE="https://github.com/01org/libyami"
+EGIT_REPO_URI="https://github.com/01org/libyami.git"
 
-if [[ "$PV" == "9999" ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/01org/libyami.git"
-	KEYWORDS=""
-else
-	SRC_URI="https://github.com/01org/libyami/archive/${P}.tar.gz"
-	KEYWORDS="~amd64 ~x86"
-fi
-
+KEYWORDS=""
 LICENSE="LGPL-2.1+"
 SLOT="0"
 IUSE=""
