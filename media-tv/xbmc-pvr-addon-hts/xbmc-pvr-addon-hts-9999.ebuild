@@ -43,4 +43,5 @@ src_install() {
 	emake -C "addons/pvr.${PVR_ADDON}" install DESTDIR="${ED}" || die "emake install failed"
 
 	mv "${ED}/usr/share/xbmc" "${ED}/usr/share/kodi"
+	mv "${ED}/usr/lib/xbmc" "${ED}/usr/lib/kodi"
 }
