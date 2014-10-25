@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
 
-COMMON_DEPEND=">=media-tv/xbmc-12.0"
+COMMON_DEPEND=">=media-tv/xbmc-14.0"
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
 
@@ -41,4 +41,6 @@ src_compile() {
 
 src_install() {
 	emake -C "addons/pvr.${PVR_ADDON}" install DESTDIR="${ED}" || die "emake install failed"
+
+	mv "${ED}/usr/share/xbmc" "${ED}/usr/share/kodi"
 }
