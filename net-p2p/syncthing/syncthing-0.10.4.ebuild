@@ -10,7 +10,9 @@ DESCRIPTION="p2p file syncthing"
 HOMEPAGE="http://syncthing.net/"
 EGIT_REPO_URI="https://github.com/syncthing/syncthing.git"
 
-KEYWORDS=""
+EGIT_COMMIT="v${PV}"
+KEYWORDS="~amd64 ~x86"
+
 LICENSE="MIT"
 SLOT="0"
 IUSE="+tools"
