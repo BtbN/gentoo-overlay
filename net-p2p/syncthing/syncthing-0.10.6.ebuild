@@ -36,7 +36,7 @@ src_install() {
 	dobin bin/syncthing
 	use tools && dobin bin/{stindex,stevents}
 
-	dodoc README.md CONTRIBUTORS CONTRIBUTING.md
+	dodoc README.md AUTHORS CONTRIBUTING.md
 
 	newinitd "${FILESDIR}/syncthing_initd" syncthing
 	newconfd "${FILESDIR}/syncthing_confd" syncthing
