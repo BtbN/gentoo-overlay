@@ -6,7 +6,7 @@ EAPI="5"
 GCONF_DEBUG="no"
 GNOME_ORG_MODULE="NetworkManager-${PN##*-}"
 AUTOTOOLS_AUTORECONF="yes"
-EGIT_REPO_URI="git://anongit.freedesktop.org/NetworkManager/NetworkManager"
+EGIT_REPO_URI="git://git.gnome.org/network-manager-openconnect"
 
 inherit autotools-utils gnome2 user git-r3
 
