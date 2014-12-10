@@ -29,7 +29,6 @@ RDEPEND="
 	gtk? ( >=x11-libs/gtk+-3.4:3 )
 "
 DEPEND="${RDEPEND}
-	dev-util/gtk-doc
 	sys-devel/gettext
 	dev-util/intltool
 	virtual/pkgconfig
