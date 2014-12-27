@@ -19,5 +19,5 @@ S="${WORKDIR}"
 
 src_install() {
 	insinto /usr/include
-	doins Samples/common/inc/nvEncodeAPI.h
+	doins nvenc_5.0.1_sdk/Samples/common/inc/nvEncodeAPI.h
 }
