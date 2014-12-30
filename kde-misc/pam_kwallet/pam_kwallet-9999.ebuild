@@ -16,6 +16,14 @@ SLOT="0"
 KEYWORDS=""
 IUSE=""
 
-DEPEND="kde-base/kdelibs
+DEPEND="kde-base/kdelibs"
+RDEPEND="${DEPEND}
 	net-misc/socat"
-RDEPEND="${DEPEND}"
+
+src_configure() {
+	local mycmakeargs=(
+		-DCMAKE_INSTALL_PREFIX="$(kde4-config --prefix)"
+		-DQT_QMAKE_EXECUTABLE=/usr/lib/qt4/bin/qmake
+	)
+	cmake-utils_src_configure
+}
