@@ -7,7 +7,7 @@ EAPI="5"
 DL_PN="autogen"
 DL_P="${DL_PN}-${PV}"
 
-inherit eutils autotools-utils
+inherit eutils
 
 DESCRIPTION="Program and text file generation"
 HOMEPAGE="http://www.gnu.org/software/autogen/"
@@ -25,14 +25,17 @@ src_prepare() {
 	echo -e "#/bin/sh\nexit 0" > pkg/libopts/mklibsrc.sh || die "echo failed"
 
 	# Make it use a dummy libsrc file instead
-	sed -i 's/libsrc\s*=.*/libsrc = dummy.tar.gz/' autoopts/Makefile.{am,in} || die "sed failed"
+	sed -i 's/libsrc\s*=.*/libsrc = dummy.tar.gz/' autoopts/Makefile.in || die "sed failed"
 
 	# Create that dummy
 	touch autoopts/dummy.tar.gz || die "touch failed"
 }
 
 src_configure() {
-	econf $(use_enable static-libs static)
+	econf $(use_enable static-libs static) \
+		--with-libxml2=no \
+		--with-libguile=no \
+		--with-guile-ver=1.8
 }
 
 src_compile() {
