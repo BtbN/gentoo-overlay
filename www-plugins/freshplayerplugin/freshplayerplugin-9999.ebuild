@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit nsplugins cmake-utils git-2
+inherit nsplugins cmake-utils multilib git-2
 
 DESCRIPTION="PPAPI-host NPAPI-plugin adapter for flashplayer in npapi based browsers"
 HOMEPAGE="https://github.com/i-rinat/freshplayerplugin"
@@ -12,35 +12,48 @@ SRC_URI=""
 
 EGIT_REPO_URI="https://github.com/i-rinat/freshplayerplugin.git"
 
-MULTILIB_COMPAT="abi_x86_64"
-
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
+IUSE="pulseaudio"
 
+CDEPEND="
+	media-libs/mesa:=[egl,gles2]
+	media-libs/alsa-lib:=
+	media-libs/freetype:=
+	dev-libs/libconfig:=
+	dev-libs/uriparser:=
+	dev-libs/libevent:=
+	dev-libs/glib:2=
+	dev-libs/openssl:0=
+	x11-libs/pango:=[X]
+	x11-libs/libXinerama:=
+	x11-libs/libXrandr:=
+	x11-libs/libXrender:=
+	x11-libs/gtk+:2=
+	x11-libs/cairo:=
+	media-libs/freetype:=
+	pulseaudio? ( media-sound/pulseaudio:= )"
 DEPEND="
-	media-libs/alsa-lib
-	dev-libs/libconfig
-	x11-libs/pango
-	x11-libs/libXinerama
-	dev-libs/libevent
-	media-libs/mesa[egl,gles2]
-	x11-libs/gtk+:2
-	dev-libs/uriparser
-	x11-libs/cairo
-	media-libs/freetype
-	dev-util/ragel"
+	${CDEPEND}
+	dev-util/ragel
+	virtual/pkgconfig"
 RDEPEND="
-	${DEPEND}
+	${CDEPEND}
 	www-plugins/chrome-binary-plugins[flash]"
 
+src_configure() {
+	local mycmakeargs=()
+	use pulseaudio || mycmakeargs+=( -DPULSEAUDIO_FOUND=FALSE )
+	cmake-utils_src_configure
+}
+
 src_install() {
-	cd "${BUILD_DIR}" || die "failed entering build dir"
+	dodoc ChangeLog README.md
 
-	exeinto /usr/lib/${PLUGINS_DIR}
-	doexe *.so
+	exeinto "/usr/$(get_libdir)/${PLUGINS_DIR}"
+	doexe "${BUILD_DIR}"/*.so
 
-	insinto /etc
-	doins "${FILESDIR}"/freshwrapper.conf
+	mkdir -p "${ED}/etc"
+	sed -r 's|(pepperflash_path *= *)".*"|\1"/usr/lib/chromium-browser/PepperFlash/libpepflashplayer.so"|' data/freshwrapper.conf.example > "${ED}/etc/freshwrapper.conf" || die "sed failed"
 }
