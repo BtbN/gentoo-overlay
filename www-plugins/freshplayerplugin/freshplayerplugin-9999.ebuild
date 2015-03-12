@@ -43,8 +43,7 @@ RDEPEND="
 	www-plugins/chrome-binary-plugins[flash]"
 
 src_configure() {
-	local mycmakeargs=()
-	use pulseaudio || mycmakeargs+=( -DPULSEAUDIO_FOUND=FALSE )
+	local mycmakeargs=( $(cmake-utils_use_find_package pulseaudio PulseAudio) )
 	cmake-utils_src_configure
 }
 
