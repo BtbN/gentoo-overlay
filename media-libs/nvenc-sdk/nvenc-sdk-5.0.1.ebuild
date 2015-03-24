@@ -6,7 +6,7 @@ EAPI=5
 
 DESCRIPTION="Required development files for Nvidia NVENC"
 HOMEPAGE="https://developer.nvidia.com/nvidia-video-codec-sdk"
-SRC_URI="http://developer.download.nvidia.com/compute/nvenc/v5.0_beta/nvenc_5.0.1_sdk.zip"
+SRC_URI="http://developer.download.nvidia.com/compute/nvenc/v5.0/nvenc_5.0.1_sdk.zip"
 
 RESTRICT="mirror"
 
