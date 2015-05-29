@@ -7,7 +7,7 @@ EAPI="5"
 PHP_EXT_NAME="twig"
 PHP_EXT_INI="yes"
 PHP_EXT_ZENDEXT="no"
-USE_PHP="php5-5 php5-4 php5-3"
+USE_PHP="php5-6 php5-5 php5-4 php5-3"
 
 inherit php-ext-source-r2 git-2
 
