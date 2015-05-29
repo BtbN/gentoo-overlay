@@ -7,7 +7,7 @@ EAPI="5"
 PHP_EXT_NAME="stomp"
 PHP_EXT_INI="yes"
 PHP_EXT_ZENDEXT="no"
-USE_PHP="php5-5"
+USE_PHP="php5-6 php5-5"
 DOCS="CREDITS EXPERIMENTAL README"
 
 inherit php-ext-pecl-r2 git-2
