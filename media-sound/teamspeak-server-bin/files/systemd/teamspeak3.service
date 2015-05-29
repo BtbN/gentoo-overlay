@@ -1,6 +1,7 @@
 [Unit]
 Description=TeamSpeak 3 Server
 After=network.target
+After=mysqld.service
 
 [Service]
 Type=simple
