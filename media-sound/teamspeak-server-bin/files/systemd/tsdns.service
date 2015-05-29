@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Environment=LD_LIBRARY_PATH=/opt/teamspeak3-server
 WorkingDirectory=/etc/teamspeak3-server
-ExecStartPre=/bin/rm -f/dev/shm/tsdns_update
+ExecStartPre=/bin/rm -f /dev/shm/tsdns_update
 ExecStart=/opt/teamspeak3-server/bin/tsdnsserver
 StandardOutput=syslog
 StandardError=syslog
