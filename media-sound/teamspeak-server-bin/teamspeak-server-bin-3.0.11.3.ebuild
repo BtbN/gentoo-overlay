@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit eutils user
+inherit eutils systemd user
 
 DESCRIPTION="TeamSpeak Server - Voice Communication Software"
 HOMEPAGE="http://www.teamspeak.com/"
@@ -72,6 +72,8 @@ src_install() {
 		exeinto /usr/bin
 		doexe "${FILESDIR}"/tsdnsserver
 		exeinto ${opt_dir}
+
+		systemd_dounit "${FILESDIR}"/systemd/tsdns.service
 	fi
 
 	# Install the runtime FS layout.
@@ -83,6 +85,8 @@ src_install() {
 
 	# Install the init script and systemd unit.
 	newinitd "${FILESDIR}"/initd teamspeak3-server
+	systemd_dounit "${FILESDIR}"/systemd/teamspeak3.service
+	systemd_dotmpfilesd "${FILESDIR}"/systemd/teamspeak3.conf
 
 	# Fix up permissions.
 	fowners teamspeak3 /{etc,var/{lib,log}}/teamspeak3-server
