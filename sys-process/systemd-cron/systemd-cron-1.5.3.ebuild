@@ -20,6 +20,7 @@ COMMON_DEPEND="sys-process/cronbase"
 RDEPEND=">=sys-apps/systemd-217
 	sys-apps/debianutils
 	!etc-crontab-systemd? ( !sys-process/dcron )
+	!sys-process/cronie[anacron]
 	${PYTHON_DEPS}
 	${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
