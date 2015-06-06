@@ -1,0 +1,13 @@
+[Unit]
+Description=Jenkins CI
+After=network.target
+
+[Service]
+User=jenkins
+Group=jenkins
+ExecStart=/usr/libexec/jenkins
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

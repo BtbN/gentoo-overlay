@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit user java-pkg-2
+inherit user systemd java-pkg-2
 
 DESCRIPTION="Extensible continuous integration server"
 HOMEPAGE="http://jenkins-ci.org/"
@@ -43,6 +43,11 @@ src_install() {
 
 	newinitd "${FILESDIR}/init.sh" jenkins
 	newconfd "${FILESDIR}/conf" jenkins
+
+	systemd_newunit "${FILESDIR}/jenkins.service" jenkins.service
+
+	exeinto /usr/libexec
+	newexe "${FILESDIR}/launch_script.sh" jenkins
 
 	fowners jenkins:jenkins /var/log/jenkins /var/lib/jenkins /var/lib/jenkins/home /var/lib/jenkins/backup
 }
