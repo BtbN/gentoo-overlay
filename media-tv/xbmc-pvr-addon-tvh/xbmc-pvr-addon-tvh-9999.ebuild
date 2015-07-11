@@ -16,7 +16,7 @@ LICENSE="GPL-2"
 SLOT="0"
 IUSE=""
 
-COMMON_DEPEND=">=media-tv/xbmc-14.0"
+COMMON_DEPEND=">=media-tv/kodi-14.0"
 RDEPEND="${COMMON_DEPEND}"
 DEPEND="${COMMON_DEPEND}"
 
