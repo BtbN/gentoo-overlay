@@ -21,7 +21,7 @@ IUSE="cuda python"
 
 CDEPEND="
 	dev-libs/boost:=[python?]
-	media-libs/opencv:=
+	<media-libs/opencv-3:=
 	dev-libs/protobuf:=[python?]
 	dev-cpp/glog:=
 	dev-cpp/gflags:=
