@@ -177,7 +177,7 @@ RDEPEND="
 		x264? ( >=media-libs/x264-0.0.20130506:=[${MULTILIB_USEDEP}] )
 		x265? ( >=media-libs/x265-1.2:=[${MULTILIB_USEDEP}] )
 		xvid? ( >=media-libs/xvid-1.3.2-r1[${MULTILIB_USEDEP}] )
-		nvenc? ( >=media-libs/nvenc-sdk-4.0 )
+		nvenc? ( >=media-libs/nvenc-sdk-5.0 )
 	)
 	fdk? ( >=media-libs/fdk-aac-0.1.3[${MULTILIB_USEDEP}] )
 	flite? ( >=app-accessibility/flite-1.4-r4[${MULTILIB_USEDEP}] )
