@@ -85,6 +85,8 @@ FFMPEG_FLAG_MAP=(
 		libsoxr
 		# Threads; we only support pthread for now but ffmpeg supports more
 		+threads:pthreads
+		# OpenCL acceleration
+		opencl
 )
 
 # Same as above but for encoders, i.e. they do something only with USE=encode.
@@ -204,6 +206,7 @@ RDEPEND="
 	lzma? ( >=app-arch/xz-utils-5.0.5-r1[${MULTILIB_USEDEP}] )
 	modplug? ( >=media-libs/libmodplug-0.8.8.4-r1[${MULTILIB_USEDEP}] )
 	openal? ( >=media-libs/openal-1.15.1[${MULTILIB_USEDEP}] )
+	opencl? ( virtual/opencl[${MULTILIB_USEDEP}] )
 	opengl? ( >=virtual/opengl-7.0-r1[${MULTILIB_USEDEP}] )
 	openssl? ( >=dev-libs/openssl-1.0.1h-r2[${MULTILIB_USEDEP}] )
 	opus? ( >=media-libs/opus-1.0.2-r2[${MULTILIB_USEDEP}] )
