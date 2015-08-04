@@ -92,13 +92,14 @@ FFMPEG_FLAG_MAP=(
 # Same as above but for encoders, i.e. they do something only with USE=encode.
 FFMPEG_ENCODER_FLAG_MAP=(
 	aac:libvo-aacenc amrenc:libvo-amrwbenc mp3:libmp3lame
-	aacplus:libaacplus faac:libfaac theora:libtheora twolame:libtwolame
-	wavpack:libwavpack webp:libwebp x264:libx264 x265:libx265 xvid:libxvid
-	nvenc:nvenc
+	aacplus:libaacplus faac:libfaac snappy:libsnappy theora:libtheora
+	twolame:libtwolame wavpack:libwavpack webp:libwebp x264:libx264 x265:libx265
+	xvid:libxvid
+	nvenc
 )
 
 IUSE="
-	alsa bindist +encode examples jack oss pic static-libs test v4l
+	alsa +encode examples jack oss pic static-libs test v4l
 	${FFMPEG_FLAG_MAP[@]%:*}
 	${FFMPEG_ENCODER_FLAG_MAP[@]%:*}
 "
@@ -106,7 +107,7 @@ IUSE="
 # Strings for CPU features in the useflag[:configure_option] form
 # if :configure_option isn't set, it will use 'useflag' as configure option
 ARM_CPU_FEATURES=( armv5te armv6 armv6t2 neon armvfp:vfp )
-MIPS_CPU_FEATURES=( mips32r2 mipsdspr1 mipsdspr2 mipsfpu )
+MIPS_CPU_FEATURES=( mipsdspr1 mipsdspr2 mipsfpu )
 PPC_CPU_FEATURES=( altivec )
 X86_CPU_FEATURES_RAW=( 3dnow:amd3dnow 3dnowext:amd3dnowext avx:avx avx2:avx2 fma3:fma3 fma4:fma4 mmx:mmx mmxext:mmxext sse:sse sse2:sse2 sse3:sse3 ssse3:ssse3 sse4_1:sse4 sse4_2:sse42 xop:xop )
 X86_CPU_FEATURES=( ${X86_CPU_FEATURES_RAW[@]/#/cpu_flags_x86_} )
@@ -167,6 +168,7 @@ RDEPEND="
 		amrenc? ( >=media-libs/vo-amrwbenc-0.1.2-r1[${MULTILIB_USEDEP}] )
 		faac? ( >=media-libs/faac-1.28-r3[${MULTILIB_USEDEP}] )
 		mp3? ( >=media-sound/lame-3.99.5-r1[${MULTILIB_USEDEP}] )
+		snappy? ( >=app-arch/snappy-1.1.2-r1[${MULTILIB_USEDEP}] )
 		theora? (
 			>=media-libs/libtheora-1.1.1[encode,${MULTILIB_USEDEP}]
 			>=media-libs/libogg-1.3.0[${MULTILIB_USEDEP}]
@@ -175,11 +177,11 @@ RDEPEND="
 		wavpack? ( >=media-sound/wavpack-4.60.1-r1[${MULTILIB_USEDEP}] )
 		webp? ( >=media-libs/libwebp-0.3.0[${MULTILIB_USEDEP}] )
 		x264? ( >=media-libs/x264-0.0.20130506:=[${MULTILIB_USEDEP}] )
-		x265? ( >=media-libs/x265-1.2:=[${MULTILIB_USEDEP}] )
+		x265? ( >=media-libs/x265-1.6:=[${MULTILIB_USEDEP}] )
 		xvid? ( >=media-libs/xvid-1.3.2-r1[${MULTILIB_USEDEP}] )
 		nvenc? ( >=media-libs/nvenc-sdk-5.0 )
 	)
-	fdk? ( >=media-libs/fdk-aac-0.1.3[${MULTILIB_USEDEP}] )
+	fdk? ( >=media-libs/fdk-aac-0.1.3:=[${MULTILIB_USEDEP}] )
 	flite? ( >=app-accessibility/flite-1.4-r4[${MULTILIB_USEDEP}] )
 	fontconfig? ( >=media-libs/fontconfig-2.10.92[${MULTILIB_USEDEP}] )
 	frei0r? ( media-plugins/frei0r-plugins )
@@ -274,15 +276,15 @@ GPL_REQUIRED_USE="
 	)
 "
 REQUIRED_USE="
-	bindist? (
-		encode? ( !faac !aacplus )
-		gpl? ( !openssl !fdk )
-	)
 	libv4l? ( v4l )
 	fftools_cws2fws? ( zlib )
 	test? ( encode )
 	${GPL_REQUIRED_USE}
 	${CPU_REQUIRED_USE}"
+RESTRICT="
+	encode? ( faac? ( bindist ) aacplus? ( bindist ) )
+	gpl? ( openssl? ( bindist ) fdk? ( bindist ) )
+"
 
 S=${WORKDIR}/${P/_/-}
 
@@ -408,9 +410,7 @@ multilib_src_configure() {
 		--cc="$(tc-getCC)" \
 		--cxx="$(tc-getCXX)" \
 		--ar="$(tc-getAR)" \
-		--optflags="${CFLAGS}" \
-		--extra-cflags="${CFLAGS}" \
-		--extra-cxxflags="${CXXFLAGS}" \
+		--optflags=" " \
 		$(use_enable static-libs static) \
 		"${myconf[@]}"
 	echo "${@}"
