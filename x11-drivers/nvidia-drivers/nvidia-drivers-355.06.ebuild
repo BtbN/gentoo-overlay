@@ -288,6 +288,9 @@ src_install() {
 	if use kernel_linux; then
 		insinto /etc/OpenCL/vendors
 		doins ${NV_OBJ}/nvidia.icd
+
+		# OpenCL 1.2 headers for eselect-opencl
+		dosym ../../../global/include/CL-1.2 /usr/$(get_libdir)/OpenCL/vendors/nvidia/include/CL
 	fi
 
 	# Documentation
@@ -431,9 +434,6 @@ src_install-libs() {
 		doexe ${libdir}/libGLESv2.so.${PV}
 		dosym libGLESv2.so.${PV} ${GL_ROOT}/libGLESv2.so.2
 		dosym libGLESv2.so.2 ${GL_ROOT}/libGLESv2.so
-
-		# OpenCL 1.2 headers for eselect-opencl
-		dosym ../../../global/include/CL-1.2 ${CL_ROOT}/include/CL
 	fi
 }
 
