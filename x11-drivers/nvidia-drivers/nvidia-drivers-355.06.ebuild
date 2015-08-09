@@ -34,7 +34,7 @@ REQUIRED_USE="
 "
 
 COMMON="
-	app-eselect/eselect-opencl
+	>=app-eselect/eselect-opencl-1.1.0-r2
 	kernel_linux? ( >=sys-libs/glibc-2.6.1 )
 	X? (
 		>=app-eselect/eselect-opengl-1.0.9
@@ -390,7 +390,7 @@ src_install-libs() {
 			"libGL.so ${NV_SOVER} ${GL_ROOT}"
 			"libGLESv1_CM.so ${NV_SOVER} ${GL_ROOT}"
 			"libGLdispatch.so 0 ${GL_ROOT}"
-			"libOpenCL.so 1.0.0 ${GL_ROOT}"
+			"libOpenCL.so 1.0.0 ${CL_ROOT}"
 			"libOpenGL.so 0 ${GL_ROOT}"
 			"libcuda.so ${NV_SOVER}"
 			"libnvcuvid.so ${NV_SOVER}"
@@ -431,6 +431,9 @@ src_install-libs() {
 		doexe ${libdir}/libGLESv2.so.${PV}
 		dosym libGLESv2.so.${PV} ${GL_ROOT}/libGLESv2.so.2
 		dosym libGLESv2.so.2 ${GL_ROOT}/libGLESv2.so
+
+		# OpenCL 1.2 headers for eselect-opencl
+		dosym ../../../global/include/CL-1.2 ${CL_ROOT}/include/CL
 	fi
 }
 
