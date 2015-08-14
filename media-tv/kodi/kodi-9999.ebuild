@@ -18,7 +18,7 @@ HOMEPAGE="http://kodi.tv/ http://kodi.wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa avahi bluetooth bluray caps cec css dbus debug +fishbmc gles goom java joystick midi mysql nfs +opengl profile +projectm pulseaudio +rsxs rtmp +samba sftp +spectrum test +texturepacker udisks upnp upower +usb vaapi vdpau +waveform webserver +X"
+IUSE="airplay alsa avahi bluetooth bluray caps cec css dbus debug +fishbmc gles goom java joystick midi mysql nfs +opengl profile +projectm pulseaudio +rsxs rtmp +samba sftp +spectrum test texturepacker udisks upnp upower +usb vaapi vdpau +waveform webserver +X"
 REQUIRED_USE="
 	rsxs? ( X )
 	udisks? ( dbus )
@@ -152,7 +152,6 @@ src_configure() {
 		--docdir=/usr/share/doc/${PF} \
 		--disable-ccache \
 		--disable-optimizations \
-		--disable-texturepacker \
 		--with-ffmpeg=shared \
 		$(use_enable alsa) \
 		$(use_enable airplay) \
