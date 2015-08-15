@@ -26,6 +26,7 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="${PYTHON_DEPS}
+	media-libs/dcadec
 	dev-libs/crossguid
 	media-libs/giflib
 	app-arch/bzip2
