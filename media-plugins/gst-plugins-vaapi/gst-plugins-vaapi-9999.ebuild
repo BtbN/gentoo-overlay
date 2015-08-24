@@ -47,6 +47,7 @@ src_configure() {
 }
 
 src_install() {
+	emake install DESTDIR="${ED}"
 	einstalldocs
 	prune_libtool_files --modules
 }
