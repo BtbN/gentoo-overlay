@@ -34,7 +34,7 @@ DEPEND="${RDEPEND}
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]"
 
 src_prepare() {
-	./autogeh.sh || die "autogen failed"
+	./autogen.sh || die "autogen failed"
 }
 
 multilib_src_configure() {
