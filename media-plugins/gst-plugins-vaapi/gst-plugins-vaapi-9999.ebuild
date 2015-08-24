@@ -33,7 +33,9 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.12
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]"
 
-S="${WORKDIR}/${MY_PN}-${PV}"
+multilib_src_prepare() {
+	./autogeh.sh || die "autogen failed"
+}
 
 multilib_src_configure() {
 	ECONF_SOURCE=${S} \
