@@ -35,16 +35,10 @@ RESTRICT="mirror strip"
 
 S="${WORKDIR}"
 
-pkg_nofetch() {
-	elog "Please download ${A}"
-	elog "from ${HOMEPAGE}?page=downloads and place this"
-	elog "file in ${DISTDIR}"
-}
-
 src_prepare() {
 	# Remove the qt-libraries as they just cause trouble with the system's Qt, see bug #328807.
 	rm libQt* || die "Couldn't remove bundled Qt libraries."
-	rm -r accessible platforms sqldrivers qt.conf || die "Couldn't remove bundle Qt files."
+	rm -r imageformats platforms sqldrivers qt.conf || die "Couldn't remove bundle Qt files."
 
 	# Remove unwanted soundbackends.
 	if ! use alsa ; then
@@ -56,7 +50,7 @@ src_prepare() {
 	fi
 
 	# Remove quazip
-	rm libquazip.so.1 || die
+	rm libquazip.* || die
 
 	# Rename the tsclient to its shorter version, required by the teamspeak3 script we install.
 	mv ts3client_linux_* ts3client || die "Couldn't rename ts3client to its shorter version."
