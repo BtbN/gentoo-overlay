@@ -33,7 +33,7 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.12
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]"
 
-multilib_src_prepare() {
+src_prepare() {
 	./autogeh.sh || die "autogen failed"
 }
 
