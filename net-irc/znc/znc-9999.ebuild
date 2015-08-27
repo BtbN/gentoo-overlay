@@ -1,24 +1,17 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-irc/znc/znc-1.4-r1.ebuild,v 1.3 2015/03/25 16:48:24 jlec Exp $
+# $Header: $
 
 EAPI=5
 
-PYTHON_COMPAT=( python{3_2,3_3,3_4} )
-inherit base python-single-r1 systemd user
+PYTHON_COMPAT=( python{3_3,3_4} )
+inherit base python-single-r1 systemd user git-r3
 
 MY_PV=${PV/_/-}
 DESCRIPTION="An advanced IRC Bouncer"
 
-if [[ ${PV} == *9999* ]]; then
-	inherit git-2
-	EGIT_REPO_URI=${EGIT_REPO_URI:-"git://github.com/znc/znc.git"}
-	SRC_URI=""
-	KEYWORDS=""
-else
-	SRC_URI="http://znc.in/releases/${PN}-${MY_PV}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~x86"
-fi
+EGIT_REPO_URI=${EGIT_REPO_URI:-"git://github.com/znc/znc.git"}
+KEYWORDS=""
 
 HOMEPAGE="http://znc.in"
 LICENSE="GPL-2"
