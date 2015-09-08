@@ -21,7 +21,7 @@ RDEPEND="${DEPEND}
 
 src_prepare() {
     # Patch Gentoo default kde path
-	sed -i 's/.kde/.kde4/' pam_kwallet.c || die 'sed failed'
+	sed -i 's/\.kde/.kde4/' pam_kwallet.c || die 'sed failed'
 }
 
 src_configure() {
