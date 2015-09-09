@@ -20,3 +20,5 @@ DEPEND=">=x11-libs/libva-1.6.0
 	>=dev-libs/cmrt-1.0.6
 	>=x11-libs/libdrm-2.4.45"
 RDEPEND="${DEPEND}"
+
+S="intel-hybrid-driver-${PV}"
