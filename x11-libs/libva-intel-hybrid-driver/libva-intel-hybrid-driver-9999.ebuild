@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/01org/intel-hybrid-driver.git"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE=""
 
 DEPEND=">=x11-libs/libva-1.6.0
