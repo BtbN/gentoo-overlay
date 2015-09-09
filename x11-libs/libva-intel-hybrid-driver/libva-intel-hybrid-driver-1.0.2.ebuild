@@ -22,3 +22,8 @@ DEPEND=">=x11-libs/libva-1.6.0
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/intel-hybrid-driver-${PV}"
+
+src_prepare() {
+	sed -i 's|AM_CPPFLAGS =|AM_CPPFLAGS = -I$(top_srcdir)/src|' src/vp9hdec/Makefile.am || die 'sed failed'
+	autotools-utils_src_prepare
+}
