@@ -41,6 +41,8 @@ pkg_setup() {
 IBEIGNET_DIR=/usr/$(get_libdir)/OpenCL/vendors/intel-beignet
 
 src_prepare() {
+	epatch "${FILESDIR}/beignet-llvm-37.patch"
+
 	# disable tests for now
 	sed -i "s/ADD_SUBDIRECTORY(utests)/#ADD_SUBDIRECTORY(utests)/" CMakeLists.txt || die "sed failed"
 
