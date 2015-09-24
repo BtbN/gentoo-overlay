@@ -35,10 +35,11 @@ RDEPEND="app-eselect/eselect-opencl
 	x11-libs/libXext
 	x11-libs/libXfixes"
 
+IBEIGNET_DIR=/usr/$(get_libdir)/OpenCL/vendors/intel-beignet
+
 pkg_setup() {
 	python_setup
 }
-IBEIGNET_DIR=/usr/$(get_libdir)/OpenCL/vendors/intel-beignet
 
 src_prepare() {
 	epatch "${FILESDIR}/beignet-llvm-37.patch"
@@ -46,26 +47,27 @@ src_prepare() {
 	# disable tests for now
 	sed -i "s/ADD_SUBDIRECTORY(utests)/#ADD_SUBDIRECTORY(utests)/" CMakeLists.txt || die "sed failed"
 
-	echo "${IBEIGNET_DIR}/lib/beignet/libcl.so" > intelbeignet.icd
+	echo "${IBEIGNET_DIR}/$(get_libdir)/beignet/libcl.so" > intelbeignet.icd
 	cmake-utils_src_prepare
 }
-src_configure() {
 
+src_configure() {
 	local mycmakeargs=( -DCMAKE_INSTALL_PREFIX="${IBEIGNET_DIR}/" )
 
 	cmake-utils_src_configure
 }
+
 src_install() {
 	cmake-utils_src_install
 
 	insinto /etc/OpenCL/vendors/
 	doins intelbeignet.icd
 
-	dodoc -r  docs
+	dodoc -r docs
 
-    dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so.1.2
-	dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so.1
-	dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so
-	dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libcl.so.1
-	dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libcl.so
+    dosym $(get_libdir)/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so.1.2
+	dosym $(get_libdir)/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so.1
+	dosym $(get_libdir)/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so
+	dosym $(get_libdir)/beignet/libcl.so "${IBEIGNET_DIR}"/libcl.so.1
+	dosym $(get_libdir)/beignet/libcl.so "${IBEIGNET_DIR}"/libcl.so
 }
