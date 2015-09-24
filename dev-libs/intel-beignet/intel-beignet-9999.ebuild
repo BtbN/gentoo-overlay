@@ -63,6 +63,7 @@ src_install() {
 
 	dodoc -r  docs
 
+    dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so.1.2
 	dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so.1
 	dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libOpenCL.so
 	dosym lib/beignet/libcl.so "${IBEIGNET_DIR}"/libcl.so.1
