@@ -21,11 +21,11 @@ REQUIRED_USE="|| ( alsa pulseaudio )"
 
 RDEPEND="
 	dev-libs/quazip:0/0[qt5]
-	>=dev-qt/qtcore-5.5.0:5
-	>=dev-qt/qtgui-5.5.0:5[accessibility]
-	>=dev-qt/qtnetwork-5.5.0:5
-	>=dev-qt/qtsql-5.5.0:5[sqlite]
-	>=dev-qt/qtwidgets-5.5.0:5
+	dev-qt/qtcore:5
+	dev-qt/qtgui:5[accessibility]
+	dev-qt/qtnetwork:5
+	dev-qt/qtsql:5[sqlite]
+	dev-qt/qtwidgets:5
 	sys-libs/glibc
 	sys-libs/zlib
 	alsa? ( media-libs/alsa-lib )
