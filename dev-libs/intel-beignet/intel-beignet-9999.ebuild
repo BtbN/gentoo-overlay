@@ -42,7 +42,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/beignet-llvm-37.patch"
+	#epatch "${FILESDIR}/beignet-llvm-37.patch"
 
 	# disable tests for now
 	sed -i "s/ADD_SUBDIRECTORY(utests)/#ADD_SUBDIRECTORY(utests)/" CMakeLists.txt || die "sed failed"
