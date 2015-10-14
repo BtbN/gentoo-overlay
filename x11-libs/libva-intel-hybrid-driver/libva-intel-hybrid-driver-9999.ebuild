@@ -20,3 +20,8 @@ DEPEND=">=x11-libs/libva-1.6.0
 	>=dev-libs/cmrt-1.0.6
 	>=x11-libs/libdrm-2.4.45"
 RDEPEND="${DEPEND}"
+
+src_prepare() {
+    sed -i 's|AM_CPPFLAGS =|AM_CPPFLAGS = -I$(top_srcdir)/src|' src/vp9hdec/Makefile.am || die 'sed failed'
+    autotools-utils_src_prepare
+}
