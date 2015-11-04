@@ -23,6 +23,6 @@ src_compile() {
 }
 
 src_install() {
-	mkdir -p "${ED}/$(get_libdir)/znc" || die "mkdir failed"
-	cp betterwatch.so "${ED}/$(get_libdir)/znc" || die "cp failed"
+	mkdir -p "${ED}/usr/$(get_libdir)/znc" || die "mkdir failed"
+	cp betterwatch.so "${ED}/usr/$(get_libdir)/znc" || die "cp failed"
 }

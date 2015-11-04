@@ -23,6 +23,6 @@ src_compile() {
 }
 
 src_install() {
-	mkdir -p "${ED}/$(get_libdir)/znc" || die "mkdir failed"
-	cp clientbuffer.so "${ED}/$(get_libdir)/znc" || die "cp failed"
+	mkdir -p "${ED}/usr/$(get_libdir)/znc" || die "mkdir failed"
+	cp clientbuffer.so "${ED}/usr/$(get_libdir)/znc" || die "cp failed"
 }
