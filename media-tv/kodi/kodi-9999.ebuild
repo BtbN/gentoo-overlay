@@ -18,9 +18,8 @@ HOMEPAGE="http://kodi.tv/ http://kodi.wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa avahi bluetooth bluray caps cec css dbus debug +fishbmc gles goom java joystick midi mysql nfs +opengl profile +projectm pulseaudio +rsxs rtmp +samba sftp +spectrum test texturepacker udisks upnp upower +usb vaapi vdpau +waveform webserver +X"
+IUSE="airplay alsa avahi bluetooth bluray caps cec css dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test texturepacker udisks upnp upower +usb vaapi vdpau webserver +X"
 REQUIRED_USE="
-	rsxs? ( X )
 	udisks? ( dbus )
 	upower? ( dbus )
 "
@@ -62,7 +61,6 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	media-libs/libmpeg2
 	media-libs/libogg
 	media-libs/libpng
-	projectm? ( media-libs/libprojectm )
 	media-libs/libsamplerate
 	joystick? ( media-libs/libsdl2 )
 	>=media-libs/taglib-1.8
@@ -163,29 +161,23 @@ src_configure() {
 		$(use_enable css dvdcss) \
 		$(use_enable dbus) \
 		$(use_enable debug) \
-		$(use_enable fishbmc) \
 		$(use_enable gles) \
-		$(use_enable goom) \
 		$(use_enable joystick) \
 		$(use_enable midi mid) \
 		$(use_enable mysql) \
 		$(use_enable nfs) \
 		$(use_enable opengl gl) \
 		$(use_enable profile profiling) \
-		$(use_enable projectm) \
 		$(use_enable pulseaudio pulse) \
-		$(use_enable rsxs) \
 		$(use_enable rtmp) \
 		$(use_enable samba) \
 		$(use_enable sftp ssh) \
-		$(use_enable spectrum) \
 		$(use_enable usb libusb) \
 		$(use_enable test gtest) \
 		$(use_enable texturepacker) \
 		$(use_enable upnp) \
 		$(use_enable vaapi) \
 		$(use_enable vdpau) \
-		$(use_enable waveform) \
 		$(use_enable webserver) \
 		$(use_enable X x11)
 }
