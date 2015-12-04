@@ -8,7 +8,7 @@ inherit cmake-utils
 
 DESCRIPTION="The MariaDB Native Client library (C driver)"
 HOMEPAGE="https://downloads.mariadb.org/client-native/"
-SRC_URI="https://downloads.mariadb.org/f/client-native-${PV}/src/${P}-src.tar.gz"
+SRC_URI="http://mirror2.hs-esslingen.de/mariadb/connector-c-${PV}/mariadb-connector-c-${PV}-src.tar.gz"
 
 LICENSE="GPL-2+"
 SLOT="2"
@@ -18,7 +18,7 @@ IUSE=""
 DEPEND="dev-libs/openssl:0"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}/${P}-src"
+S="${WORKDIR}"
 
 src_install() {
 	cmake-utils_src_install
