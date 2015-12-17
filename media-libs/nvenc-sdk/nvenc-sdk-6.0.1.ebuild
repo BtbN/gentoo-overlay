@@ -6,11 +6,11 @@ EAPI=5
 
 DESCRIPTION="Required development files for Nvidia NVENC"
 HOMEPAGE="https://developer.nvidia.com/nvidia-video-codec-sdk"
-SRC_URI="http://developer.download.nvidia.com/compute/nvenc/v5.0/nvenc_5.0.1_sdk.zip"
+SRC_URI="http://developer.download.nvidia.com/assets/cuda/files/nvidia_video_sdk_${PV}.zip"
 
 RESTRICT="mirror"
 
-LICENSE="NVENC_SDK"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
@@ -19,5 +19,5 @@ S="${WORKDIR}"
 
 src_install() {
 	insinto /usr/include
-	doins nvenc_5.0.1_sdk/Samples/common/inc/nvEncodeAPI.h
+	doins nvidia_video_sdk_${PV}/Samples/common/inc/nvEncodeAPI.h
 }
