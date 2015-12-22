@@ -7,8 +7,8 @@ inherit eutils git-r3
 
 MY_PN="gstreamer-vaapi"
 DESCRIPTION="Hardware accelerated video decoding through VA-API plugin"
-HOMEPAGE="http://gitorious.org/vaapi/gstreamer-vaapi"
-EGIT_REPO_URI="https://github.com/gbeauchesne/gstreamer-vaapi.git"
+HOMEPAGE="https://github.com/01org/gstreamer-vaapi.git"
+EGIT_REPO_URI="https://github.com/01org/gstreamer-vaapi.git"
 
 LICENSE="LGPL-2.1"
 SLOT="1.0"
