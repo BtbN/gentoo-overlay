@@ -3,7 +3,8 @@
 # $Id$
 
 EAPI="5"
-inherit eutils flag-o-matic multilib-minimal
+
+inherit eutils multilib-minimal
 
 MY_PN="gst-libav"
 DESCRIPTION="FFmpeg based gstreamer plugin"
@@ -19,8 +20,8 @@ IUSE="libav +orc"
 RDEPEND="
 	app-arch/bzip2
 	app-arch/xz-utils
-	>=media-libs/gstreamer-1.4.0:1.0[${MULTILIB_USEDEP}]
-	>=media-libs/gst-plugins-base-1.4.0:1.0[${MULTILIB_USEDEP}]
+	>=media-libs/gstreamer-${PV}:1.0[${MULTILIB_USEDEP}]
+	>=media-libs/gst-plugins-base-${PV}:1.0[${MULTILIB_USEDEP}]
 	!libav? ( >=media-video/ffmpeg-2.2:0=[${MULTILIB_USEDEP}] )
 	libav? ( >=media-video/libav-10:0=[${MULTILIB_USEDEP}] )
 	orc? ( >=dev-lang/orc-0.4.17[${MULTILIB_USEDEP}] )
@@ -41,7 +42,6 @@ multilib_src_configure() {
 		--with-package-name="Gentoo GStreamer ebuild" \
 		--with-package-origin="https://www.gentoo.org" \
 		--disable-fatal-warnings \
-#		--with-system-libav \
 		$(use_enable orc)
 }
 
