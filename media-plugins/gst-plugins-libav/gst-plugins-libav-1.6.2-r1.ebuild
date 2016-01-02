@@ -14,7 +14,7 @@ SRC_URI="http://gstreamer.freedesktop.org/src/${MY_PN}/${MY_PN}-${PV}.tar.xz"
 LICENSE="GPL-2"
 SLOT="1.0"
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd"
-IUSE="libav +orc"
+IUSE="+orc"
 
 # XXX: bzip2/lzma are automagic
 RDEPEND="
@@ -22,8 +22,6 @@ RDEPEND="
 	app-arch/xz-utils
 	>=media-libs/gstreamer-${PV}:1.0[${MULTILIB_USEDEP}]
 	>=media-libs/gst-plugins-base-${PV}:1.0[${MULTILIB_USEDEP}]
-	!libav? ( >=media-video/ffmpeg-2.2:0=[${MULTILIB_USEDEP}] )
-	libav? ( >=media-video/libav-10:0=[${MULTILIB_USEDEP}] )
 	orc? ( >=dev-lang/orc-0.4.17[${MULTILIB_USEDEP}] )
 "
 DEPEND="${RDEPEND}
@@ -35,7 +33,6 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 multilib_src_configure() {
 	GST_PLUGINS_BUILD=""
-	# always use system ffmpeg/libav if possible
 	ECONF_SOURCE=${S} \
 	econf \
 		--disable-maintainer-mode \
