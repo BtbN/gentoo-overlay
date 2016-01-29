@@ -11,29 +11,19 @@ HOMEPAGE="http://www.teamspeak.com/"
 LICENSE="teamspeak3 GPL-2"
 
 SLOT="0"
-IUSE="doc pdf tsdns"
+IUSE="doc tsdns"
 KEYWORDS="~amd64 ~x86"
 
 RESTRICT="installsources mirror strip"
 
-SRC_URI="amd64? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak3-server_linux-amd64-${PV}.tar.gz )
-	x86? ( http://ftp.4players.de/pub/hosted/ts3/releases/${PV}/teamspeak3-server_linux-x86-${PV}.tar.gz )"
+SRC_URI="amd64? ( http://dl.4players.de/ts/releases/${PV}/teamspeak3-server_linux_amd64-${PV}.tar.bz2 )
+	x86? ( http://dl.4players.de/ts/releases/${PV}/teamspeak3-server_linux_x86-${PV}.tar.bz2 )"
 
 RDEPEND="dev-db/mariadb-connector-c:2"
 DEPEND="${RDEPEND}
 	app-arch/bzip2"
 
-S="${WORKDIR}/teamspeak3-server_linux-${ARCH}"
-
-pkg_nofetch() {
-	if use amd64 ; then
-		einfo "Please download teamspeak3-server_linux-amd64-${PV}.tar.gz"
-	elif use x86 ; then
-		einfo "Please download teamspeak3-server_linux-x86-${PV}.tar.gz"
-	fi
-	einfo "from ${HOMEPAGE}?page=downloads and place this"
-	einfo "file in ${DISTDIR}"
-}
+S="${WORKDIR}/teamspeak3-server_linux_${ARCH}"
 
 pkg_setup() {
 	enewuser teamspeak3
@@ -46,7 +36,7 @@ src_install() {
 	insinto ${opt_dir}
 
 	# Install binary, wrapper, shell files and libraries.
-	newbin ts3server_linux_${ARCH} ts3server-bin
+	newbin ts3server ts3server-bin
 
 	exeinto /usr/bin
 	doexe "${FILESDIR}"/ts3server
@@ -60,10 +50,9 @@ src_install() {
 	# Install documentation and tsdns.
 	dodoc -r CHANGELOG doc/*.txt
 	use doc && dodoc -r serverquerydocs
-	use pdf && dodoc doc/*.pdf
 
 	if use tsdns; then
-		newbin tsdns/tsdnsserver_linux_${ARCH} tsdnsserver
+		newbin tsdns/tsdnsserver tsdnsserver
 
 		newdoc tsdns/README README.tsdns
 		newdoc tsdns/USAGE USAGE.tsdns
