@@ -33,7 +33,7 @@ HOMEPAGE="https://kodi.tv/ http://kodi.wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test udisks upnp upower +usb vaapi vdpau webserver +X"
+IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test udisks upnp upower +usb vaapi vdpau webserver +X +texturepacker"
 # gles/vaapi: http://trac.kodi.tv/ticket/10552 #464306
 REQUIRED_USE="
 	|| ( gles opengl )
@@ -149,6 +149,8 @@ src_unpack() {
 
 src_prepare() {
 	export HAVE_GIT=no GIT_REV=${EGIT_VERSION:-exported}
+	epatch "${FILESDIR}"/${PN}-9999-no-arm-flags.patch
+	epatch "${FILESDIR}"/${PN}-9999-texturepacker.patch
 	epatch_user #293109
 	./bootstrap || die "bootstrap failed"
 }
@@ -189,7 +191,7 @@ src_configure() {
 		$(use_enable sftp ssh) \
 		$(use_enable usb libusb) \
 		$(use_enable test gtest) \
-		--disable-texturepacker \
+		$(use_enable texturepacker) \
 		$(use_enable upnp) \
 		$(use_enable vaapi) \
 		$(use_enable vdpau) \
