@@ -33,7 +33,7 @@ HOMEPAGE="https://kodi.tv/ http://kodi.wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test +texturepacker udisks upnp upower +usb vaapi vdpau webserver +X"
+IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test udisks upnp upower +usb vaapi vdpau webserver +X"
 # gles/vaapi: http://trac.kodi.tv/ticket/10552 #464306
 REQUIRED_USE="
 	|| ( gles opengl )
@@ -122,7 +122,6 @@ DEPEND="${COMMON_DEPEND}
 	dev-lang/swig
 	dev-libs/crossguid
 	dev-util/gperf
-	texturepacker? ( media-libs/giflib )
 	X? ( x11-proto/xineramaproto )
 	dev-util/cmake
 	x86? ( dev-lang/nasm )
@@ -190,7 +189,7 @@ src_configure() {
 		$(use_enable sftp ssh) \
 		$(use_enable usb libusb) \
 		$(use_enable test gtest) \
-		$(use_enable texturepacker) \
+		--disable-texturepacker \
 		$(use_enable upnp) \
 		$(use_enable vaapi) \
 		$(use_enable vdpau) \
