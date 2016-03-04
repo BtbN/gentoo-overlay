@@ -1,49 +1,64 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
 EAPI="5"
 
 # Does not work with py3 here
-# It might work with py:2.5 but I didn't test that
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="sqlite"
 
-inherit eutils python-single-r1 multiprocessing autotools git-r3
+inherit eutils linux-info python-single-r1 multiprocessing autotools toolchain-funcs
 
-CODENAME="Helix"
-EGIT_REPO_URI="git://github.com/xbmc/xbmc.git"
+CODENAME="Krypton"
+case ${PV} in
+9999)
+	EGIT_REPO_URI="git://github.com/xbmc/xbmc.git"
+	inherit git-r3
+	;;
+*|*_p*)
+	MY_PV=${PV/_p/_r}
+	MY_P="${PN}-${MY_PV}"
+	SRC_URI="http://mirrors.kodi.tv/releases/source/${MY_PV}-${CODENAME}.tar.gz -> ${P}.tar.gz
+		https://github.com/xbmc/xbmc/archive/${PV}-${CODENAME}.tar.gz -> ${P}.tar.gz
+		!java? ( http://mirrors.kodi.tv/releases/source/${MY_P}-generated-addons.tar.xz )"
+	KEYWORDS="~amd64 ~x86"
+
+	S=${WORKDIR}/xbmc-${PV}-${CODENAME}
+	;;
+esac
+
 DESCRIPTION="Kodi is a free and open source media-player and entertainment hub"
-HOMEPAGE="http://kodi.tv/ http://kodi.wiki/"
+HOMEPAGE="https://kodi.tv/ http://kodi.wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa avahi bluetooth bluray caps cec css dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test texturepacker udisks upnp upower +usb vaapi vdpau webserver +X"
+IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test +texturepacker udisks upnp upower +usb vaapi vdpau webserver +X"
+# gles/vaapi: http://trac.kodi.tv/ticket/10552 #464306
 REQUIRED_USE="
+	|| ( gles opengl )
+	gles? ( !vaapi )
+	vaapi? ( !gles )
 	udisks? ( dbus )
 	upower? ( dbus )
 "
 
 COMMON_DEPEND="${PYTHON_DEPS}
-	media-libs/dcadec
-	dev-libs/crossguid
-	media-libs/giflib
 	app-arch/bzip2
 	app-arch/unzip
 	app-arch/zip
 	app-i18n/enca
 	airplay? ( app-pda/libplist )
-	dev-libs/boost
 	dev-libs/expat
 	dev-libs/fribidi
 	dev-libs/libcdio[-minimal]
-	cec? ( >=dev-libs/libcec-2.2 )
+	cec? ( >=dev-libs/libcec-3.0 )
 	dev-libs/libpcre[cxx]
 	dev-libs/libxml2
 	dev-libs/libxslt
 	>=dev-libs/lzo-2.04
 	dev-libs/tinyxml[stl]
-	dev-libs/yajl
+	>=dev-libs/yajl-2
 	dev-python/simplejson[${PYTHON_USEDEP}]
 	media-fonts/corefonts
 	media-fonts/roboto
@@ -51,27 +66,24 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	media-libs/flac
 	media-libs/fontconfig
 	media-libs/freetype
-	media-libs/jasper
 	media-libs/jbigkit
 	>=media-libs/libass-0.9.7
-	bluray? ( media-libs/libbluray )
-	css? ( media-libs/libdvdcss )
+	bluray? ( >=media-libs/libbluray-0.7.0 )
 	media-libs/libmad
 	media-libs/libmodplug
-	media-libs/libmpeg2
 	media-libs/libogg
-	media-libs/libpng
+	media-libs/libpng:0=
 	media-libs/libsamplerate
 	joystick? ( media-libs/libsdl2 )
 	>=media-libs/taglib-1.8
 	media-libs/libvorbis
-	media-libs/tiff
+	media-sound/dcadec
 	pulseaudio? ( media-sound/pulseaudio )
 	media-sound/wavpack
 	>=media-video/ffmpeg-2.6:=[encode]
 	rtmp? ( media-video/rtmpdump )
 	avahi? ( net-dns/avahi )
-	nfs? ( net-fs/libnfs )
+	nfs? ( net-fs/libnfs:= )
 	webserver? ( net-libs/libmicrohttpd[messages] )
 	sftp? ( net-libs/libssh[sftp] )
 	net-misc/curl
@@ -80,20 +92,18 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	dbus? ( sys-apps/dbus )
 	caps? ( sys-libs/libcap )
 	sys-libs/zlib
-	virtual/jpeg
-	usb? ( virtual/libusb )
+	usb? ( virtual/libusb:1 )
 	mysql? ( virtual/mysql )
 	opengl? (
 		virtual/glu
 		virtual/opengl
-		>=media-libs/glew-1.5.6
 	)
 	gles? (
 		media-libs/mesa[gles2]
 	)
 	vaapi? ( x11-libs/libva[opengl] )
 	vdpau? (
-		|| ( x11-libs/libvdpau >=x11-drivers/nvidia-drivers-180.51 )
+		|| ( >=x11-libs/libvdpau-1.1 >=x11-drivers/nvidia-drivers-180.51 )
 		media-video/ffmpeg[vdpau]
 	)
 	X? (
@@ -110,14 +120,27 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	app-arch/xz-utils
 	dev-lang/swig
+	dev-libs/crossguid
 	dev-util/gperf
+	texturepacker? ( media-libs/giflib )
 	X? ( x11-proto/xineramaproto )
 	dev-util/cmake
 	x86? ( dev-lang/nasm )
-	virtual/jre
-	test? ( dev-cpp/gtest )"
+	java? ( virtual/jre )
+	test? ( dev-cpp/gtest )
+	virtual/pkgconfig"
+# Force java for latest git version to avoid having to hand maintain the
+# generated addons package.  #488118
+[[ ${PV} == "9999" ]] && DEPEND+=" virtual/jre"
+
+CONFIG_CHECK="~IP_MULTICAST"
+ERROR_IP_MULTICAST="
+In some cases Kodi needs to access multicast addresses.
+Please consider enabling IP_MULTICAST under Networking options.
+"
 
 pkg_setup() {
+	check_extra_config
 	python-single-r1_pkg_setup
 }
 
@@ -126,16 +149,8 @@ src_unpack() {
 }
 
 src_prepare() {
-	# Disable internal func checks as our USE/DEPEND
-	# stuff handles this just fine already #408395
-	export ac_cv_lib_avcodec_ff_vdpau_vc1_decode_picture=yes
-
-	# Fix the final version string showing as "exported"
-	# instead of the SVN revision number.
 	export HAVE_GIT=no GIT_REV=${EGIT_VERSION:-exported}
-
 	epatch_user #293109
-
 	./bootstrap || die "bootstrap failed"
 }
 
@@ -146,6 +161,8 @@ src_configure() {
 	export HELP2MAN=$(type -P help2man || echo true)
 	# No configure flage for this #403561
 	export ac_cv_lib_bluetooth_hci_devid=$(usex bluetooth)
+	# Requiring java is asine #434662
+	[[ ${PV} != "9999" ]] && export ac_cv_path_JAVA_EXE=$(which $(usex java java true))
 
 	econf \
 		--docdir=/usr/share/doc/${PF} \
@@ -158,7 +175,6 @@ src_configure() {
 		$(use_enable bluray libbluray) \
 		$(use_enable caps libcap) \
 		$(use_enable cec libcec) \
-		$(use_enable css dvdcss) \
 		$(use_enable dbus) \
 		$(use_enable debug) \
 		$(use_enable gles) \
@@ -188,34 +204,10 @@ src_compile() {
 
 src_install() {
 	default
-	rm "${ED}"/usr/share/doc/*/{LICENSE.GPL,copying.txt}*
+	rm "${ED}"/usr/share/doc/*/{LICENSE.GPL,copying.txt}* || die
 
 	domenu tools/Linux/kodi.desktop
 	newicon media/icon48x48.png kodi.png
-
-	# Remove optional addons (platform specific).
-	local disabled_addons=(
-		repository.pvr-{android,ios,osx{32,64},win32}.xbmc.org
-		visualization.dxspectrum
-		visualization.vortex
-	)
-	rm -rf "${disabled_addons[@]/#/${ED}/usr/share/kodi/addons/}"
-
-	# Remove fonconfig settings that are used only on MacOSX.
-	# Can't be patched upstream because they just find all files and install
-	# them into same structure like they have in git.
-	rm -rf "${ED}"/usr/share/kodi/system/players/dvdplayer/etc
-
-	# Replace bundled fonts with system ones
-	# teletext.ttf: unknown
-	# bold-caps.ttf: unknown
-	# roboto: roboto-bold, roboto-regular
-	# arial.ttf: font mashed from droid/roboto, not removed wrt bug#460514
-	rm -rf "${ED}"/usr/share/kodi/addons/skin.confluence/fonts/Roboto-*
-	dosym /usr/share/fonts/roboto/Roboto-Regular.ttf \
-		/usr/share/kodi/addons/skin.confluence/fonts/Roboto-Regular.ttf
-	dosym /usr/share/fonts/roboto/Roboto-Bold.ttf \
-		/usr/share/kodi/addons/skin.confluence/fonts/Roboto-Bold.ttf
 
 	python_domodule tools/EventClients/lib/python/xbmcclient.py
 	python_newscript "tools/EventClients/Clients/Kodi Send/kodi-send.py" kodi-send
