@@ -111,6 +111,7 @@ pkg_pretend() {
 	# Kernel features/options to check for
 	CONFIG_CHECK="~ZONE_DMA ~MTRR ~SYSVIPC ~!LOCKDEP"
 	use x86 && CONFIG_CHECK+=" ~HIGHMEM"
+	use kms && CONFIG_CHECK+=" ~DRM_KMS_HELPER ~DRM_KMS_FB_HELPER"
 
 	# Now do the above checks
 	use kernel_linux && check_extra_config
