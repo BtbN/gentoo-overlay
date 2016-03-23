@@ -304,16 +304,16 @@ src_install() {
 			insinto /usr/share/X11/xorg.conf.d
 			newins {,50-}nvidia-drm-outputclass.conf
 		fi
-
-		# NVIDIA Vulkan icd
-		insinto /etc/vulkan/icd.d
-		doins ${NV_OBJ}/nvidia_icd.json
 	fi
 
-	# OpenCL ICD for NVIDIA
 	if use kernel_linux; then
+		# OpenCL ICD for NVIDIA
 		insinto /etc/OpenCL/vendors
 		doins ${NV_OBJ}/nvidia.icd
+
+		# Vulkan ICD for NVIDIA
+		insinto /etc/vulkan/icd.d
+		doins ${NV_OBJ}/nvidia_icd.json
 	fi
 
 	# Documentation
@@ -415,6 +415,7 @@ src_install-libs() {
 	local inslibdir=$(get_libdir)
 	local GL_ROOT="/usr/$(get_libdir)/opengl/nvidia/lib"
 	local CL_ROOT="/usr/$(get_libdir)/OpenCL/vendors/nvidia"
+	local VK_ROOK="/usr/$(get_libdir)/vulkan/nvidia/lib"
 	local libdir=${NV_OBJ}
 
 	if use kernel_linux && has_multilib_profile && [[ ${ABI} == "x86" ]]; then
@@ -474,7 +475,12 @@ src_install-libs() {
 			NV_GLX_LIBRARIES+=(
 				"libnvidia-ml.so.${NV_SOVER}"
 				"tls/libnvidia-tls.so.${NV_SOVER}"
+				"libGLX_nvidia.so.${NV_SOVER} ${VK_ROOT}"
 			)
+
+			TMP_ENVD_FILE="${T}/00nvidia-vulkan-$(get_libdir)"
+			echo "LDPATH=\"${VK_ROOT}\"" > "${TMP_ENVD_FILE}"
+			doenvd "${TMP_ENVD_FILE}"
 		fi
 
 		for NV_LIB in "${NV_GLX_LIBRARIES[@]}"; do
