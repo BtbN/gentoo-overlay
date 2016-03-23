@@ -415,7 +415,7 @@ src_install-libs() {
 	local inslibdir=$(get_libdir)
 	local GL_ROOT="/usr/$(get_libdir)/opengl/nvidia/lib"
 	local CL_ROOT="/usr/$(get_libdir)/OpenCL/vendors/nvidia"
-	local VK_ROOK="/usr/$(get_libdir)/vulkan/nvidia/lib"
+	local VK_ROOT="/usr/$(get_libdir)/vulkan/nvidia/lib"
 	local libdir=${NV_OBJ}
 
 	if use kernel_linux && has_multilib_profile && [[ ${ABI} == "x86" ]]; then
