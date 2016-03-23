@@ -5,26 +5,28 @@
 EAPI=6
 PYTHON_COMPAT=( python3_{3,4,5} )
 
-inherit python-any-r1 cmake-multilib
+if [[ "${PV}" == "9999" ]]; then
+	EGIT_REPO_URI="https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers.git"
+	inherit git-r3
+else
+	KEYWORDS="~amd64"
+	SRC_URI="https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers/archive/sdk-${PV}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/Vulkan-LoaderAndValidationLayers-sdk-${PV}"
+fi
 
-MY_PN="Vulkan-LoaderAndValidationLayers-sdk"
-MY_P="${MY_PN}-${PV}"
+inherit python-any-r1 cmake-multilib
 
 DESCRIPTION="Vulkan Installable Client Driver (ICD) Loader"
 HOMEPAGE="https://www.khronos.org/vulkan/"
-SRC_URI="https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers/archive/sdk-${PV}.tar.gz -> ${P}.tar.gz"
 
-LICENSE="as-is"
+LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND="${PYTHON_DEPS}"
 RDEPEND=""
 
 DOCS=( README.md LICENSE.txt )
-
-S="${WORKDIR}/${MY_P}"
 
 multilib_src_configure() {
 	local mycmakeargs=(
