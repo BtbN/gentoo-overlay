@@ -1,39 +1,40 @@
 #!/sbin/runscript
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-irc/znc/files/znc.initd,v 1.1 2012/11/21 18:11:31 wired Exp $
+# $Id$
 
 extra_commands="config"
 extra_started_commands="reload save"
+command="/usr/bin/znc"
+command_args="--datadir \"${ZNC_DATADIR}\""
+pidfile="${ZNC_PIDFILE:-/run/znc/znc.pid}"
+user=${ZNC_USER:-znc}
+group=${ZNC_GROUP:-znc}
+start_stop_daemon_args="--chdir \"${ZNC_DATADIR}\" --user ${user} --group ${group} ${ZNC_SSDARGS}"
+retry="${ZNC_TERMTIMEOUT}"
+
+required_dirs="${ZNC_DATADIR}"
 
 depend() {
-	need net
+	use dns logger
 }
 
-start() {
-	ebegin "Starting ZNC"
-	start-stop-daemon --start --user ${ZNC_USER} --name znc \
-		--exec /usr/bin/znc -- -d ${ZNC_CONF}
-	eend $?
+start_pre() {
+	checkpath -d -m 0770 -o ${user}:${group} "$(dirname ${pidfile})"
 }
 
-stop() {
-	ebegin "Stopping ZNC"
-	start-stop-daemon --signal SIGINT --name znc \
-		--exec /usr/bin/znc -- -d ${ZNC_CONF}
-	eend $?
+stop_post() {
+	rm -f "${pidfile}"
 }
 
 reload() {
 	ebegin "Reloading ZNC Configuration File from Disk"
-	start-stop-daemon --signal SIGHUP --name znc \
-		--exec /usr/bin/znc -- -d ${ZNC_CONF}
+	start-stop-daemon --signal SIGHUP --pidfile "${pidfile}"
 	eend $?
 }
 
 save() {
 	ebegin "Saving ZNC Configuration File to Disk"
-	start-stop-daemon --signal SIGUSR1 --name znc \
-		--exec /usr/bin/znc -- -d ${ZNC_CONF}
+	start-stop-daemon --signal SIGUSR1 --pidfile "${pidfile}"
 	eend $?
 }
