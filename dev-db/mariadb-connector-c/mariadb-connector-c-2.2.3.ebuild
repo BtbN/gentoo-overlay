@@ -18,7 +18,7 @@ IUSE=""
 DEPEND="dev-libs/openssl:0"
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}"
+S="${WORKDIR}/${P}-src"
 
 src_install() {
 	cmake-utils_src_install
