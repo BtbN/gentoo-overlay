@@ -94,6 +94,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	sys-libs/zlib
 	usb? ( virtual/libusb:1 )
 	mysql? ( virtual/mysql )
+	texturepacker? ( media-libs/giflib )
 	opengl? (
 		virtual/glu
 		virtual/opengl
