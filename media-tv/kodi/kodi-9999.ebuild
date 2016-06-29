@@ -150,7 +150,6 @@ src_unpack() {
 
 src_prepare() {
 	export HAVE_GIT=no GIT_REV=${EGIT_VERSION:-exported}
-	epatch "${FILESDIR}"/${PN}-9999-no-arm-flags.patch
 	epatch "${FILESDIR}"/${PN}-9999-texturepacker.patch
 	epatch_user #293109
 	./bootstrap || die "bootstrap failed"
