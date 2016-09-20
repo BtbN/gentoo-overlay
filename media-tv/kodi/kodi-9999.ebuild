@@ -167,7 +167,7 @@ src_configure() {
 		--docdir=/usr/share/doc/${PF} \
 		--disable-ccache \
 		--disable-optimizations \
-		--with-ffmpeg=force \
+		--with-ffmpeg=shared \
 		$(use_enable alsa) \
 		$(use_enable airplay) \
 		$(use_enable avahi) \
