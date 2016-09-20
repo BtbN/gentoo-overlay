@@ -33,7 +33,7 @@ HOMEPAGE="https://kodi.tv/ http://kodi.wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java joystick midi mysql nfs +opengl profile pulseaudio rtmp +samba sftp test udisks upnp upower +usb vaapi vdpau webserver +X +texturepacker"
+IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java midi mysql nfs +opengl profile pulseaudio +samba sftp test udisks upnp upower +usb vaapi vdpau webserver +X +texturepacker"
 # gles/vaapi: http://trac.kodi.tv/ticket/10552 #464306
 REQUIRED_USE="
 	|| ( gles opengl )
@@ -74,14 +74,12 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	media-libs/libogg
 	media-libs/libpng:0=
 	media-libs/libsamplerate
-	joystick? ( media-libs/libsdl2 )
 	>=media-libs/taglib-1.8
 	media-libs/libvorbis
 	media-sound/dcadec
 	pulseaudio? ( media-sound/pulseaudio )
 	media-sound/wavpack
 	>=media-video/ffmpeg-2.6:=[encode]
-	rtmp? ( media-video/rtmpdump )
 	avahi? ( net-dns/avahi )
 	nfs? ( net-fs/libnfs:= )
 	webserver? ( net-libs/libmicrohttpd[messages] )
@@ -179,14 +177,12 @@ src_configure() {
 		$(use_enable dbus) \
 		$(use_enable debug) \
 		$(use_enable gles) \
-		$(use_enable joystick) \
 		$(use_enable midi mid) \
 		$(use_enable mysql) \
 		$(use_enable nfs) \
 		$(use_enable opengl gl) \
 		$(use_enable profile profiling) \
 		$(use_enable pulseaudio pulse) \
-		$(use_enable rtmp) \
 		$(use_enable samba) \
 		$(use_enable sftp ssh) \
 		$(use_enable usb libusb) \
