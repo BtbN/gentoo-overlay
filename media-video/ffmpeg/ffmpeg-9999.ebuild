@@ -97,7 +97,7 @@ FFMPEG_ENCODER_FLAG_MAP=(
 )
 
 IUSE="
-	alsa cuda doc +encode jack libnpp oss pic static-libs test v4l
+	alsa cuda doc +encode jack libnpp nasm oss pic static-libs test v4l
 	${FFMPEG_FLAG_MAP[@]%:*}
 	${FFMPEG_ENCODER_FLAG_MAP[@]%:*}
 "
@@ -251,7 +251,10 @@ DEPEND="${RDEPEND}
 	doc? ( sys-apps/texinfo )
 	>=virtual/pkgconfig-0-r1[${MULTILIB_USEDEP}]
 	ladspa? ( >=media-libs/ladspa-sdk-1.13-r2[${MULTILIB_USEDEP}] )
-	cpu_flags_x86_mmx? ( >=dev-lang/yasm-1.2 )
+	cpu_flags_x86_mmx? (
+		!nasm? ( || ( >=dev-lang/yasm-1.2 dev-lang/nasm ) )
+		nasm? ( dev-lang/nasm )
+	)
 	test? ( net-misc/wget sys-devel/bc )
 	v4l? ( sys-kernel/linux-headers )
 "
@@ -352,6 +355,8 @@ multilib_src_configure() {
 		extra_cflags+=( "-I/opt/cuda/include" )
 		extra_ldflags+=( "-L/opt/cuda/lib64" )
 	fi
+
+	use nasm && myconf+=( --yasmexe=nasm )
 
 	# (temporarily) disable non-multilib deps
 	if ! multilib_is_native_abi; then
