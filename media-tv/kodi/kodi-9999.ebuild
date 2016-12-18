@@ -8,32 +8,16 @@ EAPI="5"
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="sqlite"
 
-inherit eutils linux-info python-single-r1 multiprocessing autotools toolchain-funcs
+EGIT_REPO_URI="https://github.com/xbmc/xbmc.git"
 
-CODENAME="Krypton"
-case ${PV} in
-9999)
-	EGIT_REPO_URI="git://github.com/xbmc/xbmc.git"
-	inherit git-r3
-	;;
-*|*_p*)
-	MY_PV=${PV/_p/_r}
-	MY_P="${PN}-${MY_PV}"
-	SRC_URI="http://mirrors.kodi.tv/releases/source/${MY_PV}-${CODENAME}.tar.gz -> ${P}.tar.gz
-		https://github.com/xbmc/xbmc/archive/${PV}-${CODENAME}.tar.gz -> ${P}.tar.gz
-		!java? ( http://mirrors.kodi.tv/releases/source/${MY_P}-generated-addons.tar.xz )"
-	KEYWORDS="~amd64 ~x86"
-
-	S=${WORKDIR}/xbmc-${PV}-${CODENAME}
-	;;
-esac
+inherit eutils linux-info python-single-r1 multiprocessing cmake-utils toolchain-funcs git-r3
 
 DESCRIPTION="Kodi is a free and open source media-player and entertainment hub"
 HOMEPAGE="https://kodi.tv/ http://kodi.wiki/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="airplay alsa avahi bluetooth bluray caps cec dbus debug gles java midi mysql nfs +opengl profile pulseaudio +samba sftp test udisks upnp upower +usb vaapi vdpau webserver +X +texturepacker"
+IUSE="airplay alsa avahi bluray caps cec dbus debug gles java midi mysql nfs +opengl profile pulseaudio +samba sftp test udisks upnp upower +usb vaapi vdpau webserver +X +texturepacker"
 # gles/vaapi: http://trac.kodi.tv/ticket/10552 #464306
 REQUIRED_USE="
 	|| ( gles opengl )
@@ -86,7 +70,6 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	sftp? ( net-libs/libssh[sftp] )
 	net-misc/curl
 	samba? ( >=net-fs/samba-3.4.6[smbclient(+)] )
-	bluetooth? ( net-wireless/bluez )
 	dbus? ( sys-apps/dbus )
 	caps? ( sys-libs/libcap )
 	sys-libs/zlib
@@ -126,10 +109,8 @@ DEPEND="${COMMON_DEPEND}
 	x86? ( dev-lang/nasm )
 	java? ( virtual/jre )
 	test? ( dev-cpp/gtest )
-	virtual/pkgconfig"
-# Force java for latest git version to avoid having to hand maintain the
-# generated addons package.  #488118
-[[ ${PV} == "9999" ]] && DEPEND+=" virtual/jre"
+	virtual/pkgconfig
+	virtual/jre"
 
 CONFIG_CHECK="~IP_MULTICAST"
 ERROR_IP_MULTICAST="
@@ -137,70 +118,63 @@ In some cases Kodi needs to access multicast addresses.
 Please consider enabling IP_MULTICAST under Networking options.
 "
 
+CMAKE_USE_DIR="${S}/project/cmake"
+
 pkg_setup() {
 	check_extra_config
 	python-single-r1_pkg_setup
 }
 
-src_unpack() {
-	[[ ${PV} == "9999" ]] && git-r3_src_unpack || default
-}
-
 src_prepare() {
-	export HAVE_GIT=no GIT_REV=${EGIT_VERSION:-exported}
 	epatch "${FILESDIR}"/${PN}-9999-texturepacker.patch
-	epatch_user #293109
-	./bootstrap || die "bootstrap failed"
+	sed -i 's/gtk-update-icon-cache/true/g' project/cmake/scripts/linux/Install.cmake || die "sed failed"
+	epatch_user
 }
 
 src_configure() {
-	# Disable documentation generation
-	export ac_cv_path_LATEX=no
 	# Avoid help2man
 	export HELP2MAN=$(type -P help2man || echo true)
-	# No configure flage for this #403561
-	export ac_cv_lib_bluetooth_hci_devid=$(usex bluetooth)
-	# Requiring java is asine #434662
-	[[ ${PV} != "9999" ]] && export ac_cv_path_JAVA_EXE=$(which $(usex java java true))
 
-	econf \
-		--docdir=/usr/share/doc/${PF} \
-		--disable-ccache \
-		--disable-optimizations \
-		--with-ffmpeg=shared \
-		$(use_enable alsa) \
-		$(use_enable airplay) \
-		$(use_enable avahi) \
-		$(use_enable bluray libbluray) \
-		$(use_enable caps libcap) \
-		$(use_enable cec libcec) \
-		$(use_enable dbus) \
-		$(use_enable debug) \
-		$(use_enable gles) \
-		$(use_enable midi mid) \
-		$(use_enable mysql) \
-		$(use_enable nfs) \
-		$(use_enable opengl gl) \
-		$(use_enable profile profiling) \
-		$(use_enable pulseaudio pulse) \
-		$(use_enable samba) \
-		$(use_enable sftp ssh) \
-		$(use_enable usb libusb) \
-		$(use_enable test gtest) \
-		$(use_enable texturepacker) \
-		$(use_enable upnp) \
-		$(use_enable vaapi) \
-		$(use_enable vdpau) \
-		$(use_enable webserver) \
-		$(use_enable X x11)
-}
+	local mycmakeargs=(
+		-DENABLE_INTERNAL_FFMPEG=0
+	)
 
-src_compile() {
-	emake V=1
+	cmake-utils_src_configure
+
+#	econf \
+#		--docdir=/usr/share/doc/${PF} \
+#		--disable-ccache \
+#		--disable-optimizations \
+#		--with-ffmpeg=shared \
+#		$(use_enable alsa) \
+#		$(use_enable airplay) \
+#		$(use_enable avahi) \
+#		$(use_enable bluray libbluray) \
+#		$(use_enable caps libcap) \
+#		$(use_enable cec libcec) \
+#		$(use_enable dbus) \
+#		$(use_enable debug) \
+#		$(use_enable gles) \
+#		$(use_enable midi mid) \
+#		$(use_enable mysql) \
+#		$(use_enable nfs) \
+#		$(use_enable opengl gl) \
+#		$(use_enable profile profiling) \
+#		$(use_enable pulseaudio pulse) \
+#		$(use_enable samba) \
+#		$(use_enable sftp ssh) \
+#		$(use_enable usb libusb) \
+#		$(use_enable test gtest) \
+#		$(use_enable texturepacker) \
+#		$(use_enable upnp) \
+#		$(use_enable vaapi) \
+#		$(use_enable vdpau) \
+#		$(use_enable webserver) \
+#		$(use_enable X x11)
 }
 
 src_install() {
-	default
+	cmake-utils_src_install
 	rm "${ED}"/usr/share/doc/*/{LICENSE.GPL,copying.txt}* || die
 
 	domenu tools/Linux/kodi.desktop
