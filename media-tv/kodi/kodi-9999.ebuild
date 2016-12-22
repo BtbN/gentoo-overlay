@@ -126,6 +126,7 @@ pkg_setup() {
 }
 
 src_prepare() {
+	epatch "${FILESDIR}"/${PN}-9999-texturepacker.patch
 	sed -i 's/gtk-update-icon-cache/true/g' project/cmake/scripts/linux/Install.cmake || die "sed failed"
 	epatch_user
 }
