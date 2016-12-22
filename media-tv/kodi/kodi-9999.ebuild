@@ -118,7 +118,6 @@ In some cases Kodi needs to access multicast addresses.
 Please consider enabling IP_MULTICAST under Networking options.
 "
 
-CMAKE_USE_DIR="${S}/project/cmake"
 
 pkg_setup() {
 	check_extra_config
@@ -127,7 +126,7 @@ pkg_setup() {
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}-9999-texturepacker.patch
-	sed -i 's/gtk-update-icon-cache/true/g' project/cmake/scripts/linux/Install.cmake || die "sed failed"
+	sed -i 's/gtk-update-icon-cache/true/g' cmake/scripts/linux/Install.cmake || die "sed failed"
 	epatch_user
 }
 
