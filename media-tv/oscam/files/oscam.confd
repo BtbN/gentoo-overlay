@@ -1,8 +1,0 @@
-
-# User and group to run oscam as
-OSCAM_USER="nobody"
-OSCAM_GROUP="nobody"
-
-# Additional options to pass to oscam
-OSCAM_OPTIONS=""
-
