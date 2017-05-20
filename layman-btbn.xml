@@ -3,7 +3,7 @@
         <repo priority="50" quality="experimental" status="unofficial">
                 <name>btbn</name>
                 <description>Overlay for my personal ebuilds</description>
-                <homepage>https://git.btbn.de/gitweb/gentoo-overlay.git</homepage>
-                <source type="git">git://git.btbn.de/gentoo-overlay.git</source>
+                <homepage>https://github.com/BtbN/gentoo-overlay</homepage>
+                <source type="git">https://github.com/BtbN/gentoo-overlay.git</source>
         </repo>
 </repositories>
