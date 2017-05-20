@@ -8,7 +8,7 @@ inherit git-r3
 
 DESCRIPTION="ZNC per client buffer plugin"
 HOMEPAGE="https://github.com/jpnurmi/znc-clientbuffer"
-EGIT_REPO_URI="https://github.com/jpnurmi/znc-clientbuffer.git"
+EGIT_REPO_URI="https://github.com/CyberShadow/znc-clientbuffer.git"
 
 LICENSE="Apache-2.0"
 SLOT="0"
