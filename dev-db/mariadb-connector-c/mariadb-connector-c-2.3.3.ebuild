@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 inherit cmake-utils
 
@@ -11,7 +11,7 @@ HOMEPAGE="https://downloads.mariadb.org/client-native/"
 SRC_URI="https://downloads.mariadb.org/f/connector-c-${PV}/${P}-src.tar.gz"
 
 LICENSE="GPL-2+"
-SLOT="3"
+SLOT="2"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
