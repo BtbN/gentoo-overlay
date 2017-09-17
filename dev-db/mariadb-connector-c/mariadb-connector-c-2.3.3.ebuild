@@ -24,7 +24,7 @@ src_install() {
 	cmake-utils_src_install
 
 	insinto /etc/ld.so.conf.d
-	doins "${FILESDIR}/mariadb_client.conf"
+	doins "${FILESDIR}/mariadb_client2.conf"
 
 	mv "${ED}/usr/bin/"mariadb{,_client}_config
 }
