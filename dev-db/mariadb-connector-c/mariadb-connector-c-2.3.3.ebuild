@@ -11,7 +11,7 @@ HOMEPAGE="https://downloads.mariadb.org/client-native/"
 SRC_URI="https://downloads.mariadb.org/f/connector-c-${PV}/${P}-src.tar.gz"
 
 LICENSE="GPL-2+"
-SLOT="2"
+SLOT="3"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
@@ -21,10 +21,10 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}/${P}-src"
 
 src_install() {
-	cd "$BUILD_DIR/libmariadb"
-	insinto /usr/lib/mariadb
-	doins libmariadb.so.2
+	cmake-utils_src_install
 
 	insinto /etc/ld.so.conf.d
-	doins "${FILESDIR}/mariadb_client2.conf"
+	doins "${FILESDIR}/mariadb_client.conf"
+
+	mv "${ED}/usr/bin/"mariadb{,_client}_config
 }

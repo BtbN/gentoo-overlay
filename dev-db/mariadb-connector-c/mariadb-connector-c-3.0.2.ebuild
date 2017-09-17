@@ -20,11 +20,21 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${P}-src"
 
+src_configure() {
+	local mycmakeargs=(
+		-DINSTALL_LIBDIR="lib/mariadb3"
+		-DINSTALL_PLUGINDIR="lib/mariadb3/plugin"
+		-DINSTALL_INCLUDEDIR="include/mariadb3"
+	)
+
+	cmake-utils_src_configure
+}
+
 src_install() {
 	cmake-utils_src_install
 
 	insinto /etc/ld.so.conf.d
 	doins "${FILESDIR}/mariadb_client.conf"
 
-	mv "${ED}/usr/bin/"mariadb{,_client}_config
+	mv "${ED}/usr/bin/"mariadb{,_client3}_config
 }
