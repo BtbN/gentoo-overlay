@@ -20,6 +20,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
+RESTRICT="mirror"
+
 DEPEND="sys-apps/systemd
 	sys-libs/libseccomp
 	sys-fs/squashfs-tools:0
