@@ -9,7 +9,7 @@ inherit user systemd java-pkg-2
 DESCRIPTION="Extensible continuous integration server"
 HOMEPAGE="http://jenkins-ci.org/"
 LICENSE="MIT"
-SRC_URI="http://mirrors.jenkins-ci.org/war/${PV}/jenkins.war -> jenkins-${PV}.war"
+SRC_URI="http://mirrors.jenkins-ci.org/war-stable/${PV}/jenkins.war -> jenkins-${PV}.war"
 RESTRICT="mirror"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
