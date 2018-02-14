@@ -72,8 +72,7 @@ src_install() {
 	keepdir /{etc,var/{lib,log}}/teamspeak3-server
 	use tsdns && touch "${ED}/etc/teamspeak3-server/tsdns_settings.ini"
 
-	# Install the init script and systemd unit.
-	newinitd "${FILESDIR}"/initd teamspeak3-server
+	# Install the systemd unit.
 	systemd_dounit "${FILESDIR}"/systemd/teamspeak3.service
 	systemd_dotmpfilesd "${FILESDIR}"/systemd/teamspeak3.conf
 
