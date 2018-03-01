@@ -29,6 +29,10 @@ S="${WORKDIR}/B2_Command_Line_Tool-${PV}"
 src_prepare() {
 	eapply_user
 
+	# The b2 commandline util collides with boost-build, rename to b2cli
+	sed -i 's|b2=b2|b2cli=b2|' setup.py || die "sed failed"
+	sed -i 's|b2|b2cli|g' contrib/bash_completion/b2 || die "sed failed"
+
 	# For some reason it installs test as a package if present.
 	rm -r test || die "rm failed"
 
@@ -38,5 +42,5 @@ src_prepare() {
 src_install() {
 	distutils-r1_src_install
 
-	newbashcomp contrib/bash_completion/b2 "${PN}"
+	newbashcomp contrib/bash_completion/b2 b2cli
 }
