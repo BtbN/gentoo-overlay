@@ -20,6 +20,13 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${P}-src"
 
+src_configure() {
+    local mycmakeargs=(
+       -DINCLUDE_INSTALL_DIR="include/mariadb2"
+    )
+	cmake-utils_src_configure
+}
+
 src_install() {
 	cmake-utils_src_install
 
