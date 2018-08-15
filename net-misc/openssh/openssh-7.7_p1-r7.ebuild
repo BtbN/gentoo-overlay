@@ -12,6 +12,7 @@ PARCH=${P/_}
 HPN_VER="14v15-gentoo2" HPN_PATCH="${PARCH}-hpnssh${HPN_VER}.patch.xz"
 SCTP_VER="1.1" SCTP_PATCH="${PARCH}-sctp-${SCTP_VER}.patch.xz"
 X509_VER="11.3.1" X509_PATCH="${PARCH}-x509-${X509_VER}.patch.xz"
+LIBRESSL_VER="2.7.4" LIBRESSL_DEST="${WORKDIR}/libressl_dest"
 
 PATCH_SET="openssh-7.7p1-patches-1.1"
 
@@ -19,6 +20,7 @@ DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
 SRC_URI="mirror://openbsd/OpenSSH/portable/${PARCH}.tar.gz
 	https://dev.gentoo.org/~whissi/dist/${PN}/${PATCH_SET}.tar.xz
+	ssl? ( https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VER}.tar.gz )
 	${SCTP_PATCH:+sctp? ( https://dev.gentoo.org/~whissi/dist/openssh/${SCTP_PATCH} )}
 	${HPN_PATCH:+hpn? ( https://dev.gentoo.org/~whissi/dist/openssh/${HPN_PATCH} )}
 	${X509_PATCH:+X509? ( https://dev.gentoo.org/~whissi/dist/openssh/${X509_PATCH} )}
@@ -47,13 +49,6 @@ LIB_DEPEND="
 	sctp? ( net-misc/lksctp-tools[static-libs(+)] )
 	selinux? ( >=sys-libs/libselinux-1.28[static-libs(+)] )
 	skey? ( >=sys-auth/skey-1.1.5-r1[static-libs(+)] )
-	ssl? (
-		!libressl? (
-			>=dev-libs/openssl-1.0.1:0=[bindist=]
-			dev-libs/openssl:0=[static-libs(+)]
-		)
-		libressl? ( dev-libs/libressl:0=[static-libs(+)] )
-	)
 	>=sys-libs/zlib-1.2.3:=[static-libs(+)]"
 RDEPEND="
 	!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
@@ -224,7 +219,7 @@ src_prepare() {
 
 	tc-export PKG_CONFIG
 	local sed_args=(
-		-e "s:-lcrypto:$(${PKG_CONFIG} --libs openssl):"
+		-e "s#-lcrypto#-l:libssl.a -l:libcrypto.a -ldl -lz -lpthread#"
 		# Disable PATH reset, trust what portage gives us #254615
 		-e 's:^PATH=/:#PATH=/:'
 		# Disable fortify flags ... our gcc does this for us
@@ -245,7 +240,34 @@ src_prepare() {
 	eautoreconf
 }
 
+build_libressl() {
+	pushd "${WORKDIR}/libressl-${LIBRESSL_VER}" || die "pushd failed"
+
+	touch crypto/Makefile.in || die "touch failed"
+
+	sed -i \
+		-e '/^[ \t]*CFLAGS=/s#-g ##' \
+		-e '/^[ \t]*CFLAGS=/s#-g"#"#' \
+		-e '/^[ \t]*CFLAGS=/s#-O2 ##' \
+		-e '/^[ \t]*CFLAGS=/s#-O2"#"#' \
+		-e '/^[ \t]*USER_CFLAGS=/s#-O2 ##' \
+		-e '/^[ \t]*USER_CFLAGS=/s#-O2"#"#' \
+		configure || die "fixing CFLAGS failed"
+
+	ECONF_SOURCE="$PWD" econf \
+		--enable-asm \
+		--disable-shared \
+		--enable-static
+
+	emake
+	emake install DESTDIR="${LIBRESSL_DEST}"
+
+	popd
+}
+
 src_configure() {
+	use ssl && build_libressl
+
 	addwrite /dev/ptmx
 
 	use debug && append-cppflags -DSANDBOX_SECCOMP_FILTER_DEBUG
@@ -271,6 +293,7 @@ src_configure() {
 		$(use_with pie)
 		$(use_with selinux)
 		$(use_with skey)
+		$(use_with ssl ssl-dir "${LIBRESSL_DEST}/usr")
 		$(use_with ssl openssl)
 		$(use_with ssl md5-passwords)
 		$(use_with ssl ssl-engine)
