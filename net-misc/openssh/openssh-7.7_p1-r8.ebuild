@@ -14,7 +14,7 @@ SCTP_VER="1.1" SCTP_PATCH="${PARCH}-sctp-${SCTP_VER}.patch.xz"
 X509_VER="11.3.1" X509_PATCH="${PARCH}-x509-${X509_VER}.patch.xz"
 LIBRESSL_VER="2.7.4" LIBRESSL_DEST="${WORKDIR}/libressl_dest"
 
-PATCH_SET="openssh-7.7p1-patches-1.1"
+PATCH_SET="openssh-7.7p1-patches-1.2"
 
 DESCRIPTION="Port of OpenBSD's free SSH release"
 HOMEPAGE="https://www.openssh.com/"
