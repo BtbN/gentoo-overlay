@@ -128,7 +128,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=">=dev-util/cargo-0.29.0
+DEPEND=">=dev-util/cargo-0.28.0
 	>=dev-lang/rust-1.28.0"
 
 src_install() {
