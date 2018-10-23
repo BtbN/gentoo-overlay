@@ -19,7 +19,8 @@ LICENSE="GPL-2"
 SRC_URI="https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-boost-${PV}.tar.gz"
 KEYWORDS="~amd64"
 
-SUBSLOT="21"
+# It's actually 21, but nothing is prepared for that.
+SUBSLOT="18"
 SLOT="0/${SUBSLOT}"
 IUSE="libressl +ssl static-libs"
 
