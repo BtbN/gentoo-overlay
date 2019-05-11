@@ -35,8 +35,8 @@ hyper-0.12.28
 indexmap-1.0.2
 iovec-0.1.2
 itoa-0.4.4
-jemalloc-sys-0.3.0
-jemallocator-0.3.0
+jemalloc-sys-0.1.8
+jemallocator-0.1.9
 kernel32-sys-0.2.2
 lazy_static-1.3.0
 lazycell-1.2.1
