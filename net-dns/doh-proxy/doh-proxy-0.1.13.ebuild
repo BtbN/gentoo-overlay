@@ -116,11 +116,11 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=">=virtual/cargo-1.28.0
-	>=virtual/rust-1.28.0"
+DEPEND=""
+RDEPEND=""
 
 src_install() {
-	cargo_src_install
+	cargo_src_install —path=.
 
 	systemd_dounit "${FILESDIR}"/doh-proxy.service
 }
