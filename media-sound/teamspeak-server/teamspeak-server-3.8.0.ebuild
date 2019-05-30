@@ -16,8 +16,8 @@ KEYWORDS="~amd64 ~x86"
 
 RESTRICT="installsources mirror strip"
 
-SRC_URI="amd64? ( http://dl.4players.de/ts/releases/${PV}/teamspeak3-server_linux_amd64-${PV}.tar.bz2 )
-	x86? ( http://dl.4players.de/ts/releases/${PV}/teamspeak3-server_linux_x86-${PV}.tar.bz2 )"
+SRC_URI="amd64? ( https://files.teamspeak-services.com/releases/server/${PV}/teamspeak3-server_linux_amd64-${PV}.tar.bz2 )
+	x86? ( https://files.teamspeak-services.com/releases/server/${PV}/teamspeak3-server_linux_x86-${PV}.tar.bz2 )"
 
 RDEPEND="dev-db/mariadb-connector-c:2"
 DEPEND="${RDEPEND}
