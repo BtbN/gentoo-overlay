@@ -61,7 +61,7 @@ multilib_src_configure() {
 		-DWITH_DEFAULT_COMPILER_OPTIONS=OFF
 		-DWITH_DEFAULT_FEATURE_SET=OFF
 		-DENABLED_LOCAL_INFILE=ON
-		-DMYSQL_UNIX_ADDR="${EPREFIX}/var/run/mysqld/mysqld.sock"
+		-DMYSQL_UNIX_ADDR="${EPREFIX}/run/mysqld/mysqld.sock"
 		-DWITH_ZLIB=system
 		-DWITH_SSL=$(usex ssl system bundled)
 		-DLIBMYSQL_OS_OUTPUT_NAME=mysqlclient
