@@ -1,31 +1,26 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-multilib
-
-MULTILIB_WRAPPED_HEADERS+=(
-	/usr/include/mysql/my_config.h
-)
 
 # wrap the config script
 MULTILIB_CHOST_TOOLS=( /usr/bin/mysql_config )
 
 DESCRIPTION="C client library for MariaDB/MySQL"
-HOMEPAGE="https://dev.mysql.com/downloads/connector/c/"
+HOMEPAGE="https://dev.mysql.com/downloads/"
 LICENSE="GPL-2"
 
 SRC_URI="https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-boost-${PV}.tar.gz"
 KEYWORDS="~amd64"
 
-# It's actually 21, but nothing is prepared for that.
-SUBSLOT="18"
-SLOT="0/${SUBSLOT}"
-IUSE="libressl +ssl static-libs"
+SLOT="0/18" # 0/21, but it's broken...
+IUSE="ldap libressl +ssl static-libs"
 
 CDEPEND="
 	sys-libs/zlib:=[${MULTILIB_USEDEP}]
+	ldap? ( dev-libs/cyrus-sasl:=[${MULTILIB_USEDEP}] )
 	ssl? (
 		libressl? ( dev-libs/libressl:0=[${MULTILIB_USEDEP}] )
 		!libressl? ( dev-libs/openssl:0=[${MULTILIB_USEDEP}] )
@@ -47,10 +42,34 @@ S="${WORKDIR}/mysql-${PV}"
 
 src_prepare() {
 	sed -i -e 's/CLIENT_LIBS/CONFIG_CLIENT_LIBS/' "${S}/scripts/CMakeLists.txt" || die
+
+	# All these are for the server only
+	sed -i \
+		-e '/MYSQL_CHECK_LIBEVENT/d' \
+		-e '/MYSQL_CHECK_RAPIDJSON/d' \
+		-e '/MYSQL_CHECK_ICU/d' \
+		-e '/MYSQL_CHECK_RE2/d' \
+		-e '/MYSQL_CHECK_LZ4/d' \
+		-e '/MYSQL_CHECK_EDITLINE/d' \
+		-e '/MYSQL_CHECK_CURL/d' \
+		-e '/ADD_SUBDIRECTORY(man)/d' \
+		-e '/ADD_SUBDIRECTORY(share)/d' \
+		CMakeLists.txt || die
+
+	# Skip building clients
+	echo > client/CMakeLists.txt || die
+
 	if use libressl ; then
 		sed -i 's/OPENSSL_MAJOR_VERSION STREQUAL "1"/OPENSSL_MAJOR_VERSION STREQUAL "2"/' \
 			"${S}/cmake/ssl.cmake" || die
 	fi
+
+	# Forcefully disable auth plugin
+	if ! use ldap ; then
+		sed -i -e '/MYSQL_CHECK_SASL/d' CMakeLists.txt || die
+		echo > libmysql/authentication_ldap/CMakeLists.txt || die
+	fi
+
 	cmake-utils_src_prepare
 }
 
@@ -63,7 +82,7 @@ multilib_src_configure() {
 		-DENABLED_LOCAL_INFILE=ON
 		-DMYSQL_UNIX_ADDR="${EPREFIX}/run/mysqld/mysqld.sock"
 		-DWITH_ZLIB=system
-		-DWITH_SSL=$(usex ssl system bundled)
+		-DWITH_SSL=$(usex ssl system wolfssl)
 		-DLIBMYSQL_OS_OUTPUT_NAME=mysqlclient
 		-DSHARED_LIB_PATCH_VERSION="0"
 		-DCMAKE_POSITION_INDEPENDENT_CODE=ON
@@ -73,23 +92,8 @@ multilib_src_configure() {
 	cmake-utils_src_configure
 }
 
-multilib_src_install() {
-	cmake-utils_src_install
-	find "${D}/usr/bin" -type f -not -name my_print_defaults -not -name perror -not -name mysql_config -delete || die "deleting failed"
-	rm -r "${D}/usr/share" || die "rm failed"
-}
-
 multilib_src_install_all() {
 	if ! use static-libs ; then
 		find "${ED}" -name "*.a" -delete || die
-	fi
-}
-
-pkg_preinst() {
-	if [[ -z ${REPLACING_VERSIONS} && -e "${EROOT}usr/$(get_libdir)/libmysqlclient.so" ]] ; then
-		elog "Due to ABI changes when switching between different client libraries,"
-		elog "revdep-rebuild must find and rebuild all packages linking to libmysqlclient."
-		elog "Please run: revdep-rebuild --library libmysqlclient.so.${SUBSLOT}"
-		ewarn "Failure to run revdep-rebuild may cause issues with other programs or libraries"
 	fi
 }
