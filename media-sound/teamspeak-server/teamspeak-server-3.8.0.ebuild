@@ -1,88 +1,118 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
-EAPI="5"
+EAPI=7
 
-inherit eutils systemd user
+inherit systemd user
 
-DESCRIPTION="TeamSpeak Server - Voice Communication Software"
-HOMEPAGE="http://www.teamspeak.com/"
-LICENSE="teamspeak3 GPL-2"
+DESCRIPTION="A server software for hosting quality voice communication via the internet"
+HOMEPAGE="https://www.teamspeak.com/"
+SRC_URI="
+	amd64? ( https://files.teamspeak-services.com/releases/server/${PV}/teamspeak3-server_linux_amd64-${PV}.tar.bz2 )
+	x86? ( https://files.teamspeak-services.com/releases/server/${PV}/teamspeak3-server_linux_x86-${PV}.tar.bz2 )
+"
 
+LICENSE="Apache-2.0 Boost-1.0 BSD LGPL-2.1 LGPL-3 MIT teamspeak3"
 SLOT="0"
-IUSE="doc tsdns"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="-* ~amd64 ~x86"
+IUSE="doc mysql tsdns"
 
-RESTRICT="installsources mirror strip"
+RESTRICT="mirror"
 
-SRC_URI="amd64? ( https://files.teamspeak-services.com/releases/server/${PV}/teamspeak3-server_linux_amd64-${PV}.tar.bz2 )
-	x86? ( https://files.teamspeak-services.com/releases/server/${PV}/teamspeak3-server_linux_x86-${PV}.tar.bz2 )"
-
-RDEPEND="dev-db/mariadb-connector-c:2"
-DEPEND="${RDEPEND}
-	app-arch/bzip2"
-
-S="${WORKDIR}/teamspeak3-server_linux_${ARCH}"
+QA_PREBUILT="
+	opt/teamspeak3-server/libmariadb.so.2
+	opt/teamspeak3-server/libts3db_mariadb.so
+	opt/teamspeak3-server/libts3db_sqlite3.so
+	opt/teamspeak3-server/libts3_ssh.so
+	opt/teamspeak3-server/ts3server
+	opt/teamspeak3-server/tsdnsserver
+"
 
 pkg_setup() {
-	enewuser teamspeak3
+	enewgroup teamspeak
+	enewuser teamspeak -1 -1 /opt/teamspeak3-server teamspeak
+}
+
+src_unpack() {
+	default
+
+	mv teamspeak3-server_linux_$(usex amd64 amd64 x86) "${P}" || die
 }
 
 src_install() {
-	# Install TeamSpeak 3 server into /opt/teamspeak3-server.
-	local opt_dir="/opt/teamspeak3-server"
-	into ${opt_dir}
-	insinto ${opt_dir}
+	diropts -o teamspeak -g teamspeak
+	keepdir /opt/teamspeak3-server /var/log/teamspeak3-server
 
-	# Install binary, wrapper, shell files and libraries.
-	newbin ts3server ts3server-bin
+	diropts
+	keepdir /etc/teamspeak3-server
 
-	exeinto /usr/bin
-	doexe "${FILESDIR}"/ts3server
+	touch "${D%/}"/opt/teamspeak3-server/.ts3server_license_accepted || die
 
-	exeinto ${opt_dir}
-	doexe *.sh
-	doins *.so
+	exeinto /opt/teamspeak3-server
+	doexe ts3server
 
-	doins -r sql
+	dodir /opt/bin
+	dosym ../teamspeak3-server/ts3server /opt/bin/ts3server
 
-	# Install documentation and tsdns.
-	dodoc -r CHANGELOG doc/*.txt
-	use doc && dodoc -r serverquerydocs
+	exeinto /opt/teamspeak3-server
+	doexe libts3db_sqlite3.so libts3_ssh.so
 
-	if use tsdns; then
-		newbin tsdns/tsdnsserver tsdnsserver
+	insinto /opt/teamspeak3-server/serverquerydocs
+	doins -r serverquerydocs/.
 
-		newdoc tsdns/README README.tsdns
-		newdoc tsdns/USAGE USAGE.tsdns
-		dodoc tsdns/tsdns_settings.ini.sample
+	insinto /opt/teamspeak3-server/sql
+	doins sql/*.sql
+	doins -r sql/create_sqlite
 
-		exeinto /usr/bin
-		doexe "${FILESDIR}"/tsdnsserver
-		exeinto ${opt_dir}
+	insinto /etc/teamspeak3-server
+	newins "${FILESDIR}"/ts3server.ini-r1 ts3server.ini
 
-		systemd_dounit "${FILESDIR}"/systemd/tsdns.service
+	dodoc CHANGELOG
+	docinto ts3server
+	dodoc doc/*.txt
+
+	newinitd "${FILESDIR}"/teamspeak.initd-r1 teamspeak3-server
+	systemd_newunit "${FILESDIR}"/teamspeak.service teamspeak3-server.service
+
+	newenvd - 99teamspeak3-server <<- EOF
+		CONFIG_PROTECT="/etc/teamspeak3-server/ts3server.ini /etc/teamspeak3-server/ts3server_mariadb.ini /etc/teamspeak3-server/tsdns_settings.ini"
+	EOF
+
+	if use doc; then
+		docinto html
+		dodoc -r doc/serverquery/.
 	fi
 
-	# Install the runtime FS layout.
-	insinto /etc/teamspeak3-server
-	doins "${FILESDIR}"/server.conf
-	doins "${FILESDIR}"/ts3db_mysql.ini
-	keepdir /{etc,var/{lib,log}}/teamspeak3-server
-	use tsdns && touch "${ED}/etc/teamspeak3-server/tsdns_settings.ini"
+	if use mysql; then
+		insinto /etc/teamspeak3-server
+		newins "${FILESDIR}"/ts3server_mariadb.ini.sample-r1 ts3server_mariadb.ini.sample
+		doins "${FILESDIR}"/ts3db_mariadb.ini.sample
 
-	# Install the systemd unit.
-	systemd_dounit "${FILESDIR}"/systemd/teamspeak3.service
-	systemd_dotmpfilesd "${FILESDIR}"/systemd/teamspeak3.conf
+		exeinto /opt/teamspeak3-server
+		doexe libts3db_mariadb.so
+		doexe redist/libmariadb.so.2
 
-	# Fix up permissions.
-	fowners teamspeak3 /{etc,var/{lib,log}}/teamspeak3-server
-	fowners teamspeak3 ${opt_dir}
+		insinto /opt/teamspeak3-server/sql
+		doins -r sql/create_mariadb
+		doins -r sql/updates_and_fixes
+	fi
 
-	fperms 700 /{etc,var/{lib,log}}/teamspeak3-server
-	fperms 755 ${opt_dir}
+	if use tsdns; then
+		exeinto /opt/teamspeak3-server
+		doexe tsdns/tsdnsserver
+		dodir /opt/bin
+		dosym ../teamspeak3-server/tsdnsserver /opt/bin/tsdnsserver
 
-	chown -R teamspeak3 "${ED}/etc/teamspeak3-server"
-	chmod -R go-rwx "${ED}/etc/teamspeak3-server"
+		insinto /etc/teamspeak3-server
+		doins tsdns/tsdns_settings.ini.sample
+
+		docinto tsdns
+		dodoc tsdns/{README,USAGE}
+	fi
+}
+
+pkg_postinst() {
+	elog "If you have a license,"
+	elog "place it in /opt/teamspeak3-server as licensekey.dat."
+	elog "Please note, that the license must be writeable by the teamspeak user."
 }
