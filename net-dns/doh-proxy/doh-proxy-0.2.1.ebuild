@@ -85,7 +85,7 @@ syn-1.0.13
 tempfile-3.1.0
 textwrap-0.11.0
 time-0.1.42
-tokio-0.2.9
+tokio-0.2.6
 tokio-tls-0.3.0
 tokio-util-0.2.0
 tower-service-0.3.0
