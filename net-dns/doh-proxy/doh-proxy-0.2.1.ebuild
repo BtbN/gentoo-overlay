@@ -117,6 +117,7 @@ IUSE="ssl"
 
 DEPEND="ssl? ( dev-libs/openssl:0 )"
 RDEPEND="$DEPEND"
+BDEPEND=">=virtual/rust-1.39"
 
 src_compile() {
 	cargo_src_compile \
