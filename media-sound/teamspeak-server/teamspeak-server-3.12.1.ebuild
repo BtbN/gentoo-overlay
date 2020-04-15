@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit systemd user
+inherit systemd
 
 DESCRIPTION="A server software for hosting quality voice communication via the internet"
 HOMEPAGE="https://www.teamspeak.com/"
@@ -17,7 +17,12 @@ SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
 IUSE="doc mysql tsdns"
 
-RESTRICT="mirror"
+RESTRICT="bindist mirror"
+
+RDEPEND="
+	acct-group/teamspeak
+	acct-user/teamspeak
+"
 
 QA_PREBUILT="
 	opt/teamspeak3-server/libmariadb.so.2
@@ -27,11 +32,6 @@ QA_PREBUILT="
 	opt/teamspeak3-server/ts3server
 	opt/teamspeak3-server/tsdnsserver
 "
-
-pkg_setup() {
-	enewgroup teamspeak
-	enewuser teamspeak -1 -1 /opt/teamspeak3-server teamspeak
-}
 
 src_unpack() {
 	default
@@ -46,7 +46,7 @@ src_install() {
 	diropts
 	keepdir /etc/teamspeak3-server
 
-	touch "${D%/}"/opt/teamspeak3-server/.ts3server_license_accepted || die
+	touch "${ED}"/opt/teamspeak3-server/.ts3server_license_accepted || die
 
 	exeinto /opt/teamspeak3-server
 	doexe ts3server
@@ -113,6 +113,7 @@ src_install() {
 
 pkg_postinst() {
 	elog "If you have a license,"
-	elog "place it in /opt/teamspeak3-server as licensekey.dat."
-	elog "Please note, that the license must be writeable by the teamspeak user."
+	elog "put it in /opt/teamspeak3-server named as licensekey.dat."
+	elog "Please note, that the license must be writeable by the teamspeak user,"
+	elog "as it will be automatically updated every six months."
 }
