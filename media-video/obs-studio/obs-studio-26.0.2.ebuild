@@ -103,6 +103,13 @@ src_unpack() {
 	fi
 }
 
+src_prepare() {
+	default
+
+	sed -i -e 's/^PFNWGLGETPROCADDRESSPROC_PRIVATE gladGetProcAddressPtr/extern &/' \
+		deps/glad/src/glad_glx.c || die "sed failed"
+}
+
 src_configure() {
 	local libdir=$(get_libdir)
 	local mycmakeargs=(
