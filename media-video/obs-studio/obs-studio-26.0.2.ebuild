@@ -4,7 +4,7 @@
 EAPI=7
 
 CMAKE_REMOVE_MODULES_LIST=( FindFreetype )
-PYTHON_COMPAT=( python3_{6,7,8,9} )
+PYTHON_COMPAT=( python3_{6,7} )
 
 OBS_BROWSER_COMMIT="6162c93f370f0dfb71ed5ff0b6efac1648ec0da4"
 CEF_DIR="cef_binary_3770_linux64"
@@ -75,6 +75,9 @@ DEPEND="
 	)
 	v4l? ( media-libs/libv4l )
 	vlc? ( media-video/vlc:= )
+	browser? (
+		dev-libs/nss
+	)
 "
 RDEPEND="${DEPEND}"
 
