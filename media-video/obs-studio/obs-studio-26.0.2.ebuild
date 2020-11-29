@@ -108,6 +108,7 @@ src_unpack() {
 
 src_prepare() {
 	default
+	cmake_src_prepare
 
 	sed -i -e 's/^PFNWGLGETPROCADDRESSPROC_PRIVATE gladGetProcAddressPtr/extern &/' \
 		deps/glad/src/glad_glx.c || die "sed failed"
