@@ -24,3 +24,11 @@ DEPEND="
 	dev-qt/qtcore:5
 	dev-qt/qtwidgets:5"
 RDEPEND="${DEPEND}"
+
+src_configure() {
+	local mycmakeargs=(
+		-DENABLE_CUSTOM_API_KEY=YES
+	)
+
+	cmake_src_configure
+}
