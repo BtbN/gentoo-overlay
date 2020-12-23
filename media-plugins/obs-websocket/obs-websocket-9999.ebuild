@@ -15,7 +15,6 @@ fi
 
 DESCRIPTION="WebSockets API for OBS Studio"
 HOMEPAGE="https://github.com/Palakis/obs-websocket"
-SRC_URI=""
 
 LICENSE="GPL-2+"
 SLOT="0"
