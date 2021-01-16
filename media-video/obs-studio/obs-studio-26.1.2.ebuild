@@ -6,7 +6,7 @@ EAPI=7
 CMAKE_REMOVE_MODULES_LIST=( FindFreetype )
 PYTHON_COMPAT=( python3_{6,7} )
 
-OBS_BROWSER_COMMIT="751cd04a3c00faa2c4cd8bf1419acffb71245e0c"
+OBS_BROWSER_COMMIT="53cfefe74a2347e9054212bb4c014766e53ee5f4"
 CEF_DIR="cef_binary_3770_linux64"
 
 inherit cmake python-single-r1 xdg-utils
