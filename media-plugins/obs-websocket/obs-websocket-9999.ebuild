@@ -3,16 +3,14 @@
 
 EAPI=7
 
-inherit cmake
+inherit git-r3 cmake
 
-if [[ ${PV} == *9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/Palakis/obs-websocket.git"
-else
-	SRC_URI="https://github.com/Palakis/obs-websocket/archive/${PV}.tar.gz -> ${P}.tar.gz"
+if [[ ${PV} != *9999 ]]; then
 	KEYWORDS="~amd64"
+	EGIT_COMMIT="${PV}"
 fi
 
+EGIT_REPO_URI="https://github.com/Palakis/obs-websocket.git"
 DESCRIPTION="WebSockets API for OBS Studio"
 HOMEPAGE="https://github.com/Palakis/obs-websocket"
 
