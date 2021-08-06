@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -15,18 +15,20 @@ SRC_URI="
 LICENSE="Apache-2.0 Boost-1.0 BSD LGPL-2.1 LGPL-3 MIT teamspeak3"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
-IUSE="doc mysql tsdns"
+IUSE="doc mysql postgres tsdns"
 
 RESTRICT="bindist mirror"
 
 RDEPEND="
 	acct-group/teamspeak
 	acct-user/teamspeak
+	postgres? ( dev-db/postgresql )
 "
 
 QA_PREBUILT="
 	opt/teamspeak3-server/libmariadb.so.2
 	opt/teamspeak3-server/libts3db_mariadb.so
+	opt/teamspeak3-server/libts3db_postgresql.so
 	opt/teamspeak3-server/libts3db_sqlite3.so
 	opt/teamspeak3-server/libts3_ssh.so
 	opt/teamspeak3-server/ts3server
@@ -65,11 +67,11 @@ src_install() {
 	doins -r sql/create_sqlite
 
 	insinto /etc/teamspeak3-server
-	newins "${FILESDIR}"/ts3server.ini-r1 ts3server.ini
+	newins "${FILESDIR}"/ts3server.ini-r2 ts3server.ini
 
 	dodoc CHANGELOG
 	docinto ts3server
-	dodoc doc/*.txt
+	dodoc doc/*.{md,txt}
 
 	newinitd "${FILESDIR}"/teamspeak.initd-r1 teamspeak3-server
 	systemd_newunit "${FILESDIR}"/teamspeak.service teamspeak3-server.service
@@ -85,7 +87,7 @@ src_install() {
 
 	if use mysql; then
 		insinto /etc/teamspeak3-server
-		newins "${FILESDIR}"/ts3server_mariadb.ini.sample-r1 ts3server_mariadb.ini.sample
+		newins "${FILESDIR}"/ts3server_mariadb.ini.sample-r2 ts3server_mariadb.ini.sample
 		doins "${FILESDIR}"/ts3db_mariadb.ini.sample
 
 		exeinto /opt/teamspeak3-server
@@ -94,6 +96,19 @@ src_install() {
 
 		insinto /opt/teamspeak3-server/sql
 		doins -r sql/create_mariadb
+		doins -r sql/updates_and_fixes
+	fi
+
+	if use postgres; then
+		insinto /etc/teamspeak3-server
+		doins "${FILESDIR}"/ts3server_postgresql.ini.sample
+		doins "${FILESDIR}"/ts3db_postgresql.ini.sample
+
+		exeinto /opt/teamspeak3-server
+		doexe libts3db_postgresql.so
+
+		insinto /opt/teamspeak3-server/sql
+		doins -r sql/create_postgresql
 		doins -r sql/updates_and_fixes
 	fi
 
