@@ -16,19 +16,22 @@ HOMEPAGE="https://github.com/ratwithacompiler/OBS-captions-plugin"
 
 LICENSE="GPL-2+"
 SLOT="0"
+IUSE="+grpc"
 
 DEPEND="
 	media-video/obs-studio
 	dev-qt/qtcore:5
 	dev-qt/qtwidgets:5
-	net-libs/grpc:=
-	dev-libs/protobuf:="
+	grpc? (
+		net-libs/grpc:=
+		dev-libs/protobuf:= )"
 RDEPEND="${DEPEND}"
 
 src_configure() {
 	local mycmakeargs=(
 		-DENABLE_CUSTOM_API_KEY=ON
-		-DSPEECH_API_GOOGLE_GRPC_V1=ON
+		-DSPEECH_API_GOOGLE_GRPC_V1=$(usex grpc ON OFF)
+		-DSPEECH_API_GOOGLE_HTTP_OLD=$(usex grpc OFF ON)
 		-DBUILD_SHARED_LIBS=ON
 		-DOBS_SOURCE_DIR="${EPREFIX}"/usr/include/obs
 		-DOBS_LIB_DIR="${EPREFIX}"/usr/"$(get_libdir)"

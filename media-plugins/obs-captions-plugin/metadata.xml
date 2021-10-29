@@ -2,6 +2,9 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <upstream>
-    <remote-id type="github">Palakis/obs-websocket</remote-id>
+    <remote-id type="github">ratwithacompiler/OBS-captions-plugin</remote-id>
   </upstream>
+  <use>
+    <flag name="grpc">Use grpc instead of http</flag>
+  </use>
 </pkgmetadata>
