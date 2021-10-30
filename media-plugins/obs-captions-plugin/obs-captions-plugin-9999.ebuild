@@ -32,6 +32,7 @@ src_configure() {
 		-DENABLE_CUSTOM_API_KEY=ON
 		-DSPEECH_API_GOOGLE_GRPC_V1=$(usex grpc ON OFF)
 		-DSPEECH_API_GOOGLE_HTTP_OLD=$(usex grpc OFF ON)
+		-DUSE_PKG_CONFIG_GRPC=ON
 		-DBUILD_SHARED_LIBS=ON
 		-DOBS_SOURCE_DIR="${EPREFIX}"/usr/include/obs
 		-DOBS_LIB_DIR="${EPREFIX}"/usr/"$(get_libdir)"
