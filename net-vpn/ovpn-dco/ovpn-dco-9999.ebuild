@@ -19,7 +19,7 @@ else
 fi
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/15"
 
 MODULE_NAMES="ovpn-dco(updates:.:drivers/net/ovpn-dco)"
 BUILD_TARGETS="all"
@@ -28,4 +28,11 @@ src_compile() {
 	BUILD_PARAMS+=" KERNEL_SRC='${KERNEL_DIR}'"
 	[[ ${PV} != 9999 ]] && BUILD_PARAMS+=" REVISION='${PV}'"
 	linux-mod_src_compile
+}
+
+src_install() {
+	linux-mod_src_install
+
+	insinto /usr/share/${PN}
+	doins -r include
 }
