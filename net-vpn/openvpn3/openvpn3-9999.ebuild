@@ -2,8 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+PYTHON_COMPAT=( python3_{8,9,10} )
 
-inherit git-r3 autotools
+inherit git-r3 autotools python-single-r1
 
 DESCRIPTION="Next generation OpenVPN client"
 HOMEPAGE="https://openvpn.net"
@@ -18,7 +19,7 @@ LICENSE="AGPL-3+"
 SLOT="0"
 IUSE="mbedtls dco"
 
-DEPEND="
+DEPEND="${PYTHON_DEPS}
 	acct-group/openvpn
 	acct-user/openvpn
 	dev-libs/jsoncpp:=
@@ -33,8 +34,11 @@ DEPEND="
 		>=dev-libs/protobuf-2.4.0:=
 		>=dev-libs/libnl-3.2.29:=
 	)"
-RDEPEND="${DEPEND}"
-BDEPEND="
+RDEPEND="${DEPEND}
+	$(python_gen_cond_dep 'dev-python/pyopenssl[${PYTHON_USEDEP}]')
+	$(python_gen_cond_dep 'dev-python/pygobject[${PYTHON_USEDEP}]')
+	$(python_gen_cond_dep 'dev-python/dbus-python[${PYTHON_USEDEP}]')"
+BDEPEND="${PYTHON_DEPS}
 	sys-devel/autoconf-archive"
 
 src_prepare() {
@@ -53,5 +57,6 @@ src_configure() {
 
 src_install() {
 	default
+	python_fix_shebang "${ED}"
 	keepdir /var/lib/openvpn3/configs
 }
