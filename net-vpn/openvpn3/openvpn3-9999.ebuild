@@ -17,7 +17,7 @@ fi
 
 LICENSE="AGPL-3+"
 SLOT="0"
-IUSE="mbedtls dco"
+IUSE="dco mbedtls systemd"
 
 DEPEND="${PYTHON_DEPS}
 	acct-group/openvpn
@@ -29,6 +29,7 @@ DEPEND="${PYTHON_DEPS}
 	dev-libs/tinyxml2:=
 	mbedtls? ( net-libs/mbedtls:= )
 	!mbedtls? ( >=dev-libs/openssl-1.0.2:= )
+	systemd? ( sys-apps/systemd:= )
 	dco? (
 		net-vpn/ovpn-dco:=
 		>=dev-libs/protobuf-2.4.0:=
@@ -37,7 +38,8 @@ DEPEND="${PYTHON_DEPS}
 RDEPEND="${DEPEND}
 	$(python_gen_cond_dep 'dev-python/pyopenssl[${PYTHON_USEDEP}]')
 	$(python_gen_cond_dep 'dev-python/pygobject[${PYTHON_USEDEP}]')
-	$(python_gen_cond_dep 'dev-python/dbus-python[${PYTHON_USEDEP}]')"
+	$(python_gen_cond_dep 'dev-python/dbus-python[${PYTHON_USEDEP}]')
+	systemd? ( $(python_gen_cond_dep 'dev-python/python-systemd[${PYTHON_USEDEP}]') )"
 BDEPEND="${PYTHON_DEPS}
 	sys-devel/autoconf-archive"
 
