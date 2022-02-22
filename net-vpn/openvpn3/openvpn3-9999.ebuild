@@ -25,13 +25,13 @@ DEPEND="
 	sys-libs/libcap-ng:=
 	app-arch/lz4:=
 	dev-libs/glib:=
-	>=dev-libs/tinyxml2-8.0.0:=
+	dev-libs/tinyxml2:=
 	mbedtls? ( net-libs/mbedtls:= )
 	!mbedtls? ( >=dev-libs/openssl-1.0.2:= )
 	dco? (
 		net-vpn/ovpn-dco:=
-		dev-libs/protobuf:=
-		dev-libs/libnl:=
+		>=dev-libs/protobuf-2.4.0:=
+		>=dev-libs/libnl-3.2.29:=
 	)"
 RDEPEND="${DEPEND}"
 BDEPEND="
@@ -45,7 +45,13 @@ src_prepare() {
 
 src_configure() {
 	export DCO_SOURCEDIR="/usr/share/ovpn-dco"
+	export OPENVPN3_STATEDIR="/var/lib/openvpn3"
 	econf \
 		--with-crypto-library=$(usex mbedtls mbedtls openssl) \
 		$(use_enable dco)
+}
+
+src_install() {
+	default
+	keepdir /var/lib/openvpn3/configs
 }
