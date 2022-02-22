@@ -55,6 +55,10 @@ src_configure() {
 		$(use_enable dco)
 }
 
+src_test() {
+	./src/tests/unit/unit-tests || die
+}
+
 src_install() {
 	default
 	python_fix_shebang "${ED}"
