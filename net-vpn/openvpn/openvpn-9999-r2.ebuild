@@ -9,7 +9,7 @@ DESCRIPTION="Robust and highly flexible tunneling application compatible with ma
 HOMEPAGE="https://openvpn.net/"
 
 if [[ ${PV} == "9999" ]]; then
-	EGIT_REPO_URI="https://github.com/BtbN/${PN}.git"
+	EGIT_REPO_URI="https://github.com/OpenVPN/${PN}.git"
 	EGIT_SUBMODULES=(-cmocka)
 	EGIT_BRANCH="dco"
 
