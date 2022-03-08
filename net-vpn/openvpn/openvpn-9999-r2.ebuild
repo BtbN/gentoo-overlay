@@ -124,7 +124,7 @@ src_install() {
 	find "${ED}/usr" -name '*.la' -delete || die
 
 	# install documentation
-	dodoc AUTHORS ChangeLog PORTS README README.IPv6
+	dodoc AUTHORS ChangeLog PORTS README
 
 	# Install some helper scripts
 	keepdir /etc/openvpn
