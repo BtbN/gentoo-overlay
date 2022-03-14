@@ -20,6 +20,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0/15"
+IUSE="debug"
 
 MODULE_NAMES="ovpn-dco(updates:.:drivers/net/ovpn-dco)"
 BUILD_TARGETS="all"
@@ -27,6 +28,7 @@ BUILD_TARGETS="all"
 src_compile() {
 	BUILD_PARAMS+=" KERNEL_SRC='${KERNEL_DIR}'"
 	[[ ${PV} != 9999 ]] && BUILD_PARAMS+=" REVISION='${PV}'"
+	use debug && BUILD_PARAMS+=" DEBUG=1"
 	linux-mod_src_compile
 }
 
