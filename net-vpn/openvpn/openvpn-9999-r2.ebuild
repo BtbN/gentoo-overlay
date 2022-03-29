@@ -22,7 +22,7 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 
-IUSE="dco down-root examples inotify iproute2 +lz4 +lzo mbedtls +openssl"
+IUSE="caps dco down-root examples inotify iproute2 +lz4 +lzo mbedtls +openssl"
 IUSE+=" pam pkcs11 +plugins selinux systemd test"
 
 RESTRICT="!test? ( test )"
@@ -46,6 +46,7 @@ CDEPEND="
 	pkcs11? ( >=dev-libs/pkcs11-helper-1.11 )
 	systemd? ( sys-apps/systemd )
 	dco? ( net-vpn/ovpn-dco:= >=dev-libs/libnl-3.2.29:= )
+	caps? ( sys-libs/libcap:= )
 "
 
 BDEPEND="virtual/pkgconfig"
@@ -98,6 +99,7 @@ src_configure() {
 		$(use_enable down-root plugin-down-root)
 		$(use_enable systemd)
 		$(use_enable dco)
+		$(use_enable caps)
 	)
 
 	SYSTEMD_UNIT_DIR=$(systemd_get_systemunitdir) \
