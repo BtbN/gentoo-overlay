@@ -31,6 +31,7 @@ REQUIRED_USE="
 	pkcs11? ( !mbedtls )
 	!plugins? ( !pam !down-root )
 	inotify? ( plugins )
+	dco? ( !iproute2 )
 "
 
 CDEPEND="
