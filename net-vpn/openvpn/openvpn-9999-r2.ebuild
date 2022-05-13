@@ -64,10 +64,6 @@ if [[ ${PV} = "9999" ]]; then
 	BDEPEND+=" dev-python/docutils"
 fi
 
-PATCHES=(
-	"${FILESDIR}"/openvpn-2.5.0-auth-pam-missing-header.patch
-)
-
 pkg_setup() {
 	local CONFIG_CHECK="~TUN"
 	linux-info_pkg_setup
