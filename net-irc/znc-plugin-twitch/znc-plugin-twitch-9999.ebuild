@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake-utils git-r3
+inherit cmake git-r3
 
 DESCRIPTION="Twitch TMI helper plugin for ZNC"
 HOMEPAGE="https://github.com/BtbN/ZncTwitchTMI"
