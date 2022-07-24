@@ -30,5 +30,7 @@ src_configure() {
 		-DCMAKE_POLICY_DEFAULT_CMP0048=NEW
 	)
 
+	export CXXFLAGS="$CXXFLAGS -Wno-format-overflow"
+
 	cmake_src_configure
 }
