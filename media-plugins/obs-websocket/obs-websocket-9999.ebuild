@@ -24,3 +24,11 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 BUILD_DIR="${S}/build"
+
+src_configure() {
+	local mycmakeargs=(
+		-DCMAKE_POLICY_DEFAULT_CMP0048=NEW
+	)
+
+	cmake_src_configure
+}
