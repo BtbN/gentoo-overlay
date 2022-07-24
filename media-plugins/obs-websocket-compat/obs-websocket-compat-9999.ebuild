@@ -26,3 +26,8 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 BUILD_DIR="${S}/build"
+
+src_prepare() {
+	sed -i 's/OBSOutputAutoRelease/OBSOutputAutoRelease_OBSWS/g' src/*.h src/*.cpp || die "sed failed"
+	cmake_src_prepare
+}
