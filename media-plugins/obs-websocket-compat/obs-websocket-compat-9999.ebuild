@@ -28,6 +28,6 @@ RDEPEND="${DEPEND}"
 BUILD_DIR="${S}/build"
 
 src_prepare() {
-	sed -i 's/OBSOutputAutoRelease/OBSOutputAutoRelease_OBSWS/g' src/*.h src/*.cpp || die "sed failed"
+	sed -r -i 's/OBS(.+?)AutoRelease/OBS\1AutoRelease_OBSWS/g' src/*.h src/*/*.h src/*.cpp src/*/*.cpp || die "sed failed"
 	cmake_src_prepare
 }
