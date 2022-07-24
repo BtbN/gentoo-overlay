@@ -7,11 +7,12 @@ inherit git-r3 cmake
 
 if [[ ${PV} != *9999 ]]; then
 	KEYWORDS="~amd64"
-	EGIT_COMMIT="${PV}"
+	EGIT_COMMIT="${PV}-compat"
 fi
 
 EGIT_REPO_URI="https://github.com/obsproject/obs-websocket.git"
-DESCRIPTION="WebSockets API for OBS Studio"
+EGIT_BRANCH="4.x-compat"
+DESCRIPTION="WebSockets API for OBS Studio (4.x protocol compat)"
 HOMEPAGE="https://github.com/obsproject/obs-websocket"
 
 LICENSE="GPL-2+"
@@ -20,5 +21,6 @@ SLOT="0"
 DEPEND="
 	media-video/obs-studio
 	dev-qt/qtcore:5
-	dev-qt/qtwidgets:5"
+	dev-qt/qtwidgets:5
+	>=media-plugins/obs-websocket-5.0.0"
 RDEPEND="${DEPEND}"
