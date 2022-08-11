@@ -11,11 +11,10 @@ HOMEPAGE="https://openvpn.net/"
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/OpenVPN/${PN}.git"
 	EGIT_SUBMODULES=(-cmocka)
-	EGIT_BRANCH="dco"
 
 	inherit git-r3
 else
-	SRC_URI="https://build.openvpn.net/downloads/releases/${P}.tar.gz"
+	SRC_URI="https://build.openvpn.net/downloads/releases/${P}.tar.xz"
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux"
 fi
 
@@ -45,7 +44,7 @@ CDEPEND="
 	pam? ( sys-libs/pam )
 	pkcs11? ( >=dev-libs/pkcs11-helper-1.11 )
 	systemd? ( sys-apps/systemd )
-	dco? ( net-vpn/ovpn-dco:= >=dev-libs/libnl-3.2.29:= )
+	dco? ( net-vpn/ovpn-dco >=dev-libs/libnl-3.2.29:= )
 	sys-libs/libcap-ng:=
 "
 
@@ -100,7 +99,6 @@ src_configure() {
 	SYSTEMD_UNIT_DIR=$(systemd_get_systemunitdir) \
 		TMPFILES_DIR="/usr/lib/tmpfiles.d" \
 		IPROUTE=$(usex iproute2 '/bin/ip' '') \
-		DCO_INCLUDEDIR=/usr/share/ovpn-dco/include/uapi \
 		econf "${myeconfargs[@]}"
 }
 
@@ -123,6 +121,7 @@ src_install() {
 
 	# install documentation
 	dodoc AUTHORS ChangeLog PORTS README
+	use dco && dodoc README.dco.md
 
 	# Install some helper scripts
 	keepdir /etc/openvpn
