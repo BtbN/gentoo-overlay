@@ -1,7 +1,7 @@
 # Copyright 2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit linux-mod
 
@@ -19,7 +19,7 @@ else
 fi
 
 LICENSE="GPL-2"
-SLOT="0/15"
+SLOT="0"
 IUSE="debug"
 
 MODULE_NAMES="ovpn-dco(updates:.:drivers/net/ovpn-dco)"
