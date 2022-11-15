@@ -2,13 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-GIT_REVISION=9cd3357b7fd7218e4aec3eae239db1f68a5a6ec6
+GIT_REVISION=770bd0108c32f3fb5c73ae1264f7e503fe7b2661
 inherit go-module systemd
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
 SRC_URI="https://github.com/containerd/containerd/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-SRC_URI+=" https://dev.gentoo.org/~williamh/dist/${P}-deps.tar.xz"
+
+PROPERTIES="live"
 
 LICENSE="Apache-2.0"
 SLOT="0"
@@ -23,7 +24,7 @@ DEPEND="
 # recommended version of runc is found in script/setup/runc-version
 RDEPEND="
 	${DEPEND}
-	~app-containers/runc-1.1.3
+	~app-containers/runc-1.1.4
 "
 
 BDEPEND="
@@ -34,6 +35,13 @@ BDEPEND="
 # tests require root or docker
 # upstream does not recommend stripping binary
 RESTRICT+=" strip test"
+
+src_unpack() {
+	default
+
+	cd "${S}" || die
+	ego mod vendor
+}
 
 src_prepare() {
 	default
@@ -66,7 +74,6 @@ src_compile() {
 	# we need to explicitly specify GOFLAGS for "go run" to use vendor source
 	emake "${myemakeargs[@]}" man -j1 #nowarn
 	emake "${myemakeargs[@]}" all
-
 }
 
 src_install() {
