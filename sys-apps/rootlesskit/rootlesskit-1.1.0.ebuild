@@ -12,7 +12,7 @@ SLOT="0"
 
 PROPERTIES="live"
 
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 IUSE="selinux"
 
 RDEPEND="selinux? ( sec-policy/selinux-rootlesskit )"
