@@ -6,11 +6,11 @@ inherit go-module linux-info
 
 # update on bump, look for https://github.com/docker\
 # docker-ce/blob/<docker ver OR branch>/components/engine/hack/dockerfile/install/runc.installer
-RUNC_COMMIT=6724737f999df9ee0d8ca5c6d7b81f97adc34374
+RUNC_COMMIT=5fd4c4d144137e991c4acebb2146ab1483a97925
 CONFIG_CHECK="~USER_NS"
 
 DESCRIPTION="runc container cli tools"
-HOMEPAGE="http://github.com/opencontainers/runc/"
+HOMEPAGE="https://github.com/opencontainers/runc/"
 MY_PV="${PV/_/-}"
 SRC_URI="https://github.com/opencontainers/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz"
 
