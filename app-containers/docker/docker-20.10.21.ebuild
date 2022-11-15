@@ -1,11 +1,11 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 EGO_PN=github.com/docker/docker
 MY_PV=${PV/_/-}
-GIT_COMMIT=a89b84221c
-inherit linux-info systemd udev golang-vcs-snapshot
+GIT_COMMIT=3056208812
+inherit linux-info systemd udev go-module
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
 HOMEPAGE="https://www.docker.com/"
@@ -15,7 +15,7 @@ LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="amd64 ~arm arm64 ppc64 ~riscv ~x86"
 IUSE="apparmor aufs btrfs +cli +container-init device-mapper hardened
-overlay seccomp selinux"
+overlay rootless seccomp selinux"
 
 DEPEND="
 	acct-group/docker
@@ -28,9 +28,6 @@ DEPEND="
 
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#runtime-dependencies
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#optional-dependencies
-# https://github.com/moby/moby/tree/master//hack/dockerfile/install
-# make sure docker-proxy is pinned to exact version from ^,
-# for appropriate branchch/version of course
 RDEPEND="
 	${DEPEND}
 	>=net-firewall/iptables-1.4
@@ -39,10 +36,10 @@ RDEPEND="
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
 	>=app-containers/containerd-1.6.6[apparmor?,btrfs?,device-mapper?,seccomp?]
-	~app-containers/docker-proxy-0.8.0_p20220601
 	cli? ( ~app-containers/docker-cli-${PV} )
 	container-init? ( >=sys-process/tini-0.19.0[static] )
 	selinux? ( sec-policy/selinux-docker )
+	rootless? ( >=sys-apps/rootlesskit-1.0.0 app-containers/slirp4netns )
 "
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#build-dependencies
@@ -166,9 +163,15 @@ pkg_setup() {
 	linux-info_pkg_setup
 }
 
+src_unpack() {
+	mkdir -p "${S}" || die
+	tar -C "${S}" -x --strip-components 1 -f "${DISTDIR}/${P}.tar.gz" || die
+}
+
 src_compile() {
 	export DOCKER_GITCOMMIT="${GIT_COMMIT}"
 	export GOPATH="${WORKDIR}/${P}"
+	export GO111MODULE=off
 	export VERSION=${PV}
 
 	# setup CFLAGS and LDFLAGS for separate build target
@@ -222,6 +225,10 @@ src_install() {
 	# note: intentionally not using "doins" so that we preserve +x bits
 	dodir /usr/share/${PN}/contrib
 	cp -R contrib/* "${ED}/usr/share/${PN}/contrib"
+
+	if use rootless; then
+		dobin contrib/dockerd-rootless{,-setuptool}.sh 
+	fi
 }
 
 pkg_postinst() {
