@@ -28,6 +28,9 @@ DEPEND="
 
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#runtime-dependencies
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#optional-dependencies
+# https://github.com/moby/moby/tree/master//hack/dockerfile/install
+# make sure docker-proxy is pinned to exact version from ^,
+# for appropriate branchch/version of course
 RDEPEND="
 	${DEPEND}
 	>=net-firewall/iptables-1.4
@@ -36,6 +39,7 @@ RDEPEND="
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
 	>=app-containers/containerd-1.6.6[apparmor?,btrfs?,device-mapper?,seccomp?]
+	~app-containers/docker-proxy-0.8.0_p20220716
 	cli? ( ~app-containers/docker-cli-${PV} )
 	container-init? ( >=sys-process/tini-0.19.0[static] )
 	selinux? ( sec-policy/selinux-docker )
