@@ -1,4 +1,4 @@
-# Copyright 2022 Gentoo Authors
+# Copyright 2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -26,3 +26,11 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 BUILD_DIR="${S}/build"
+
+src_configure() {
+	local mycmakeargs=(
+		-DLINUX_PORTABLE=OFF
+	)
+
+	cmake_src_configure
+}
