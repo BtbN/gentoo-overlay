@@ -1,1 +1,0 @@
-obs-websocket-9999.ebuild

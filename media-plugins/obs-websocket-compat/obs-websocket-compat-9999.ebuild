@@ -22,7 +22,7 @@ DEPEND="
 	media-video/obs-studio
 	dev-qt/qtcore:5
 	dev-qt/qtwidgets:5
-	>=media-plugins/obs-websocket-5.0.0"
+	|| ( >=media-plugins/obs-websocket-5.0.0 >=media-video/obs-studio-29[websocket] )"
 RDEPEND="${DEPEND}"
 
 BUILD_DIR="${S}/build"
