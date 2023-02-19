@@ -11,7 +11,7 @@ if [[ ${PV} != *9999 ]]; then
 fi
 
 EGIT_REPO_URI="https://github.com/obsproject/obs-websocket.git"
-EGIT_BRANCH="4.x-compat"
+EGIT_BRANCH="4.x-compat-new-cmake"
 DESCRIPTION="WebSockets API for OBS Studio (4.x protocol compat)"
 HOMEPAGE="https://github.com/obsproject/obs-websocket"
 
@@ -26,8 +26,3 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 BUILD_DIR="${S}/build"
-
-src_prepare() {
-	sed -r -i 's/OBS(.+?)AutoRelease/OBS\1AutoRelease_OBSWS/g' src/*.h src/*/*.h src/*.cpp src/*/*.cpp || die "sed failed"
-	cmake_src_prepare
-}
