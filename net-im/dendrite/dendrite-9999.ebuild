@@ -34,7 +34,7 @@ src_compile() {
 	export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -v"
 	export CGO_ENABLED=1
 
-	ego build "./cmd/dendrite-monolith-server"
+	ego build "./cmd/dendrite"
 	ego build "./cmd/generate-config"
 	ego build "./cmd/generate-keys"
 	ego build "./cmd/create-account"
@@ -42,13 +42,13 @@ src_compile() {
 
 src_install() {
 	exeinto /usr/bin
-	newexe dendrite-monolith-server "${PN}"
+	newexe dendrite "${PN}"
 	newexe generate-config "${PN}-generate-config"
 	newexe generate-keys "${PN}-generate-keys"
 	newexe create-account "${PN}-create-account"
 
 	insinto "/etc/${PN}"
-	newins dendrite-sample.monolith.yaml config.yaml
+	newins dendrite-sample.yaml config.yaml
 	fowners root:dendrite "/etc/${PN}"
 	fperms 0750 "/etc/${PN}"
 
