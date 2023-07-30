@@ -1,11 +1,11 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 EGO_PN=github.com/docker/docker
 MY_PV=${PV/_/-}
-GIT_COMMIT=3056208812
 inherit linux-info systemd udev go-module
+GIT_COMMIT=a61e2b4c9c5f7c241aeb37f389b4444aee26bea4
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
 HOMEPAGE="https://www.docker.com/"
@@ -13,9 +13,8 @@ SRC_URI="https://github.com/moby/moby/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="amd64 ~arm arm64 ppc64 ~riscv ~x86"
-IUSE="apparmor aufs btrfs +cli +container-init device-mapper hardened
-overlay rootless seccomp selinux"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
+IUSE="apparmor aufs btrfs +container-init device-mapper overlay rootless seccomp selinux"
 
 DEPEND="
 	acct-group/docker
@@ -24,6 +23,7 @@ DEPEND="
 	btrfs? ( >=sys-fs/btrfs-progs-3.16.1 )
 	device-mapper? ( >=sys-fs/lvm2-2.02.89[thin] )
 	seccomp? ( >=sys-libs/libseccomp-2.2.1 )
+	rootless? ( >=sys-apps/rootlesskit-1.0.0 app-containers/slirp4netns )
 "
 
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#runtime-dependencies
@@ -38,12 +38,10 @@ RDEPEND="
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
-	>=app-containers/containerd-1.6.6[apparmor?,btrfs?,device-mapper?,seccomp?]
-	~app-containers/docker-proxy-0.8.0_p20220716
-	cli? ( ~app-containers/docker-cli-${PV} )
+	>=app-containers/containerd-1.6.20[apparmor?,btrfs?,device-mapper?,seccomp?]
+	~app-containers/docker-proxy-0.8.0_p20230724
 	container-init? ( >=sys-process/tini-0.19.0[static] )
 	selinux? ( sec-policy/selinux-docker )
-	rootless? ( >=sys-apps/rootlesskit-1.0.0 app-containers/slirp4netns )
 "
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#build-dependencies
@@ -59,94 +57,176 @@ S="${WORKDIR}/${P}/src/${EGO_PN}"
 
 # https://bugs.gentoo.org/748984 https://github.com/etcd-io/etcd/pull/12552
 PATCHES=(
-	"${FILESDIR}/ppc64-buildmode.patch"
 	"${FILESDIR}/0001-Openrc-Depend-on-containerd-init-script.patch"
 )
 
-# see "contrib/check-config.sh" from upstream's sources
-CONFIG_CHECK="
-	~NAMESPACES ~NET_NS ~PID_NS ~IPC_NS ~UTS_NS
-	~CGROUPS ~CGROUP_CPUACCT ~CGROUP_DEVICE ~CGROUP_FREEZER ~CGROUP_SCHED ~CPUSETS ~MEMCG
-	~CGROUP_NET_PRIO
-	~KEYS
-	~VETH ~BRIDGE ~BRIDGE_NETFILTER
-	~IP_NF_FILTER ~IP_NF_TARGET_MASQUERADE ~NETFILTER_XT_MARK
-	~NETFILTER_NETLINK ~NETFILTER_XT_MATCH_ADDRTYPE ~NETFILTER_XT_MATCH_CONNTRACK ~NETFILTER_XT_MATCH_IPVS
-	~IP_NF_NAT ~NF_NAT
-	~POSIX_MQUEUE
-
-	~USER_NS
-	~SECCOMP
-	~CGROUP_PIDS
-	~MEMCG_SWAP
-
-	~BLK_CGROUP ~BLK_DEV_THROTTLING
-	~CGROUP_PERF
-	~CGROUP_HUGETLB
-	~NET_CLS_CGROUP
-	~CFS_BANDWIDTH ~FAIR_GROUP_SCHED
-	~IP_VS ~IP_VS_PROTO_TCP ~IP_VS_PROTO_UDP ~IP_VS_NFCT ~IP_VS_RR
-
-	~VXLAN
-	~CRYPTO ~CRYPTO_AEAD ~CRYPTO_GCM ~CRYPTO_SEQIV ~CRYPTO_GHASH ~XFRM_ALGO ~XFRM_USER
-	~IPVLAN
-	~MACVLAN ~DUMMY
-
-	~OVERLAY_FS ~!OVERLAY_FS_REDIRECT_DIR
-	~EXT4_FS_SECURITY
-	~EXT4_FS_POSIX_ACL
-"
-
-ERROR_KEYS="CONFIG_KEYS: is mandatory"
-ERROR_MEMCG_SWAP="CONFIG_MEMCG_SWAP: is required if you wish to limit swap usage of containers"
-ERROR_RESOURCE_COUNTERS="CONFIG_RESOURCE_COUNTERS: is optional for container statistics gathering"
-
-ERROR_BLK_CGROUP="CONFIG_BLK_CGROUP: is optional for container statistics gathering"
-ERROR_IOSCHED_CFQ="CONFIG_IOSCHED_CFQ: is optional for container statistics gathering"
-ERROR_CGROUP_PERF="CONFIG_CGROUP_PERF: is optional for container statistics gathering"
-ERROR_CFS_BANDWIDTH="CONFIG_CFS_BANDWIDTH: is optional for container statistics gathering"
-ERROR_XFRM_ALGO="CONFIG_XFRM_ALGO: is optional for secure networks"
-ERROR_XFRM_USER="CONFIG_XFRM_USER: is optional for secure networks"
-
 pkg_setup() {
+	# this is based on "contrib/check-config.sh" from upstream's sources
+	# required features.
+	CONFIG_CHECK="
+		~NAMESPACES ~NET_NS ~PID_NS ~IPC_NS ~UTS_NS
+		~CGROUPS ~CGROUP_CPUACCT ~CGROUP_DEVICE ~CGROUP_FREEZER ~CGROUP_SCHED ~CPUSETS ~MEMCG
+		~KEYS
+		~VETH ~BRIDGE ~BRIDGE_NETFILTER
+		~IP_NF_FILTER ~IP_NF_TARGET_MASQUERADE
+		~NETFILTER_XT_MATCH_ADDRTYPE
+		~NETFILTER_XT_MATCH_CONNTRACK
+		~NETFILTER_XT_MATCH_IPVS
+		~NETFILTER_XT_MARK
+		~IP_NF_NAT ~NF_NAT
+		~POSIX_MQUEUE
+	"
+	WARNING_POSIX_MQUEUE="CONFIG_POSIX_MQUEUE: is required for bind-mounting /dev/mqueue into containers"
 
-	if kernel_is lt 4 5; then
-		CONFIG_CHECK+="
-			~MEMCG_KMEM
-		"
-		ERROR_MEMCG_KMEM="CONFIG_MEMCG_KMEM: is optional"
-	fi
-
-	if kernel_is lt 4 7; then
+	if kernel_is lt 4 8; then
 		CONFIG_CHECK+="
 			~DEVPTS_MULTIPLE_INSTANCES
 		"
 	fi
 
-	if kernel_is lt 5 1; then
+	if kernel_is le 5 1; then
 		CONFIG_CHECK+="
 			~NF_NAT_IPV4
-			~IOSCHED_CFQ
-			~CFQ_GROUP_IOSCHED
 		"
 	fi
 
-	if kernel_is lt 5 2; then
+	if kernel_is le 5 2; then
 		CONFIG_CHECK+="
 			~NF_NAT_NEEDED
 		"
 	fi
 
-	if kernel_is lt 5 8; then
+	if kernel_is ge 4 15; then
+		CONFIG_CHECK+="
+			~CGROUP_BPF
+		"
+	fi
+
+	# optional features
+	CONFIG_CHECK+="
+		~USER_NS
+	"
+
+	if use seccomp; then
+		CONFIG_CHECK+="
+			~SECCOMP ~SECCOMP_FILTER
+		"
+	fi
+
+	CONFIG_CHECK+="
+		~CGROUP_PIDS
+	"
+
+	if kernel_is lt 6 1; then
+		CONFIG_CHECK+="
+			~MEMCG_SWAP
+			"
+	fi
+
+	if kernel_is le 5 8; then
 		CONFIG_CHECK+="
 			~MEMCG_SWAP_ENABLED
 		"
 	fi
 
+	CONFIG_CHECK+="
+		~!LEGACY_VSYSCALL_NATIVE
+		"
+	if kernel_is lt 5 19; then
+		CONFIG_CHECK+="
+			~LEGACY_VSYSCALL_EMULATE
+			"
+	fi
+	CONFIG_CHECK+="
+		~!LEGACY_VSYSCALL_NONE
+		"
+	WARNING_LEGACY_VSYSCALL_NONE="CONFIG_LEGACY_VSYSCALL_NONE enabled: \
+		Containers with <=glibc-2.13 will not work"
+
+	if kernel_is le 4 5; then
+		CONFIG_CHECK+="
+			~MEMCG_KMEM
+		"
+	fi
+
+	if kernel_is lt 5; then
+		CONFIG_CHECK+="
+			~IOSCHED_CFQ ~CFQ_GROUP_IOSCHED
+		"
+	fi
+
+	CONFIG_CHECK+="
+		~BLK_CGROUP ~BLK_DEV_THROTTLING
+		~CGROUP_PERF
+		~CGROUP_HUGETLB
+		~NET_CLS_CGROUP ~CGROUP_NET_PRIO
+		~CFS_BANDWIDTH ~FAIR_GROUP_SCHED ~RT_GROUP_SCHED
+		~IP_NF_TARGET_REDIRECT
+		~IP_VS
+		~IP_VS_NFCT
+		~IP_VS_PROTO_TCP
+		~IP_VS_PROTO_UDP
+		~IP_VS_RR
+		"
+	WARNING_RT_GROUP_SCHED="CONFIG_RT_GROUP_SCHED is disabled: Depending on your docker setup, you may want to enable this. See https://docs.docker.com/config/containers/resource_constraints/#configure-the-realtime-scheduler for more information."
+
+	if use selinux; then
+		CONFIG_CHECK+="
+			~SECURITY_SELINUX
+			"
+	fi
+
+	if use apparmor; then
+		CONFIG_CHECK+="
+			~SECURITY_APPARMOR
+			"
+	fi
+
+	# if ! is_set EXT4_USE_FOR_EXT2; then
+	#	check_flags EXT3_FS EXT3_FS_XATTR EXT3_FS_POSIX_ACL EXT3_FS_SECURITY
+	#	if ! is_set EXT3_FS || ! is_set EXT3_FS_XATTR || ! is_set EXT3_FS_POSIX_ACL || ! is_set EXT3_FS_SECURITY; then
+	#		echo "    $(wrap_color '(enable these ext3 configs if you are using ext3 as backing filesystem)' bold black)"
+	#	fi
+	# fi
+
+	CONFIG_CHECK+="
+		~EXT4_FS ~EXT4_FS_POSIX_ACL ~EXT4_FS_SECURITY
+	"
+
+	# if ! is_set EXT4_FS || ! is_set EXT4_FS_POSIX_ACL || ! is_set EXT4_FS_SECURITY; then
+	#	if is_set EXT4_USE_FOR_EXT2; then
+	#		echo "    $(wrap_color 'enable these ext4 configs if you are using ext3 or ext4 as backing filesystem' bold black)"
+	#	else
+	#		echo "    $(wrap_color 'enable these ext4 configs if you are using ext4 as backing filesystem' bold black)"
+	#	fi
+	# fi
+
+	# network drivers
+	CONFIG_CHECK+="
+		~VXLAN ~BRIDGE_VLAN_FILTERING
+		~CRYPTO ~CRYPTO_AEAD ~CRYPTO_GCM ~CRYPTO_SEQIV ~CRYPTO_GHASH
+		~XFRM ~XFRM_USER ~XFRM_ALGO ~INET_ESP
+	"
+	if kernel_is le 5 3; then
+		CONFIG_CHECK+="
+			~INET_XFRM_MODE_TRANSPORT
+		"
+	fi
+
+	CONFIG_CHECK+="
+		~IPVLAN
+		"
+	CONFIG_CHECK+="
+		~MACVLAN ~DUMMY
+		"
+	CONFIG_CHECK+="
+		~NF_NAT_FTP ~NF_CONNTRACK_FTP ~NF_NAT_TFTP ~NF_CONNTRACK_TFTP
+	"
+
+	# storage drivers
 	if use aufs; then
 		CONFIG_CHECK+="
 			~AUFS_FS
-			~EXT4_FS_POSIX_ACL ~EXT4_FS_SECURITY
 		"
 		ERROR_AUFS_FS="CONFIG_AUFS_FS: is required to be set if and only if aufs is patched to kernel instead of using standalone"
 	fi
@@ -160,9 +240,13 @@ pkg_setup() {
 
 	if use device-mapper; then
 		CONFIG_CHECK+="
-			~BLK_DEV_DM ~DM_THIN_PROVISIONING ~EXT4_FS ~EXT4_FS_POSIX_ACL ~EXT4_FS_SECURITY
+			~BLK_DEV_DM ~DM_THIN_PROVISIONING
 		"
 	fi
+
+	CONFIG_CHECK+="
+		~OVERLAY_FS
+	"
 
 	linux-info_pkg_setup
 }
@@ -197,14 +281,6 @@ src_compile() {
 		fi
 	done
 
-	if use hardened; then
-		sed -i "s/EXTLDFLAGS_STATIC='/&-fno-PIC /" hack/make.sh || die
-		grep -q -- '-fno-PIC' hack/make.sh || die 'hardened sed failed'
-		sed  "s/LDFLAGS_STATIC_DOCKER='/&-extldflags -fno-PIC /" \
-			-i hack/make/dynbinary-daemon || die
-		grep -q -- '-fno-PIC' hack/make/dynbinary-daemon || die 'hardened sed failed'
-	fi
-
 	# build daemon
 	./hack/make.sh dynbinary || die 'dynbinary failed'
 }
@@ -223,7 +299,7 @@ src_install() {
 
 	udev_dorules contrib/udev/*.rules
 
-	dodoc AUTHORS CONTRIBUTING.md CHANGELOG.md NOTICE README.md
+	dodoc AUTHORS CONTRIBUTING.md NOTICE README.md
 	dodoc -r docs/*
 
 	# note: intentionally not using "doins" so that we preserve +x bits
@@ -231,7 +307,7 @@ src_install() {
 	cp -R contrib/* "${ED}/usr/share/${PN}/contrib"
 
 	if use rootless; then
-		dobin contrib/dockerd-rootless{,-setuptool}.sh 
+		dobin contrib/dockerd-rootless{,-setuptool}.sh
 	fi
 }
 
@@ -267,27 +343,6 @@ pkg_postinst() {
 		elog " ZFS storage driver is available"
 		elog " Check https://docs.docker.com/storage/storagedriver/zfs-driver for more info"
 		elog
-	fi
-
-	if use cli; then
-		ewarn "Starting with docker 20.10.2, docker has been split into"
-		ewarn "two packages upstream, so Gentoo has followed suit."
-		ewarn
-		ewarn "app-containers/docker contains the daemon and"
-		ewarn "app-containers/docker-cli contains the docker command."
-		ewarn
-		ewarn "docker currently installs docker-cli using the cli use flag."
-		ewarn
-		ewarn "This use flag is temporary, so you need to take the"
-		ewarn "following actions:"
-		ewarn
-		ewarn "First, disable the cli use flag for app-containers/docker"
-		ewarn
-		ewarn "Then, if you need docker-cli and docker on the same machine,"
-		ewarn "run the following command:"
-		ewarn
-		ewarn "# emerge --noreplace docker-cli"
-		ewarn
 	fi
 }
 

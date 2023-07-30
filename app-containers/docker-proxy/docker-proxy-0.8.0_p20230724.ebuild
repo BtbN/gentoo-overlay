@@ -1,9 +1,9 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 EGO_PN=github.com/moby/libnetwork
-GIT_COMMIT=f6ccccb1c082a432c2a5814aaedaca56af33d9ea
+GIT_COMMIT=67e0588f1ddfaf2faf4c8cae8b7ea2876434d91c
 inherit go-module
 
 DESCRIPTION="Docker container networking"
