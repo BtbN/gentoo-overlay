@@ -1,19 +1,17 @@
-# Copyright 2022 Gentoo Authors
+# Copyright 2022-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-GIT_REVISION=770bd0108c32f3fb5c73ae1264f7e503fe7b2661
 inherit go-module systemd
+GIT_REVISION=7880925980b188f4c97b462f709d0db8e8962aff
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
 SRC_URI="https://github.com/containerd/containerd/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
-PROPERTIES="live"
-
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="amd64 ~arm arm64 ppc64 ~riscv ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
 IUSE="apparmor btrfs device-mapper +cri hardened +seccomp selinux test"
 
 DEPEND="
@@ -24,7 +22,7 @@ DEPEND="
 # recommended version of runc is found in script/setup/runc-version
 RDEPEND="
 	${DEPEND}
-	~app-containers/runc-1.1.4
+	~app-containers/runc-1.1.8[apparmor?,seccomp?]
 "
 
 BDEPEND="
@@ -33,20 +31,13 @@ BDEPEND="
 "
 
 # tests require root or docker
-# upstream does not recommend stripping binary
-RESTRICT+=" strip test"
-
-src_unpack() {
-	default
-
-	cd "${S}" || die
-	ego mod vendor
-}
+RESTRICT+="test"
 
 src_prepare() {
 	default
 	sed -i \
 		-e "s/-s -w//" \
+		-e "s/-mod=readonly//" \
 		Makefile || die
 	sed -i \
 		-e "s:/usr/local:/usr:" \
@@ -74,11 +65,13 @@ src_compile() {
 	# we need to explicitly specify GOFLAGS for "go run" to use vendor source
 	emake "${myemakeargs[@]}" man -j1 #nowarn
 	emake "${myemakeargs[@]}" all
+
 }
 
 src_install() {
 	dobin bin/*
 	doman man/*
+	newconfd "${FILESDIR}"/${PN}.confd "${PN}"
 	newinitd "${FILESDIR}"/${PN}.initd "${PN}"
 	systemd_dounit containerd.service
 	keepdir /var/lib/containerd
