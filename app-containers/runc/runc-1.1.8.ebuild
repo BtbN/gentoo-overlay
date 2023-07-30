@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,7 +6,7 @@ inherit go-module linux-info
 
 # update on bump, look for https://github.com/docker\
 # docker-ce/blob/<docker ver OR branch>/components/engine/hack/dockerfile/install/runc.installer
-RUNC_COMMIT=5fd4c4d144137e991c4acebb2146ab1483a97925
+RUNC_COMMIT=82f18fe0e44a59034f3e1f45e475fa5636e539aa
 CONFIG_CHECK="~USER_NS"
 
 DESCRIPTION="runc container cli tools"
