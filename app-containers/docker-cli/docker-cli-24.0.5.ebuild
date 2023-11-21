@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-GIT_COMMIT=ced099660009713e0e845eeb754e6050dbaa45d0
+GIT_COMMIT=afdd53b4e341be38d2056a42113b938559bb1d94
 EGO_PN="github.com/docker/cli"
 MY_PV=${PV/_/-}
 inherit bash-completion-r1 go-module
