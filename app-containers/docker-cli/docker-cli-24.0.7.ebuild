@@ -52,6 +52,7 @@ src_compile() {
 
 src_install() {
 	dobin build/docker
+	doman "${WORKDIR}"/man/man?/*
 	dobashcomp contrib/completion/bash/*
 	bashcomp_alias docker dockerd
 	insinto /usr/share/fish/vendor_completions.d/
