@@ -3,7 +3,7 @@
 
 EAPI=8
 inherit go-module systemd
-GIT_REVISION=7880925980b188f4c97b462f709d0db8e8962aff
+GIT_REVISION=4f03e100cb967922bec7459a78d16ccbac9bb81d
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
@@ -22,7 +22,7 @@ DEPEND="
 # recommended version of runc is found in script/setup/runc-version
 RDEPEND="
 	${DEPEND}
-	~app-containers/runc-1.1.8[apparmor?,seccomp?]
+	~app-containers/runc-1.1.10[apparmor?,seccomp?]
 "
 
 BDEPEND="
