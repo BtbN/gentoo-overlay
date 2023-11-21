@@ -69,6 +69,7 @@ src_compile() {
 }
 
 src_install() {
+	rm "${D}"/bin/gen-manpages
 	dobin bin/*
 	doman man/*
 	newconfd "${FILESDIR}"/${PN}.confd "${PN}"
