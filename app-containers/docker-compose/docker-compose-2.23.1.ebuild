@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-inherit bash-completion-r1 go-module
+inherit go-module
 MY_PV=${PV/_/-}
 
 DESCRIPTION="Multi-container orchestration for Docker"
