@@ -3,19 +3,17 @@
 
 EAPI=8
 
-inherit autotools flag-o-matic systemd linux-info tmpfiles
+inherit autotools systemd linux-info tmpfiles
 
 DESCRIPTION="Robust and highly flexible tunneling application compatible with many OSes"
 HOMEPAGE="https://openvpn.net/"
 
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/OpenVPN/${PN}.git"
-	EGIT_SUBMODULES=(-cmocka)
-
 	inherit git-r3
 else
 	SRC_URI="https://build.openvpn.net/downloads/releases/${P}.tar.gz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux"
+	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc ~ppc64 ~riscv ~x86"
 fi
 
 LICENSE="GPL-2"
@@ -48,12 +46,16 @@ CDEPEND="
 	sys-libs/libcap-ng:=
 "
 
-BDEPEND="virtual/pkgconfig"
+BDEPEND="
+	virtual/pkgconfig
+"
 
-DEPEND="${CDEPEND}
+DEPEND="
+	${CDEPEND}
 	test? ( dev-util/cmocka )
 "
-RDEPEND="${CDEPEND}
+RDEPEND="
+	${CDEPEND}
 	acct-group/openvpn
 	acct-user/openvpn
 	selinux? ( sec-policy/selinux-openvpn )
