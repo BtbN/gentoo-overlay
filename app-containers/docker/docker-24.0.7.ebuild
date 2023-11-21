@@ -14,7 +14,7 @@ SRC_URI="https://github.com/moby/moby/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
-IUSE="apparmor aufs btrfs +container-init device-mapper overlay rootless seccomp selinux"
+IUSE="apparmor btrfs +container-init device-mapper overlay rootless seccomp selinux"
 
 DEPEND="
 	acct-group/docker
@@ -28,9 +28,6 @@ DEPEND="
 
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#runtime-dependencies
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#optional-dependencies
-# https://github.com/moby/moby/tree/master//hack/dockerfile/install
-# make sure docker-proxy is pinned to exact version from ^,
-# for appropriate branchch/version of course
 RDEPEND="
 	${DEPEND}
 	>=net-firewall/iptables-1.4
@@ -38,8 +35,9 @@ RDEPEND="
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
 	dev-libs/libltdl
-	>=app-containers/containerd-1.6.20[apparmor?,btrfs?,device-mapper?,seccomp?]
-	~app-containers/docker-proxy-0.8.0_p20230724
+	>=app-containers/containerd-1.7.3[apparmor?,btrfs?,device-mapper?,seccomp?]
+	>=app-containers/runc-1.1.9[apparmor?,seccomp?]
+	!app-containers/docker-proxy
 	container-init? ( >=sys-process/tini-0.19.0[static] )
 	selinux? ( sec-policy/selinux-docker )
 "
@@ -160,7 +158,7 @@ pkg_setup() {
 		~CGROUP_PERF
 		~CGROUP_HUGETLB
 		~NET_CLS_CGROUP ~CGROUP_NET_PRIO
-		~CFS_BANDWIDTH ~FAIR_GROUP_SCHED ~RT_GROUP_SCHED
+		~CFS_BANDWIDTH ~FAIR_GROUP_SCHED
 		~IP_NF_TARGET_REDIRECT
 		~IP_VS
 		~IP_VS_NFCT
@@ -168,7 +166,6 @@ pkg_setup() {
 		~IP_VS_PROTO_UDP
 		~IP_VS_RR
 		"
-	WARNING_RT_GROUP_SCHED="CONFIG_RT_GROUP_SCHED is disabled: Depending on your docker setup, you may want to enable this. See https://docs.docker.com/config/containers/resource_constraints/#configure-the-realtime-scheduler for more information."
 
 	if use selinux; then
 		CONFIG_CHECK+="
@@ -224,13 +221,6 @@ pkg_setup() {
 	"
 
 	# storage drivers
-	if use aufs; then
-		CONFIG_CHECK+="
-			~AUFS_FS
-		"
-		ERROR_AUFS_FS="CONFIG_AUFS_FS: is required to be set if and only if aufs is patched to kernel instead of using standalone"
-	fi
-
 	if use btrfs; then
 		CONFIG_CHECK+="
 			~BTRFS_FS
@@ -269,7 +259,7 @@ src_compile() {
 
 	# let's set up some optional features :)
 	export DOCKER_BUILDTAGS=''
-	for gd in aufs btrfs device-mapper overlay; do
+	for gd in btrfs device-mapper overlay; do
 		if ! use $gd; then
 			DOCKER_BUILDTAGS+=" exclude_graphdriver_${gd//-/}"
 		fi
@@ -281,7 +271,7 @@ src_compile() {
 		fi
 	done
 
-	# build daemon
+	# build binaries
 	./hack/make.sh dynbinary || die 'dynbinary failed'
 }
 
@@ -290,7 +280,8 @@ src_install() {
 	dosym containerd-shim /usr/bin/docker-containerd-shim
 	dosym runc /usr/bin/docker-runc
 	use container-init && dosym tini /usr/bin/docker-init
-	newbin bundles/dynbinary-daemon/dockerd dockerd
+	dobin bundles/dynbinary-daemon/dockerd
+	dobin bundles/dynbinary-daemon/docker-proxy
 
 	newinitd contrib/init/openrc/docker.initd docker
 	newconfd contrib/init/openrc/docker.confd docker
