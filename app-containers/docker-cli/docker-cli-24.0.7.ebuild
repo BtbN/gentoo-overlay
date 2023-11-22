@@ -38,7 +38,6 @@ src_prepare() {
 src_compile() {
 	export DISABLE_WARN_OUTSIDE_CONTAINER=1
 	export GOPATH="${WORKDIR}/${P}"
-	export GO111MODULE=off
 	# setup CFLAGS and LDFLAGS for separate build target
 	# see https://github.com/tianon/docker-overlay/pull/10
 	export CGO_CFLAGS="-I${ESYSROOT}/usr/include"
@@ -52,7 +51,6 @@ src_compile() {
 
 src_install() {
 	dobin build/docker
-	doman "${WORKDIR}"/man/man?/*
 	dobashcomp contrib/completion/bash/*
 	bashcomp_alias docker dockerd
 	insinto /usr/share/fish/vendor_completions.d/
