@@ -1,8 +1,8 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-GIT_COMMIT=afdd53b4e341be38d2056a42113b938559bb1d94
+GIT_COMMIT=4debf411d1e6efbd9ce65e4250718e9c529a6525
 EGO_PN="github.com/docker/cli"
 MY_PV=${PV/_/-}
 inherit bash-completion-r1 go-module
