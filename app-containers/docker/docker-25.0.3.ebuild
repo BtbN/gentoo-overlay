@@ -1,11 +1,11 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 EGO_PN=github.com/docker/docker
 MY_PV=${PV/_/-}
 inherit linux-info systemd udev go-module
-GIT_COMMIT=311b9ff0aa93aa55880e1e5f8871c4fb69583426
+GIT_COMMIT=f417435e5f6216828dec57958c490c4f8bae4f98
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
 HOMEPAGE="https://www.docker.com/"
