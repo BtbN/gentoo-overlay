@@ -5,7 +5,7 @@ EAPI=8
 EGO_PN=github.com/docker/docker
 MY_PV=${PV/_/-}
 inherit linux-info systemd udev go-module
-GIT_COMMIT=f417435e5f6216828dec57958c490c4f8bae4f98
+GIT_COMMIT=061aa95809be396a6b5542618d8a34b02a21ff77
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
 HOMEPAGE="https://www.docker.com/"
