@@ -3,7 +3,7 @@
 
 EAPI=8
 inherit go-module systemd
-GIT_REVISION=7c3aca7a610df76212171d200ca3811ff6096eb8
+GIT_REVISION=dcf2847247e18caba8dce86522029642f60fe96b
 
 DESCRIPTION="A daemon to control runC"
 HOMEPAGE="https://containerd.io/"
