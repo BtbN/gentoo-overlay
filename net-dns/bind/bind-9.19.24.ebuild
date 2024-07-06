@@ -17,7 +17,7 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+caps dnsrps dnstap doc doh fixed-rrset idn geoip gssapi lmdb selinux static-libs test xml"
+IUSE="dnsrps dnstap doc doh fixed-rrset idn geoip gssapi lmdb selinux static-libs test xml"
 
 DEPEND="
 	acct-group/named
@@ -26,7 +26,7 @@ DEPEND="
 	dev-libs/json-c:=
 	dev-libs/libuv:=
 	dev-libs/userspace-rcu:=
-	sys-libs/zlib
+	sys-libs/zlib:=
 	dev-libs/openssl:=[-bindist(-)]
 	>=sys-libs/libcap-2.1.0
 	dnstap? ( dev-libs/fstrm dev-libs/protobuf-c )

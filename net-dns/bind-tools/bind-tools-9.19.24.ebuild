@@ -23,7 +23,9 @@ COMMON_DEPEND="
 	dev-libs/jemalloc
 	dev-libs/openssl:=
 	dev-libs/userspace-rcu:=
+	dev-libs/json-c:=
 	sys-libs/libcap
+	sys-libs/zlib:=
 	gssapi? ( virtual/krb5 )
 	idn? ( net-dns/libidn2:= )
 	libedit? ( dev-libs/libedit )
