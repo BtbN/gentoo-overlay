@@ -137,8 +137,8 @@ src_install() {
 	keepdir /var/bind/{pri,sec,dyn} /var/log/named
 
 	fowners root:named /{etc,var}/bind /var/log/named /var/bind/{sec,pri,dyn}
-	fowners root:named /etc/bind/{bind.keys,named.conf}
-	fperms 0640 /etc/bind/{bind.keys,named.conf}
+	fowners root:named /etc/bind/named.conf
+	fperms 0640 /etc/bind/named.conf
 	fperms 0750 /etc/bind /var/bind/pri
 	fperms 0770 /var/log/named /var/bind/{,sec,dyn}
 
