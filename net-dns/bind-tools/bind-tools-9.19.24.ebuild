@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -22,7 +22,8 @@ COMMON_DEPEND="
 	dev-libs/libuv:=
 	dev-libs/jemalloc
 	dev-libs/openssl:=
-	caps? ( sys-libs/libcap )
+	dev-libs/userspace-rcu:=
+	sys-libs/libcap
 	gssapi? ( virtual/krb5 )
 	idn? ( net-dns/libidn2:= )
 	libedit? ( dev-libs/libedit )
@@ -49,7 +50,6 @@ src_configure() {
 		--without-maxminddb
 		--disable-geoip
 		--with-openssl="${ESYSROOT}"/usr
-		$(use_enable caps linux-caps)
 		$(use_enable static-libs static)
 		$(use_with gssapi)
 		$(use_with idn libidn2 "${ESYSROOT}"/usr)
