@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -25,9 +25,10 @@ DEPEND="
 	dev-libs/jemalloc
 	dev-libs/json-c:=
 	dev-libs/libuv:=
+	dev-libs/userspace-rcu:=
 	sys-libs/zlib
 	dev-libs/openssl:=[-bindist(-)]
-	caps? ( >=sys-libs/libcap-2.1.0 )
+	>=sys-libs/libcap-2.1.0
 	dnstap? ( dev-libs/fstrm dev-libs/protobuf-c )
 	doh? ( net-libs/nghttp2 )
 	geoip? ( dev-libs/libmaxminddb )
@@ -70,7 +71,6 @@ src_configure() {
 		--with-jemalloc
 		--with-json-c
 		--with-zlib
-		$(use_enable caps linux-caps)
 		$(use_enable dnsrps)
 		$(use_enable dnstap)
 		$(use_enable doh)
