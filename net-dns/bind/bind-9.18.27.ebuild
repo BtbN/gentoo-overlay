@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -17,7 +17,7 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~x86 ~amd64-linux ~x86-linux"
-IUSE="+caps dnsrps dnstap doc doh fixed-rrset idn geoip gssapi lmdb selinux static-libs test xml"
+IUSE="dnsrps dnstap doc doh fixed-rrset idn geoip gssapi lmdb selinux static-libs test xml"
 
 DEPEND="
 	acct-group/named
@@ -25,9 +25,10 @@ DEPEND="
 	dev-libs/jemalloc
 	dev-libs/json-c:=
 	dev-libs/libuv:=
-	sys-libs/zlib
+	dev-libs/userspace-rcu:=
+	sys-libs/zlib:=
 	dev-libs/openssl:=[-bindist(-)]
-	caps? ( >=sys-libs/libcap-2.1.0 )
+	>=sys-libs/libcap-2.1.0
 	dnstap? ( dev-libs/fstrm dev-libs/protobuf-c )
 	doh? ( net-libs/nghttp2 )
 	geoip? ( dev-libs/libmaxminddb )
@@ -70,7 +71,7 @@ src_configure() {
 		--with-jemalloc
 		--with-json-c
 		--with-zlib
-		$(use_enable caps linux-caps)
+		--enable-linux-caps
 		$(use_enable dnsrps)
 		$(use_enable dnstap)
 		$(use_enable doh)
