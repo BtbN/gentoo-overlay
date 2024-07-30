@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{12..13} )
 
 inherit python-any-r1 systemd tmpfiles
 
@@ -17,7 +17,7 @@ S="${WORKDIR}/${MY_P}"
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~x86 ~amd64-linux ~x86-linux"
-IUSE="dnsrps dnstap doc doh fixed-rrset idn geoip gssapi lmdb selinux static-libs test xml"
+IUSE="dnsrps dnstap doc doh idn geoip gssapi lmdb selinux static-libs test xml"
 
 DEPEND="
 	acct-group/named
@@ -40,6 +40,7 @@ DEPEND="
 
 #		optinally for testing dnssec
 #		dev-python/dnspython[dnssec]
+#		and dev-python/pytest-xdist for the impatient
 BDEPEND="
 	test? (
 		${PYTHON_DEPS}
@@ -47,6 +48,7 @@ BDEPEND="
 		dev-python/requests
 		dev-python/requests-toolbelt
 		dev-python/dnspython
+		dev-python/hypothesis
 		dev-perl/Net-DNS-SEC
 		dev-util/cmocka
 	)
@@ -75,7 +77,6 @@ src_configure() {
 		$(use_enable dnstap)
 		$(use_enable doh)
 		$(use_with doh libnghttp2)
-		$(use_enable fixed-rrset)
 		$(use_enable static-libs static)
 		$(use_enable geoip)
 		$(use_with geoip maxminddb)
@@ -94,7 +95,7 @@ src_test() {
 	# as root:
 	# sh bin/tests/system/ifconfig.sh up
 	# as portage:
-	# make check
+	# make -j8 check
 	# as root:
 	# sh bin/tests/system/ifconfig.sh down
 
@@ -156,18 +157,5 @@ pkg_postinst() {
 		/usr/sbin/rndc-confgen -a
 		chown root:named /etc/bind/rndc.key || die
 		chmod 0640 /etc/bind/rndc.key || die
-	fi
-
-	# show only when upgrading to 9.18
-	if [[ -n "${REPLACING_VERSIONS}" ]] && ver_test "${REPLACING_VERSIONS}" -lt 9.18; then
-		elog "As this is a major bind version upgrade, please read:"
-		elog "   https://kb.isc.org/docs/changes-to-be-aware-of-when-moving-from-bind-916-to-918"
-		elog "for differences in functionality."
-		elog ""
-		ewarn "In particular, please note that bind-9.18 does not need a root hints file anymore"
-		ewarn "and is not shipped with one. If your current configuration specifies a root hints"
-		ewarn "file - usually called named.cache - bind will not start as it will not be able to"
-		ewarn "find the specified file. Best practice is to delete the offending lines that"
-		ewarn "reference named.cache file from your configuration."
 	fi
 }
