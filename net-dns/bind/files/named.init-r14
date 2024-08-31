@@ -1,5 +1,5 @@
 #!/sbin/openrc-run
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 extra_commands="checkconfig checkzones"
@@ -11,7 +11,7 @@ depend() {
 	provide dns
 }
 
-NAMED_CONF=${NAMED_CONF:-${CHROOT}/etc/bind/named.conf}
+NAMED_CONF=${CHROOT}/etc/bind/named.conf
 
 OPENSSL_LIBGOST=${OPENSSL_LIBGOST:-0}
 MOUNT_CHECK_TIMEOUT=${MOUNT_CHECK_TIMEOUT:-60}
@@ -77,6 +77,7 @@ check_chroot() {
 		[ ! -d "${CHROOT}/etc/bind" ] || [ ! -d "${CHROOT}/var/bind" ] && return 1
 		[ ! -d "${CHROOT}/var/log/named" ] && return 1
 		[ ! -c "${CHROOT}/dev/null" ] || [ ! -c "${CHROOT}/dev/zero" ] && return 1
+		[ ! -c "${CHROOT}/dev/urandom" ] && return 1
 		[ "${CHROOT_GEOIP:-0}" -eq 1 ] && [ ! -d "${CHROOT}/usr/share/GeoIP" ] && return 1
 		if [ ${OPENSSL_LIBGOST:-0} -eq 1 ]; then
 			if [ -d "/usr/lib64" ]; then

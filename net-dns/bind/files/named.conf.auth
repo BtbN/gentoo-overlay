@@ -3,7 +3,7 @@
 //};
 
 options {
-	directory "/var/cache/bind";
+	directory "/var/bind";
 	pid-file "/run/named/named.pid";
 
 	listen-on { 127.0.0.1; };
@@ -26,8 +26,8 @@ options {
 	};
 };
 
-zone "example.com." {
-	type primary;
-	file "/var/bind/pri/db.example.com";
-	notify explicit;
-};
+//zone "example.com." {
+//	type primary;
+//	file "/var/bind/pri/db.example.com";
+//	notify explicit;
+//};
