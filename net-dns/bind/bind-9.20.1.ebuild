@@ -43,7 +43,7 @@ RDEPEND="
 	${DEPEND}
 	selinux? ( sec-policy/selinux-bind )
 	sys-process/psmisc
-	!<net-dns/bind-tools-9.18.0
+	!<net-dns/bind-tools-9.20.0
 "
 # sphinx required for man-page and html creation
 BDEPEND="
