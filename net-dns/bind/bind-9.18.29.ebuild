@@ -23,7 +23,6 @@ DEPEND="
 	acct-user/named
 	dev-libs/json-c:=
 	>=dev-libs/libuv-1.37.0:=
-	dev-libs/userspace-rcu:=
 	sys-libs/zlib:=
 	dev-libs/openssl:=[-bindist(-)]
 	caps? ( >=sys-libs/libcap-2.1.0 )
