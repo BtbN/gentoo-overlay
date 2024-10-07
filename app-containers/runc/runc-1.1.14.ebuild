@@ -6,7 +6,7 @@ inherit go-module linux-info
 
 # update on bump, look for https://github.com/docker\
 # docker-ce/blob/<docker ver OR branch>/components/engine/hack/dockerfile/install/runc.installer
-RUNC_COMMIT=51d5e94601ceffbbd85688df1c928ecccbfa4685
+RUNC_COMMIT=2c9f5602f0ba3d9da1c2596322dfc4e156844890
 CONFIG_CHECK="~USER_NS"
 
 DESCRIPTION="runc container cli tools"
