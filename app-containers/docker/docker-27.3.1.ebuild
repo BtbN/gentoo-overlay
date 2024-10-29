@@ -4,7 +4,7 @@
 EAPI=8
 EGO_PN=github.com/docker/docker
 MY_PV=${PV/_/-}
-inherit linux-info systemd udev go-module
+inherit linux-info optfeature systemd udev go-module
 GIT_COMMIT=41ca978a0a5400cc24b274137efa9f25517fcc0b
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
@@ -14,16 +14,16 @@ SRC_URI="https://github.com/moby/moby/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
-IUSE="apparmor btrfs +container-init device-mapper overlay rootless seccomp selinux"
+IUSE="apparmor btrfs +container-init +overlay2 rootless seccomp selinux systemd"
 
 DEPEND="
 	acct-group/docker
 	>=dev-db/sqlite-3.7.9:3
 	apparmor? ( sys-libs/libapparmor )
 	btrfs? ( >=sys-fs/btrfs-progs-3.16.1 )
-	device-mapper? ( >=sys-fs/lvm2-2.02.89[thin] )
 	seccomp? ( >=sys-libs/libseccomp-2.2.1 )
-	rootless? ( >=sys-apps/rootlesskit-1.0.0 app-containers/slirp4netns )
+	rootless? ( >=sys-apps/rootlesskit-1.0.0 app-containers/slirp4netns sys-apps/shadow )
+	systemd? ( sys-apps/systemd )
 "
 
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#runtime-dependencies
@@ -34,9 +34,8 @@ RDEPEND="
 	sys-process/procps
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
-	dev-libs/libltdl
-	>=app-containers/containerd-1.7.3[apparmor?,btrfs?,device-mapper?,seccomp?]
-	>=app-containers/runc-1.1.9[apparmor?,seccomp?]
+	>=app-containers/containerd-1.7.21[apparmor?,btrfs?,seccomp?]
+	>=app-containers/runc-1.1.13[apparmor?,seccomp?]
 	!app-containers/docker-proxy
 	container-init? ( >=sys-process/tini-0.19.0[static] )
 	selinux? ( sec-policy/selinux-docker )
@@ -228,12 +227,6 @@ pkg_setup() {
 		"
 	fi
 
-	if use device-mapper; then
-		CONFIG_CHECK+="
-			~BLK_DEV_DM ~DM_THIN_PROVISIONING
-		"
-	fi
-
 	CONFIG_CHECK+="
 		~OVERLAY_FS
 	"
@@ -251,15 +244,16 @@ src_compile() {
 	export GOPATH="${WORKDIR}/${P}"
 	export GO111MODULE=off
 	export VERSION=${PV}
+	tc-export PKG_CONFIG
 
 	# setup CFLAGS and LDFLAGS for separate build target
 	# see https://github.com/tianon/docker-overlay/pull/10
-	export CGO_CFLAGS="-I${ESYSROOT}/usr/include"
-	export CGO_LDFLAGS="-L${ESYSROOT}/usr/$(get_libdir)"
+	CGO_CFLAGS+=" -I${ESYSROOT}/usr/include"
+	CGO_LDFLAGS+=" -L${ESYSROOT}/usr/$(get_libdir)"
 
 	# let's set up some optional features :)
 	export DOCKER_BUILDTAGS=''
-	for gd in btrfs device-mapper overlay; do
+	for gd in btrfs overlay2; do
 		if ! use $gd; then
 			DOCKER_BUILDTAGS+=" exclude_graphdriver_${gd//-/}"
 		fi
@@ -270,6 +264,8 @@ src_compile() {
 			DOCKER_BUILDTAGS+=" $tag"
 		fi
 	done
+
+	export EXCLUDE_AUTO_BUILDTAG_JOURNALD=$(usex systemd '' 'y')
 
 	# build binaries
 	./hack/make.sh dynbinary || die 'dynbinary failed'
@@ -282,6 +278,9 @@ src_install() {
 	use container-init && dosym tini /usr/bin/docker-init
 	dobin bundles/dynbinary-daemon/dockerd
 	dobin bundles/dynbinary-daemon/docker-proxy
+	for f in dockerd-rootless-setuptool.sh dockerd-rootless.sh; do
+		dosym ../share/docker/contrib/${f} /usr/bin/${f}
+	done
 
 	newinitd contrib/init/openrc/docker.initd docker
 	newconfd contrib/init/openrc/docker.confd docker
@@ -296,10 +295,6 @@ src_install() {
 	# note: intentionally not using "doins" so that we preserve +x bits
 	dodir /usr/share/${PN}/contrib
 	cp -R contrib/* "${ED}/usr/share/${PN}/contrib"
-
-	if use rootless; then
-		dobin contrib/dockerd-rootless{,-setuptool}.sh
-	fi
 }
 
 pkg_postinst() {
@@ -318,23 +313,16 @@ pkg_postinst() {
 	elog '  usermod -aG docker <youruser>'
 	elog
 
-	if use device-mapper; then
-		elog " Devicemapper storage driver has been deprecated"
-		elog " It will be removed in a future release"
-		elog
-	fi
-
-	if use overlay; then
-		elog " Overlay storage driver/USEflag has been deprecated"
-		elog " in favor of overlay2 (enabled unconditionally)"
-		elog
-	fi
-
 	if has_version sys-fs/zfs; then
 		elog " ZFS storage driver is available"
 		elog " Check https://docs.docker.com/storage/storagedriver/zfs-driver for more info"
 		elog
 	fi
+
+	optfeature "rootless mode support" sys-apps/shadow
+	optfeature "rootless mode support" sys-apps/rootlesskit
+	optfeature_header "for rootless mode you also need a network stack"
+	optfeature "rootless mode network stack" app-containers/slirp4netns
 }
 
 pkg_postrm() {
