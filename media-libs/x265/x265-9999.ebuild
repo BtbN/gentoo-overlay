@@ -97,6 +97,7 @@ multilib_src_configure() {
 		-DENABLE_VTUNE="no" # missing
 		-DGIT_ARCHETYPE=1 #814116
 		-DLIB_INSTALL_DIR="$(get_libdir)"
+		-DENABLE_ALPHA=ON
 	)
 	if ! multilib_is_native_abi; then
 		mycmakeargs+=(
