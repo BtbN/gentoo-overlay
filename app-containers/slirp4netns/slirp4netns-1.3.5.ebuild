@@ -1,7 +1,7 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=8
+EAPI=9
 
 inherit autotools
 
@@ -12,18 +12,16 @@ SRC_URI="https://github.com/rootless-containers/slirp4netns/archive/v${PV}.tar.g
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~ppc64 ~riscv"
+RESTRICT="test"
 
-RDEPEND="
+DEPEND="
 	dev-libs/glib:2=
 	net-libs/libslirp:=
 	sys-libs/libseccomp:=
-	sys-libs/libcap:="
-
-DEPEND="${RDEPEND}"
-
+	sys-libs/libcap:=
+"
+RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
-
-RESTRICT+=" test"
 
 src_prepare() {
 	default

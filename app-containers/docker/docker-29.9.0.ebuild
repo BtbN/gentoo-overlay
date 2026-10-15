@@ -1,28 +1,29 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-EGO_PN=github.com/docker/docker
-MY_PV=${PV/_/-}
-inherit linux-info optfeature systemd udev go-module
-GIT_COMMIT=41ca978a0a5400cc24b274137efa9f25517fcc0b
+
+inherit go-module linux-info optfeature systemd toolchain-funcs udev
+
+GIT_COMMIT=a5b58c94d334674eae3a3207d4f05417643a90d0
 
 DESCRIPTION="The core functions you need to create Docker images and run Docker containers"
 HOMEPAGE="https://www.docker.com/"
-SRC_URI="https://github.com/moby/moby/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/moby/moby/archive/${PN}-v${PV/_/-}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/moby-${PN}-v${PV}"
 
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
-IUSE="apparmor btrfs +container-init +overlay2 rootless seccomp selinux systemd"
+IUSE="apparmor btrfs +container-init cuda +overlay2 rootless seccomp selinux systemd"
 
 DEPEND="
 	acct-group/docker
 	>=dev-db/sqlite-3.7.9:3
+	net-firewall/nftables:=
 	apparmor? ( sys-libs/libapparmor )
 	btrfs? ( >=sys-fs/btrfs-progs-3.16.1 )
 	seccomp? ( >=sys-libs/libseccomp-2.2.1 )
-	rootless? ( >=sys-apps/rootlesskit-1.0.0 app-containers/slirp4netns sys-apps/shadow )
 	systemd? ( sys-apps/systemd )
 "
 
@@ -30,33 +31,29 @@ DEPEND="
 # https://github.com/moby/moby/blob/master/project/PACKAGERS.md#optional-dependencies
 RDEPEND="
 	${DEPEND}
-	>=net-firewall/iptables-1.4
 	sys-process/procps
 	>=dev-vcs/git-1.7
 	>=app-arch/xz-utils-4.9
-	>=app-containers/containerd-1.7.21[apparmor?,btrfs?,seccomp?]
-	>=app-containers/runc-1.1.13[apparmor?,seccomp?]
+	>=app-containers/containerd-2.2.0[apparmor?,btrfs?,seccomp?]
+	>=app-containers/runc-1.2.6[apparmor?,seccomp?]
 	!app-containers/docker-proxy
+	!<app-containers/docker-cli-${PV}
 	container-init? ( >=sys-process/tini-0.19.0[static] )
+	cuda? ( app-containers/nvidia-container-toolkit )
+	rootless? ( >=sys-apps/rootlesskit-1.0.0 app-containers/slirp4netns sys-apps/shadow )
 	selinux? ( sec-policy/selinux-docker )
 "
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#build-dependencies
 BDEPEND="
-	>=dev-lang/go-1.16.12
 	dev-go/go-md2man
 	virtual/pkgconfig
+	>=dev-lang/go-1.26.8
 "
 # tests require running dockerd as root and downloading containers
 RESTRICT="installsources strip test"
 
-S="${WORKDIR}/${P}/src/${EGO_PN}"
-
 # https://bugs.gentoo.org/748984 https://github.com/etcd-io/etcd/pull/12552
-PATCHES=(
-	"${FILESDIR}/0001-Openrc-Depend-on-containerd-init-script.patch"
-)
-
 pkg_setup() {
 	# this is based on "contrib/check-config.sh" from upstream's sources
 	# required features.
@@ -65,7 +62,7 @@ pkg_setup() {
 		~CGROUPS ~CGROUP_CPUACCT ~CGROUP_DEVICE ~CGROUP_FREEZER ~CGROUP_SCHED ~CPUSETS ~MEMCG
 		~KEYS
 		~VETH ~BRIDGE ~BRIDGE_NETFILTER
-		~IP_NF_FILTER ~IP_NF_TARGET_MASQUERADE
+		~IP_NF_FILTER ~IP_NF_RAW ~IP_NF_TARGET_MASQUERADE
 		~NETFILTER_XT_MATCH_ADDRTYPE
 		~NETFILTER_XT_MATCH_CONNTRACK
 		~NETFILTER_XT_MATCH_IPVS
@@ -74,6 +71,13 @@ pkg_setup() {
 		~POSIX_MQUEUE
 	"
 	WARNING_POSIX_MQUEUE="CONFIG_POSIX_MQUEUE: is required for bind-mounting /dev/mqueue into containers"
+
+	if kernel_is ge 6 17; then
+		CONFIG_CHECK+="
+			~IP_NF_IPTABLES_LEGACY
+			~NETFILTER_XTABLES_LEGACY
+		"
+	fi
 
 	if kernel_is lt 4 8; then
 		CONFIG_CHECK+="
@@ -235,14 +239,15 @@ pkg_setup() {
 }
 
 src_unpack() {
-	mkdir -p "${S}" || die
-	tar -C "${S}" -x --strip-components 1 -f "${DISTDIR}/${P}.tar.gz" || die
+	default
+	go-module_src_unpack
+	cd "${S}"
+	[[ -f go.mod ]] || ln -s vendor.mod go.mod || die
+	[[ -f go.sum ]] || ln -s vendor.sum go.sum || die
 }
 
 src_compile() {
 	export DOCKER_GITCOMMIT="${GIT_COMMIT}"
-	export GOPATH="${WORKDIR}/${P}"
-	export GO111MODULE=off
 	export VERSION=${PV}
 	tc-export PKG_CONFIG
 
@@ -265,15 +270,21 @@ src_compile() {
 		fi
 	done
 
+	export AUTO_GOPATH=1
 	export EXCLUDE_AUTO_BUILDTAG_JOURNALD=$(usex systemd '' 'y')
+	export GO_MD2MAN=/usr/bin/go-md2man
 
 	# build binaries
 	./hack/make.sh dynbinary || die 'dynbinary failed'
+
+	# build man page
+	cd man || die
+	emake || die
 }
 
 src_install() {
 	dosym containerd /usr/bin/docker-containerd
-	dosym containerd-shim /usr/bin/docker-containerd-shim
+	dosym containerd-shim-runc-v2 /usr/bin/docker-containerd-shim
 	dosym runc /usr/bin/docker-runc
 	use container-init && dosym tini /usr/bin/docker-init
 	dobin bundles/dynbinary-daemon/dockerd
@@ -287,10 +298,9 @@ src_install() {
 
 	systemd_dounit contrib/init/systemd/docker.{service,socket}
 
-	udev_dorules contrib/udev/*.rules
-
 	dodoc AUTHORS CONTRIBUTING.md NOTICE README.md
 	dodoc -r docs/*
+	doman man/man8/dockerd.8
 
 	# note: intentionally not using "doins" so that we preserve +x bits
 	dodir /usr/share/${PN}/contrib
@@ -323,8 +333,4 @@ pkg_postinst() {
 	optfeature "rootless mode support" sys-apps/rootlesskit
 	optfeature_header "for rootless mode you also need a network stack"
 	optfeature "rootless mode network stack" app-containers/slirp4netns
-}
-
-pkg_postrm() {
-	udev_reload
 }
