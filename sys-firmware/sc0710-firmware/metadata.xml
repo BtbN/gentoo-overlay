@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="4k-pro">Install the ECP5 FPGA firmware for the Elgato 4K Pro</flag>
+		<flag name="cam-link-pro">Install the ECP5 FPGA firmware for the Elgato Cam Link Pro</flag>
+		<flag name="edid">Install the EDID profiles from Elgato Studio (about 90 MB download) for the edid= module parameter</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">Nakildias/sc0710</remote-id>
+	</upstream>
+</pkgmetadata>
